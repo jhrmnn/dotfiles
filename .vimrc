@@ -1,5 +1,5 @@
-syntax on
 set shell=/bin/bash
+syntax on
 
 set nocompatible
 filetype off
@@ -44,6 +44,7 @@ set autoindent
 set hlsearch
 set pastetoggle=<F10>
 set clipboard=unnamed
+set mouse=a
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
