@@ -2,6 +2,8 @@ if test -e $HOME/.config/fish/config_local.fish
     source $HOME/.config/fish/config_local.fish
 end
 
+source $HOME/.config/fish/color_scheme.fish
+
 set -x PATH $HOME/local/bin $PATH
 
 function my_fish_vi_key_bindings
