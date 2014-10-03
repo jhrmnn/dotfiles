@@ -1,5 +1,26 @@
 syntax on
+set shell=/bin/bash
+
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'klen/python-mode'
+Plugin 'dag/vim-fish'
+"Plugin 'wakatime/vim-wakatime'
+"Plugin 'davidhalter/jedi-vim'
+
+call vundle#end()
+
 filetype indent plugin on
+
+"let $GIT_SSL_NO_VERIFY = 'true'
+
 set bs=indent,eol,start
 set nocompatible
 set modeline
@@ -23,6 +44,12 @@ set autoindent
 set hlsearch
 set pastetoggle=<F10>
 set clipboard=unnamed
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:pymode_options_colorcolumn = 0
+let g:pymode_folding = 0
+let g:pymode_rope_complete_on_dot = 0
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
@@ -50,22 +77,3 @@ augroup END
 
 "au BufWinLeave *.* mkview
 "au BufWinEnter *.* silent loadview
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-"Bundle 'wakatime/vim-wakatime'
-Bundle 'kien/ctrlp.vim'
-"Bundle 'davidhalter/jedi-vim'
-Bundle 'terryma/vim-multiple-cursors'
-Plugin 'klen/python-mode'
-
-call vundle#end()
-
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:pymode_options_colorcolumn = 0
-let g:pymode_folding = 0
-let g:pymode_rope_complete_on_dot = 0
-
-let $GIT_SSL_NO_VERIFY = 'true'
