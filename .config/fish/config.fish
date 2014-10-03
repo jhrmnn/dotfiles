@@ -16,11 +16,11 @@ source $fish_path/oh-my-fish.fish
 
 
 
+if test -e $HOME/.config/fish/config_local.fish
+    source $HOME/.config/fish/config_local.fish
+end
+
 set -x PATH $HOME/local/bin $PATH
-
-set -x MKL_NUM_THREADS 1
-set -x OMP_NUM_THREADS 1
-
 
 function my_fish_vi_key_bindings
     fish_vi_key_bindings
