@@ -11,8 +11,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'klen/python-mode'
 Plugin 'dag/vim-fish'
-"Plugin 'wakatime/vim-wakatime'
-"Plugin 'davidhalter/jedi-vim'
+Plugin 'davidhalter/jedi-vim'
 
 call vundle#end()
 
