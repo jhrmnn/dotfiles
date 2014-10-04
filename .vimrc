@@ -1,5 +1,4 @@
 set shell=/bin/bash
-syntax on
 
 set nocompatible
 filetype off
@@ -18,6 +17,7 @@ Plugin 'dag/vim-fish'
 call vundle#end()
 
 filetype indent plugin on
+syntax on
 
 "let $GIT_SSL_NO_VERIFY = 'true'
 
