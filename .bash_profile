@@ -16,4 +16,6 @@ export PATH=$HOME/software/anaconda/bin:$PATH
 export PATH=~/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/software/anaconda/lib
 
-export REMOTE=`last -n 1 -a | head -1 | awk '{print $NF}'`
+if [[ $TERM_PROGRAM != Apple_Terminal ]]; then
+    export REMOTE=`last -n 1 -a | head -1 | awk '{print $NF}'`
+fi
