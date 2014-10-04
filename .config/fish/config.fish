@@ -14,3 +14,7 @@ end
 set -g fish_key_bindings my_fish_vi_key_bindings
 
 set -x REMOTE (last -n 1 -a ^/dev/null | head -1 | awk '{print $NF}')
+
+function py
+    ptpython --vi
+end
