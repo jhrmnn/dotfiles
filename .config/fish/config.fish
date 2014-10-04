@@ -13,6 +13,6 @@ end
 
 set -g fish_key_bindings my_fish_vi_key_bindings
 
-if set -q $PPID
+if set -q PPID
     set -x REMOTE (last -n 1 -a | head -1 | awk '{print $NF}')
 end
