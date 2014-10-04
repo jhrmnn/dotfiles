@@ -14,6 +14,5 @@ export PROMPT_COMMAND='history -a ; echo -ne "\033]0;${PWD}\007" ; $PROMPT_COMMA
 
 export PATH=$HOME/software/anaconda/bin:$PATH
 export PATH=~/bin:$PATH
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/software/anaconda/lib
 
 export REMOTE=`last -n 1 -a 2>/dev/null | head -1 | awk '{print $NF}'`
