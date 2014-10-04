@@ -5,6 +5,7 @@ end
 source $HOME/.config/fish/color_scheme.fish
 
 set -x PATH $HOME/local/bin $PATH
+set -x PATH $HOME/bin $PATH
 
 function my_fish_vi_key_bindings
     fish_vi_key_bindings
