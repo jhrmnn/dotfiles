@@ -16,3 +16,5 @@ export PATH=$HOME/software/anaconda/bin:$PATH
 export PATH=~/bin:$PATH
 
 export REMOTE=`last -n 1 -a 2>/dev/null | head -1 | awk '{print $NF}'`
+
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
