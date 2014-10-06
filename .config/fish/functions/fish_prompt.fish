@@ -24,11 +24,10 @@ function __my_git_prompt
     set -l branch (git rev-parse --abbrev-ref HEAD)
     echo -n ' '
     if git status --porcelain | egrep . >/dev/null
-        set_color -o red; echo -n '['
-        set_color magenta; echo -n $branch
-        set_color -o red; echo -n '!]'
+        set_color -o red
     else
-        set_color green; echo -n "[$branch]"
+        set_color green
     end
+    echo -n $branch
     set_color normal
 end
