@@ -1,0 +1,9 @@
+[user]
+	name = Jan Hermann
+	email = jan@janhermann.cz
+[core]
+	excludesfile = /Users/hermann/.gitignore_global
+[push]
+	default = matching
+[include]
+    path = .gitconfig_local
