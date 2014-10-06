@@ -5,7 +5,5 @@ for f in (git ls-tree --name-only -r HEAD)
     end
     set -l path (dirname $f)
     mkdir -p ../$path
-    set -l cmd ln -fns (python -c "import os; print os.path.relpath('.dotfiles/$f', '$path')") ../$f
-    echo $cmd
-    eval $cmd
+    ln -fns (python -c "import os; print os.path.relpath('.dotfiles/$f', '$path')") ../$f
 end
