@@ -14,3 +14,4 @@ fish install.fish
 
 [Vundle](https://github.com/gmarik/Vundle.vim) package manager for Vim has to be installed by hand and plugins installed from Vim with `:PluginInstall`
 
+Also, you probably want to change your name and email in `.gitconfig`
