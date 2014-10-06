@@ -2,8 +2,8 @@
 	name = Jan Hermann
 	email = jan@janhermann.cz
 [core]
-	excludesfile = .gitignore_global
+	excludesfile = ~/.gitignore_global
 [push]
 	default = matching
 [include]
-    path = .gitconfig_local
+    path = ~/.gitconfig_local
