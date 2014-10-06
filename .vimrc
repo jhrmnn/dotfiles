@@ -47,9 +47,7 @@ set mouse=a
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
-let g:pymode_options_colorcolumn = 0
 let g:pymode_folding = 0
-let g:pymode_rope_complete_on_dot = 0
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
