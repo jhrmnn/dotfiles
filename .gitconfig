@@ -2,7 +2,7 @@
 	name = Jan Hermann
 	email = jan@janhermann.cz
 [core]
-	excludesfile = /Users/hermann/.gitignore_global
+	excludesfile = .gitignore_global
 [push]
 	default = matching
 [include]
