@@ -113,4 +113,6 @@ set undofile
 set undodir=~/.vim/undo
 set nofoldenable
 
-so ~/.vimrc_local
+if filereadable("~/.vimrc_local")
+    so ~/.vimrc_local
+endif
