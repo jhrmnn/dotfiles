@@ -1,29 +1,67 @@
 set shell=/bin/bash
-
 set nocompatible
+
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
-Plugin 'kien/ctrlp.vim'
+
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'klen/python-mode'
+Plugin 'chriskempson/base16-vim'
 Plugin 'dag/vim-fish'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'majutsushi/tagbar'
+Plugin 'tpope/vim-fugitive'
+Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
 
 call vundle#end()
 
-filetype indent plugin on
 syntax on
+filetype plugin on
+filetype indent on
 
+"let g:syntastic_check_on_open = 1
+let g:syntastic_auto_jump = 2
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_python_checkers = ['pylama']
+let g:syntastic_python_pylama_args = '-i C901'
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+let g:pymode_folding = 0
 "let $GIT_SSL_NO_VERIFY = 'true'
 
-set bs=indent,eol,start
-set nocompatible
-set modeline
+nmap <F8> :TagbarToggle<CR>
+
 set background=dark
+colorscheme base16-eighties
+hi Normal ctermbg=none
+
+set clipboard=unnamed
+set wildmenu
+set backspace=indent,eol,start
+set gdefault
+set encoding=utf-8 nobomb
+set directory=~/.vim/swaps
+set exrc
+set secure
+set hlsearch
+set ignorecase
+set modeline
+set incsearch
+set mouse=a
+set showmode
+set showmatch
+set nolist
+set title
+set autoindent
+set smartindent
+set smarttab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -31,23 +69,6 @@ set expandtab
 set shiftround
 set wrap linebreak nolist
 set autochdir
-set showmatch
-set clipboard+=unnamed
-set nolist
-set title
-set textwidth=0
-set wrapmargin=0
-set wildmenu
-set incsearch
-set autoindent
-set hlsearch
-set pastetoggle=<F10>
-set clipboard=unnamed
-set mouse=a
-
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:pymode_folding = 0
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
@@ -57,21 +78,7 @@ let g:pymode_folding = 0
 "  n... :  where to save the viminfo files
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
-if filereadable("_vimrc")
-    so _vimrc
-endif
+let maplocalleader = ","
 
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
-
-"au BufWinLeave *.* mkview
-"au BufWinEnter *.* silent loadview
+vmap <Space> <Plug>RDSendSelection
+nmap <Space> <Plug>RDSendLine

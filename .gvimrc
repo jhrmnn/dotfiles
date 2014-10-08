@@ -1,1 +1,2 @@
-colorscheme base16-eighties
+set guifont=Menlo:h12
+set transparency=5
