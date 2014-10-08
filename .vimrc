@@ -1,5 +1,7 @@
 set shell=/bin/bash
 set nocompatible
+let mapleader = "ů"
+syntax on
 
 filetype off
 
@@ -8,40 +10,77 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'chriskempson/base16-vim'
-Plugin 'dag/vim-fish'
-Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'majutsushi/tagbar'
-Plugin 'tpope/vim-fugitive'
-Plugin 'klen/python-mode'
-Plugin 'davidhalter/jedi-vim'
+Plugin 'Shougo/vimproc' " makes some plugins faster
+Plugin 'terryma/vim-multiple-cursors' " sublime text-like behaviour [ctrl-n]
+Plugin 'chriskempson/base16-vim' " base16 color scheme
+Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
+Plugin 'dag/vim-fish' " fish shell syntax highlight
+Plugin 'rhysd/clever-f.vim' " improved f F
+Plugin 'tpope/vim-repeat' " improved .
+Plugin 'scrooloose/nerdcommenter' " fast commenting [,c<space>]
+Plugin 'Lokaltog/vim-easymotion' " fast motion
+Plugin 'kien/ctrlp.vim' " fuzzy file search [ctrl-p]
+Plugin 'scrooloose/syntastic' " linter support
+Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
+Plugin 'tpope/vim-fugitive' " git support
+Plugin 'airblade/vim-gitgutter' " git gutter
+Plugin 'jcfaria/Vim-R-plugin' "  R support
+Plugin 'lervag/vim-latex' " latex support
+Plugin 'JuliaLang/julia-vim' " julia support
+Plugin 'klen/python-mode'  " python support
+Plugin 'Shougo/neocomplcache.vim' " code completion (has to load after python-mode)
 
 call vundle#end()
 
-syntax on
 filetype plugin on
 filetype indent on
 
-"let g:syntastic_check_on_open = 1
-let g:syntastic_auto_jump = 2
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_python_checkers = ['pylama']
-let g:syntastic_python_pylama_args = '-i C901'
+let g:clever_f_smart_case = 1
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
-let g:pymode_folding = 0
-"let $GIT_SSL_NO_VERIFY = 'true'
+nmap <c-b> :TagbarToggle<CR>
 
-nmap <F8> :TagbarToggle<CR>
+nmap s <Plug>(easymotion-s2)
+nmap t <Plug>(easymotion-t2)
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+let g:EasyMotion_startofline = 0
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_target_hl_inc_cursor = 3
+map / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map n <Plug>(easymotion-next)
+map N <Plug>(easymotion-prev)
+
+"let g:syntastic_check_on_open = 1
+let g:syntastic_auto_jump = 2
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_python_checkers = ['pylama']
+let g:syntastic_python_pylama_args = 
+           \ '-i C901,D100,D101,D102 -l pep8,pyflakes,pep257'
+let g:syntastic_fortran_checkers = ['gfortran']
+
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_enable_fuzzy_completion = 1
+let g:neocomplcache_enable_auto_select = 1
+
+let g:pymode_lint = 0
+let g:pymode_folding = 0
+let python_highlight_builtin_objs = 1
 
 set t_Co=256
 set background=dark
 colorscheme base16-eighties
 hi Normal ctermbg=none
+hi EasyMotionTarget2First ctermbg=none ctermfg=3
+hi EasyMotionIncSearch ctermbg=11 ctermfg=12
 
 set clipboard=unnamed
 set wildmenu
@@ -70,16 +109,7 @@ set expandtab
 set shiftround
 set wrap linebreak nolist
 set autochdir
-
-" Tell vim to remember certain things when we exit
-"  '10  :  marks will be remembered for up to 10 previously edited files
-"  "100 :  will save up to 100 lines for each register
-"  :20  :  up to 20 lines of command-line history will be remembered
-"  %    :  saves and restores the buffer list
-"  n... :  where to save the viminfo files
-set viminfo='10,\"100,:20,%,n~/.viminfo
-
-let maplocalleader = ","
-
-vmap <Space> <Plug>RDSendSelection
-nmap <Space> <Plug>RDSendLine
+set viminfo='100,<100,:100,%,n~/.viminfo
+set undofile
+set undodir=~/.vim/undo
+set nofoldenable
