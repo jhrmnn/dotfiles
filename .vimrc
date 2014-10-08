@@ -11,6 +11,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'Shougo/vimproc' " makes some plugins faster
+Plugin 'Lokaltog/vim-powerline'
 Plugin 'terryma/vim-multiple-cursors' " sublime text-like behaviour [ctrl-n]
 Plugin 'chriskempson/base16-vim' " base16 color scheme
 Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
@@ -112,6 +113,8 @@ set viminfo='100,<100,:100,%,n~/.viminfo
 set undofile
 set undodir=~/.vim/undo
 set nofoldenable
+set laststatus=2
+set encoding=utf-8
 
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
