@@ -28,7 +28,7 @@ Plugin 'jcfaria/Vim-R-plugin' "  R support
 Plugin 'lervag/vim-latex' " latex support
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
-Plugin 'Shougo/neocomplcache.vim' " code completion (has to load after python-mode)
+Plugin 'Shougo/neocomplcache.vim' " code completion
 
 call vundle#end()
 
@@ -73,7 +73,6 @@ let g:neocomplcache_enable_auto_select = 1
 
 let g:pymode_lint = 0
 let g:pymode_folding = 0
-let python_highlight_builtin_objs = 1
 
 set t_Co=256
 set background=dark
@@ -113,3 +112,5 @@ set viminfo='100,<100,:100,%,n~/.viminfo
 set undofile
 set undodir=~/.vim/undo
 set nofoldenable
+
+so ~/.vimrc_local
