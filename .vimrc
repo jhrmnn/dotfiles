@@ -38,6 +38,7 @@ let g:pymode_folding = 0
 
 nmap <F8> :TagbarToggle<CR>
 
+set t_Co=256
 set background=dark
 colorscheme base16-eighties
 hi Normal ctermbg=none
