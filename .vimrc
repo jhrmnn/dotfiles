@@ -150,7 +150,7 @@ autocmd BufReadPost *
             \ endif
 
 function! FindProjectName()
-    let s:name = fnamemodify(argv(1), ":h") . "." . 
+    let s:name = fnamemodify(argv(0), ":p:h:t") . "." . 
                 \ md5#md5(fnamemodify(argv(1), ":p:h")) . ".vim"
     return s:name
 endfunction
