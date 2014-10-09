@@ -20,6 +20,4 @@ cd ~/.dotfiles
 fish install.fish
 ```
 
-You probably don't want to have `mapleader` set for `ů` in `.vimrc` (Czech keyboard). 
-
 Also, you might want to change your name and email in `.gitconfig`
