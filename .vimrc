@@ -150,7 +150,8 @@ autocmd BufReadPost *
             \ endif
 
 function! FindProjectName()
-    let s:name = fnamemodify(getcwd(), ":t") . "." . md5#md5(getcwd()) . ".vim"
+    let s:name = fnamemodify(argv(1), ":h") . "." . 
+                \ md5#md5(fnamemodify(argv(1), ":p:h")) . ".vim"
     return s:name
 endfunction
 
@@ -164,6 +165,8 @@ function! SaveSession(name)
     execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
 endfunction
 
-autocmd VimLeave * call SaveSession(FindProjectName())
-autocmd VimEnter * nested call RestoreSession(FindProjectName())
+if argc() > 0
+    autocmd VimLeave * call SaveSession(FindProjectName())
+    autocmd VimEnter * nested call RestoreSession(FindProjectName())
+end
 
