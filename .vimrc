@@ -20,6 +20,7 @@ Plugin 'rhysd/clever-f.vim' " improved f F
 Plugin 'tpope/vim-repeat' " improved .
 Plugin 'scrooloose/nerdcommenter' " fast commenting [,c<space>]
 Plugin 'Lokaltog/vim-easymotion' " fast motion
+Plugin 'Valloric/YouCompleteMe' " fast code completion
 Plugin 'kien/ctrlp.vim' " fuzzy file search [ctrl-p]
 Plugin 'scrooloose/syntastic' " linter support
 Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
@@ -29,12 +30,14 @@ Plugin 'jcfaria/Vim-R-plugin' "  R support
 Plugin 'lervag/vim-latex' " latex support
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
-Plugin 'Shougo/neocomplcache.vim' " code completion
 
 call vundle#end()
 
 filetype plugin on
 filetype indent on
+
+let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 let g:clever_f_smart_case = 1
 
@@ -66,15 +69,11 @@ let g:syntastic_python_pylama_args =
            \ '-i C901,D100,D101,D102 -l pep8,pyflakes,pep257'
 let g:syntastic_fortran_checkers = ['gfortran']
 
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_enable_auto_select = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
-let g:pymode_lint = 0
+let g:pymode_lint = 0 " we do this with syntastic
+let g:pymode_rope = 0 " this is down by youcompleteme
 let g:pymode_folding = 0
 
 set t_Co=256
