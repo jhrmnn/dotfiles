@@ -7,7 +7,7 @@ function fish_prompt --description 'Write out the prompt'
     set_color $fish_color_cwd; echo -n (prompt_pwd)
     set_color normal; __my_git_prompt
     set_color normal; echo -n ' '
-    set -l n_jobs (jobs | wc -l)
+    set -l n_jobs (jobs | wc -l | awk '{print $1}')
     if test $n_jobs -gt 0
         set_color $fish_color_at_sign; echo -n $n_jobs
     end

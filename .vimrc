@@ -19,6 +19,7 @@ Plugin 'dag/vim-fish' " fish shell syntax highlight
 Plugin 'moll/vim-bbye' " better bdelete
 Plugin 'rhysd/clever-f.vim' " improved f F 
 Plugin 'tpope/vim-repeat' " improved .
+Plugin 'tpope/vim-surround' " better brackets
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'scrooloose/nerdcommenter' " fast commenting [,c<space>]
@@ -54,8 +55,8 @@ let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
 let g:EasyMotion_startofline = 0
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_target_hl_inc_cursor = 3
-nmap s <Plug>(easymotion-s2)
-nmap t <Plug>(easymotion-t2)
+map s <Plug>(easymotion-s2)
+map t <Plug>(easymotion-t2)
 map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
@@ -83,7 +84,10 @@ let g:pymode_folding = 0
 
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
-let g:tagbar_autopreview = 1
+"let g:tagbar_autopreview = 1
+let g:tagbar_sort = 0
+let g:tagbar_compact = 1
+let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = "splitbelow"
                                                                                           
 
@@ -150,8 +154,8 @@ autocmd BufReadPost *
             \ endif
 
 function! FindProjectName()
-    let s:name = fnamemodify(argv(0), ":p:h:t") . "." . 
-                \ md5#md5(fnamemodify(argv(1), ":p:h")) . ".vim"
+    let s:name = fnamemodify(getcwd(), ":t") . "." . 
+                \ md5#md5(getcwd()) . ".vim"
     return s:name
 endfunction
 
@@ -165,7 +169,7 @@ function! SaveSession(name)
     execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
 endfunction
 
-if argc() > 0
+if argc() == 0
     autocmd VimLeave * call SaveSession(FindProjectName())
     autocmd VimEnter * nested call RestoreSession(FindProjectName())
 end
