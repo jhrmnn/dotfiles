@@ -18,6 +18,7 @@ Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
 Plugin 'dag/vim-fish' " fish shell syntax highlight
 Plugin 'rhysd/clever-f.vim' " improved f F
 Plugin 'tpope/vim-repeat' " improved .
+Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'scrooloose/nerdcommenter' " fast commenting [,c<space>]
 Plugin 'Lokaltog/vim-easymotion' " fast motion
@@ -50,6 +51,7 @@ let g:ctrlp_use_caching = 0
 
 nmap <c-b> :TagbarToggle<CR>
 
+let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
 nmap s <Plug>(easymotion-s2)
 nmap t <Plug>(easymotion-t2)
 map <Leader>l <Plug>(easymotion-lineforward)
@@ -81,16 +83,19 @@ let g:pymode_rope = 0 " this is down by youcompleteme
 let g:pymode_folding = 0
 
 nnoremap <Leader>o :CtrlP<CR>
-nnoremap <Leader>w :w<CR>
+nnoremap <Leader>w :bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
+nnoremap <Leader>n :noh<CR>
+nnoremap <Leader><tab> :bnext<CR>
 
 set t_Co=256
 set background=dark
 colorscheme base16-eighties
 hi Normal ctermbg=none
-hi EasyMotionTarget2First ctermbg=none ctermfg=3
-hi EasyMotionIncSearch ctermbg=11 ctermfg=12
+hi link EasyMotionTarget2First Question
+hi link EasyMotionTarget2Second Question
+hi link EasyMotionIncSearch IncSearch
 
 set clipboard=unnamed
 set wildmenu
