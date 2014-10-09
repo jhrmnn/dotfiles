@@ -11,7 +11,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'Shougo/vimproc' " makes some plugins faster
-Plugin 'Lokaltog/vim-powerline'
+Plugin 'bling/vim-airline' " better status line
 Plugin 'terryma/vim-multiple-cursors' " sublime text-like behaviour [ctrl-n]
 Plugin 'chriskempson/base16-vim' " base16 color scheme
 Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
@@ -71,6 +71,8 @@ let g:neocomplcache_enable_smart_case = 1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_enable_fuzzy_completion = 1
 let g:neocomplcache_enable_auto_select = 1
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 
 let g:pymode_lint = 0
 let g:pymode_folding = 0
