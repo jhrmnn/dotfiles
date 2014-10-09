@@ -1,6 +1,6 @@
 set shell=/bin/bash
 set nocompatible
-let mapleader = "ů"
+let mapleader = "\<Space>"
 syntax on
 
 filetype off
@@ -18,6 +18,7 @@ Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
 Plugin 'dag/vim-fish' " fish shell syntax highlight
 Plugin 'rhysd/clever-f.vim' " improved f F
 Plugin 'tpope/vim-repeat' " improved .
+Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'scrooloose/nerdcommenter' " fast commenting [,c<space>]
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'Valloric/YouCompleteMe' " fast code completion
@@ -43,6 +44,9 @@ let g:clever_f_smart_case = 1
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command 
+            \ = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+let g:ctrlp_use_caching = 0
 
 nmap <c-b> :TagbarToggle<CR>
 
@@ -75,6 +79,11 @@ let g:airline#extensions#tabline#enabled = 1
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is down by youcompleteme
 let g:pymode_folding = 0
+
+nnoremap <Leader>o :CtrlP<CR>
+nnoremap <Leader>w :w<CR>
+vmap v <Plug>(expand_region_expand)
+vmap <Leader>v <Plug>(expand_region_shrink)
 
 set t_Co=256
 set background=dark
@@ -120,3 +129,8 @@ set encoding=utf-8
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
 endif
+
+autocmd BufReadPost *
+            \ if line("'\"") > 1 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
