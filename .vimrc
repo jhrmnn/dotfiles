@@ -82,7 +82,7 @@ let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is down by youcompleteme
 let g:pymode_folding = 0
 
-nnoremap <Leader>o :CtrlP<CR>
+nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>w :bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
