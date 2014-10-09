@@ -16,7 +16,8 @@ Plugin 'terryma/vim-multiple-cursors' " sublime text-like behaviour [ctrl-n]
 Plugin 'chriskempson/base16-vim' " base16 color scheme
 Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
 Plugin 'dag/vim-fish' " fish shell syntax highlight
-Plugin 'rhysd/clever-f.vim' " improved f F
+Plugin 'moll/vim-bbye' " better bdelete
+Plugin 'rhysd/clever-f.vim' " improved f F 
 Plugin 'tpope/vim-repeat' " improved .
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
@@ -87,7 +88,7 @@ let g:tagbar_previewwin_pos = "splitbelow"
                                                                                           
 
 nnoremap <Leader>p :CtrlP<CR>
-nnoremap <Leader>w :bdelete<CR>
+nnoremap <Leader>w :Bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
 nnoremap <Leader>n :noh<CR>
@@ -137,6 +138,7 @@ set nofoldenable
 set laststatus=2
 set encoding=utf-8
 set noerrorbells visualbell t_vb=
+set sessionoptions-=options
 
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
@@ -146,3 +148,22 @@ autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
             \ endif
+
+function! FindProjectName()
+    let s:name = fnamemodify(getcwd(), ":t") . "." . md5#md5(getcwd()) . ".vim"
+    return s:name
+endfunction
+
+function! RestoreSession(name)
+    if filereadable($HOME . "/.vim/sessions/" . a:name)
+        execute 'source ' . $HOME . "/.vim/sessions/" . a:name
+    end
+endfunction
+
+function! SaveSession(name)
+    execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
+endfunction
+
+autocmd VimLeave * call SaveSession(FindProjectName())
+autocmd VimEnter * nested call RestoreSession(FindProjectName())
+
