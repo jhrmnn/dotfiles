@@ -49,18 +49,16 @@ let g:ctrlp_user_command
             \ = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 let g:ctrlp_use_caching = 0
 
-nmap <c-b> :TagbarToggle<CR>
-
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
+let g:EasyMotion_startofline = 0
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_target_hl_inc_cursor = 3
 nmap s <Plug>(easymotion-s2)
 nmap t <Plug>(easymotion-t2)
 map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
-let g:EasyMotion_startofline = 0
-let g:EasyMotion_smartcase = 1
-let g:EasyMotion_target_hl_inc_cursor = 3
 map / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 map n <Plug>(easymotion-next)
@@ -72,7 +70,7 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_python_checkers = ['pylama']
 let g:syntastic_python_pylama_args = 
-           \ '-i C901,D100,D101,D102 -l pep8,pyflakes,pep257'
+           \ '-i C901,D100,D101,D102,D103 -l pep8,pyflakes,pep257'
 let g:syntastic_fortran_checkers = ['gfortran']
 
 let g:airline_powerline_fonts = 1
@@ -82,12 +80,20 @@ let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is down by youcompleteme
 let g:pymode_folding = 0
 
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_autopreview = 1
+let g:tagbar_previewwin_pos = "splitbelow"
+                                                                                          
+
 nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>w :bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader><tab> :bnext<CR>
+nnoremap <Leader><s-tab> :bprevious<CR>
+nnoremap <Leader>t :TagbarToggle<CR>
 
 set t_Co=256
 set background=dark
@@ -130,6 +136,7 @@ set undodir=~/.vim/undo
 set nofoldenable
 set laststatus=2
 set encoding=utf-8
+set noerrorbells visualbell t_vb=
 
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
