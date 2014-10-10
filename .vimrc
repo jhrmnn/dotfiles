@@ -134,7 +134,7 @@ set softtabstop=4
 set expandtab
 set shiftround
 set wrap linebreak nolist
-set autochdir
+"set autochdir
 set viminfo='100,<100,:100,%,n~/.viminfo
 set undofile
 set undodir=~/.vim/undo
