@@ -45,11 +45,8 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 
 let g:clever_f_smart_case = 1
 
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_user_command 
-            \ = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-let g:ctrlp_use_caching = 0
+nnoremap <Leader>p :CtrlP<CR>
+let g:ctrlp_follow_symlinks = 2
 
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
 let g:EasyMotion_startofline = 0
@@ -90,7 +87,6 @@ let g:tagbar_compact = 1
 let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = 'abo'
 
-nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>w :Bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
