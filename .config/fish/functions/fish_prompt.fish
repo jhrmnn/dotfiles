@@ -17,8 +17,9 @@ function fish_prompt --description 'Write out the prompt'
     else
         set_color $fish_color_autosuggestion
     end
-    echo -n '$ '
+    echo -n '$'
     set_color normal
+    echo -n ' '
 end
 
 function __my_git_prompt

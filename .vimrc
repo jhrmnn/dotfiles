@@ -84,12 +84,11 @@ let g:pymode_folding = 0
 
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
-"let g:tagbar_autopreview = 1
+let g:tagbar_autopreview = 1
 let g:tagbar_sort = 0
 let g:tagbar_compact = 1
 let g:tagbar_width = 35
-let g:tagbar_previewwin_pos = "splitbelow"
-                                                                                          
+let g:tagbar_previewwin_pos = 'abo'
 
 nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>w :Bdelete<CR>
@@ -99,6 +98,7 @@ nnoremap <Leader>n :noh<CR>
 nnoremap <Leader><tab> :bnext<CR>
 nnoremap <Leader><s-tab> :bprevious<CR>
 nnoremap <Leader>t :TagbarToggle<CR>
+nnoremap <Leader>, :set invpaste<CR>
 
 set t_Co=256
 set background=dark
