@@ -7,18 +7,7 @@ source $HOME/.config/fish/color_scheme.fish
 set -x PATH $HOME/local/bin $PATH
 set -x PATH $HOME/bin $PATH
 
-function my_fish_vi_key_bindings
-    fish_vi_key_bindings
-    bind \cc kill-whole-line
-    bind -M insert \cc kill-whole-line
-    bind -M insert -m default \e backward-char
-    bind -M insert \cn history-token-search-backward
-end
-
 set -g fish_key_bindings my_fish_vi_key_bindings
 
 set -x REMOTE (last -n 1 -a ^/dev/null | head -1 | awk '{print $NF}')
 
-function py
-    ptpython --vi
-end
