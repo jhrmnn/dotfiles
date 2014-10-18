@@ -40,6 +40,8 @@ call vundle#end()
 filetype plugin on
 filetype indent on
 
+let maplocalleader = ","
+
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
@@ -87,6 +89,8 @@ let g:tagbar_compact = 1
 let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = 'abo'
 
+let vimrplugin_vsplit = 1
+
 nnoremap <Leader>w :Bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
@@ -95,6 +99,9 @@ nnoremap <Leader><tab> :bnext<CR>
 nnoremap <Leader><s-tab> :bprevious<CR>
 nnoremap <Leader>t :TagbarToggle<CR>
 nnoremap <Leader>, :set invpaste<CR>
+
+vmap <Space> <Plug>RDSendSelection
+nmap <Space> <Plug>RDSendLine
 
 set t_Co=256
 set background=dark
