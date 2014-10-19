@@ -22,7 +22,7 @@ Plugin 'tpope/vim-repeat' " improved .
 Plugin 'tpope/vim-surround' " better brackets
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
-Plugin 'scrooloose/nerdcommenter' " fast commenting [,c<space>]
+Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'Valloric/YouCompleteMe' " fast code completion
 Plugin 'kien/ctrlp.vim' " fuzzy file search [ctrl-p]
@@ -63,7 +63,7 @@ omap / <Plug>(easymotion-tn)
 map n <Plug>(easymotion-next)
 map N <Plug>(easymotion-prev)
 
-"let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_open = 1
 let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
@@ -130,7 +130,7 @@ set softtabstop=4
 set expandtab
 set shiftround
 set wrap linebreak nolist
-"set autochdir
+" set autochdir
 set viminfo='100,<100,:100,%,n~/.viminfo
 set undofile
 set undodir=~/.vim/undo
@@ -169,4 +169,3 @@ if argc() == 0
     autocmd VimLeave * call SaveSession(FindProjectName())
     autocmd VimEnter * nested call RestoreSession(FindProjectName())
 end
-

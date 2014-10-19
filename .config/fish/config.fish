@@ -12,6 +12,7 @@ function my_fish_vi_key_bindings
     bind \cc kill-whole-line
     bind -M insert \cc kill-whole-line
     bind -M insert -m default \e backward-char
+    bind -M insert \cn history-token-search-backward
 end
 
 set -g fish_key_bindings my_fish_vi_key_bindings
