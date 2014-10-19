@@ -1,4 +1,4 @@
 function lt
-    ll -t $argv
+    ll -rt $argv
 end
 
