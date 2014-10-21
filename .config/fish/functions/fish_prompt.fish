@@ -1,8 +1,8 @@
 function fish_prompt --description 'Write out the prompt'
     set -l last_status $status
-    set_color $fish_color_user; echo -n (whoami)
+    set_color $fish_color_user; echo -n (whoami | cut -c1-3)
     set_color $fish_color_at_sign; echo -n '@'
-    set_color $fish_color_host; echo -n (hostname -s)
+    set_color $fish_color_host; echo -n (hostname -s | cut -c1-5)
     set_color normal; echo -n ' '
     set_color $fish_color_cwd; echo -n (prompt_pwd)
     set_color normal; __my_git_prompt
