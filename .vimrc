@@ -170,7 +170,7 @@ autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
-            \   exe "normal! g`\"" |
+            \     exe "normal! g`\"" |
             \ endif
 
 function! FindProjectName()
@@ -180,14 +180,24 @@ function! FindProjectName()
 endfunction
 
 function! RestoreSession(name)
+    if exists("g:my_is_stdin")
+        return
+    endif
+    echo "test"
+    echo exists("g:my_is_stdin")
     if filereadable($HOME . "/.vim/sessions/" . a:name)
         execute 'source ' . $HOME . "/.vim/sessions/" . a:name
     end
 endfunction
 
 function! SaveSession(name)
+    if exists("g:my_is_stdin")
+        return
+    endif
     execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
 endfunction
+
+autocmd StdinReadPre * let g:my_is_stdin = 1
 
 if argc() == 0
     autocmd VimLeave * call SaveSession(FindProjectName())
