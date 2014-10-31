@@ -53,6 +53,8 @@ let g:ctrlp_follow_symlinks = 2
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_use_caching = 0
 
+let g:gitgutter_max_signs = 10000
+
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
 let g:EasyMotion_startofline = 0
 let g:EasyMotion_smartcase = 1
