@@ -161,6 +161,13 @@ if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
 endif
 
+autocmd FileType fortran setlocal colorcolumn=80 
+autocmd FileType fortran setlocal comments=:!>,:!
+autocmd FileType fortran setlocal textwidth=80
+autocmd FileType fortran setlocal formatoptions=cqroanw
+autocmd FileType fortran setlocal number
+autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
+
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
