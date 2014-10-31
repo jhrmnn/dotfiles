@@ -20,6 +20,7 @@ Plugin 'moll/vim-bbye' " better bdelete
 Plugin 'rhysd/clever-f.vim' " improved f F 
 Plugin 'tpope/vim-repeat' " improved .
 Plugin 'tpope/vim-surround' " better brackets
+Plugin 'rking/ag.vim' " faster grep
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
@@ -49,6 +50,8 @@ let g:clever_f_smart_case = 1
 
 nnoremap <Leader>p :CtrlP<CR>
 let g:ctrlp_follow_symlinks = 2
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_use_caching = 0
 
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
 let g:EasyMotion_startofline = 0
@@ -102,6 +105,10 @@ nnoremap <Leader>, :set invpaste<CR>
 
 vmap <Space> <Plug>RDSendSelection
 nmap <Space> <Plug>RDSendLine
+
+vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
+vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
+nnoremap \ :Ag<SPACE>
 
 set t_Co=256
 set background=dark
