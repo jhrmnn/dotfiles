@@ -59,8 +59,8 @@ let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
 let g:EasyMotion_startofline = 0
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_target_hl_inc_cursor = 3
-map s <Plug>(easymotion-s2)
-map S <Plug>(easymotion-t2)
+map s <Plug>(easymotion-f2)
+map S <Plug>(easymotion-F2)
 map m <Leader><Leader>w
 map M <Leader><Leader>b
 
