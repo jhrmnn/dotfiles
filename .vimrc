@@ -168,6 +168,8 @@ autocmd FileType fortran setlocal formatoptions=cqroanw
 autocmd FileType fortran setlocal number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
+autocmd FileType python setlocal formatoptions=cqroanw
+
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \     exe "normal! g`\"" |
