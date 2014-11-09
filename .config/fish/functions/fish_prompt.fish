@@ -1,5 +1,6 @@
 function fish_prompt --description 'Write out the prompt'
     set -l last_status $status
+    echo -n (date +%H:%M)' '
     set_color $fish_color_user; echo -n (whoami | cut -c1-3)
     set_color $fish_color_at_sign; echo -n '@'
     set_color $fish_color_host; echo -n (hostname -s | cut -c1-5)
