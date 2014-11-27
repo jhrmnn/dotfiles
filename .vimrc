@@ -173,6 +173,19 @@ autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
 autocmd FileType python setlocal formatoptions=cqroanw
 
+autocmd FileType cpp setlocal colorcolumn=80
+autocmd FileType cpp setlocal textwidth=80
+autocmd FileType cpp setlocal formatoptions=cqroanw
+autocmd FileType cpp setlocal cino+=(0
+
+autocmd FileType mkd setlocal textwidth=80
+autocmd FileType mkd setlocal formatoptions=twanb1
+autocmd FileType mkd setlocal spell
+
+autocmd FileType yaml setlocal ts=2
+autocmd FileType yaml setlocal sw=2
+autocmd FileType yaml setlocal sts=2
+
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \     exe "normal! g`\"" |
