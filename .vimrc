@@ -114,7 +114,7 @@ nmap <Space> <Plug>RDSendLine
 
 vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
 vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
-nnoremap \ :Ag<SPACE>
+nnoremap \ :Ag<SPACE>"
 
 set t_Co=256
 set background=dark
