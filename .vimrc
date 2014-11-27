@@ -21,11 +21,13 @@ Plugin 'rhysd/clever-f.vim' " improved f F
 Plugin 'tpope/vim-repeat' " improved .
 Plugin 'tpope/vim-surround' " better brackets
 Plugin 'rking/ag.vim' " faster grep
+" Plugin 'ervandew/screen' " screen support
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'Valloric/YouCompleteMe' " fast code completion
+Plugin 'godlygeek/tabular' " automatic alignment
 Plugin 'kien/ctrlp.vim' " fuzzy file search [ctrl-p]
 Plugin 'scrooloose/syntastic' " linter support
 Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
@@ -35,6 +37,7 @@ Plugin 'jcfaria/Vim-R-plugin' "  R support
 Plugin 'lervag/vim-latex' " latex support
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
+Plugin 'plasticboy/vim-markdown' "markdown support
 
 call vundle#end()
 
