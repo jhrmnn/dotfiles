@@ -130,7 +130,7 @@ set directory=~/.vim/swaps
 set exrc
 set secure
 set hlsearch
-set ignorecase
+set smartcase
 set modeline
 set incsearch
 set mouse=a
