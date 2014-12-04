@@ -21,6 +21,7 @@ Plugin 'rhysd/clever-f.vim' " improved f F
 Plugin 'tpope/vim-repeat' " improved .
 Plugin 'tpope/vim-surround' " better brackets
 Plugin 'rking/ag.vim' " faster grep
+Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
 " Plugin 'ervandew/screen' " screen support
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
@@ -99,10 +100,6 @@ nnoremap <Leader><tab> :bnext<CR>
 nnoremap <Leader><s-tab> :bprevious<CR>
 nnoremap <c-s-tab> :bprevious<CR>
 nnoremap <Leader>w :Bdelete<CR>
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
 nnoremap <Leader>t :TagbarToggle<CR>
