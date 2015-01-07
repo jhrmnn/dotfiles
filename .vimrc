@@ -23,6 +23,7 @@ Plugin 'tpope/vim-surround' " better brackets
 Plugin 'rking/ag.vim' " faster grep
 Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
 " Plugin 'ervandew/screen' " screen support
+Plugin 'dhruvasagar/vim-table-mode' " plain-text table formatting
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
@@ -34,8 +35,8 @@ Plugin 'scrooloose/syntastic' " linter support
 Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
 Plugin 'tpope/vim-fugitive' " git support
 Plugin 'airblade/vim-gitgutter' " git gutter
-Plugin 'jcfaria/Vim-R-plugin' "  R support
-Plugin 'lervag/vim-latex' " latex support
+Plugin 'jcfaria/Vim-R-plugin' " R support
+Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
 Plugin 'plasticboy/vim-markdown' "markdown support
@@ -47,8 +48,23 @@ filetype indent on
 
 let maplocalleader = ","
 
+set omnifunc=syntaxcomplete#Complete
+
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_register_as_syntastic_checker = 0
+let g:ycm_semantic_triggers = {
+            \  'tex'  : ['{'],
+            \ }
+" the default ones plus '}\?' at the end
+let g:LatexBox_ref_pattern
+            \ = '\m\C\\v\?\(eq\|page\|[cC]\)\?ref\*\?\_\s*{}\?'
+let g:LatexBox_cite_pattern
+            \ = '\m\c\\\a*cite\a*\*\?\(\[[^\]]*\]\)\_\s*{}\?'
+imap íí \begin{
+imap éé <Plug>LatexCloseCurEnv
+nmap <Leader>ce <Plug>LatexChangeEnv
+nmap <Leader>se <Plug>LatexToggleStarEnv
 
 let g:clever_f_smart_case = 1
 
@@ -56,6 +72,11 @@ nnoremap <Leader>p :CtrlP<CR>
 let g:ctrlp_follow_symlinks = 2
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_use_caching = 0
+
+let g:LatexBox_latexmk_async = 1
+let g:LatexBox_latexmk_preview_continuously = 1
+let g:LatexBox_viewer = 'open -a Skim'
+let g:LatexBox_quickfix = 2
 
 let g:gitgutter_max_signs = 10000
 
@@ -81,7 +102,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 let g:pymode_lint = 0 " we do this with syntastic
-let g:pymode_rope = 0 " this is down by youcompleteme
+let g:pymode_rope = 0 " this is done by youcompleteme
 let g:pymode_folding = 0
 
 let g:tagbar_autoclose = 1
@@ -100,6 +121,7 @@ nnoremap <Leader><tab> :bnext<CR>
 nnoremap <Leader><s-tab> :bprevious<CR>
 nnoremap <c-s-tab> :bprevious<CR>
 nnoremap <Leader>w :Bdelete<CR>
+nnoremap <c-x> :Bdelete<CR>
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
 nnoremap <Leader>t :TagbarToggle<CR>
@@ -130,6 +152,7 @@ set directory=~/.vim/swaps
 set exrc
 set secure
 set hlsearch
+set ignorecase
 set smartcase
 set modeline
 set incsearch
@@ -172,11 +195,20 @@ autocmd FileType python setlocal formatoptions=cqroanw
 autocmd FileType cpp setlocal colorcolumn=80
 autocmd FileType cpp setlocal textwidth=80
 autocmd FileType cpp setlocal formatoptions=cqroanw
+autocmd FileType cpp setlocal number
 autocmd FileType cpp setlocal cino+=(0
 
 autocmd FileType mkd setlocal textwidth=80
 autocmd FileType mkd setlocal formatoptions=twanb1
 autocmd FileType mkd setlocal spell
+
+autocmd FileType tex setlocal textwidth=80
+autocmd FileType tex setlocal formatoptions=twab1
+autocmd FileType tex setlocal number
+autocmd FileType tex setlocal ts=2
+autocmd FileType tex setlocal sw=2
+autocmd FileType tex setlocal sts=2
+autocmd FileType tex setlocal spell
 
 autocmd FileType yaml setlocal ts=2
 autocmd FileType yaml setlocal sw=2
