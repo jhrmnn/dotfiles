@@ -1,5 +1,5 @@
-if test -e $HOME/.config/fish/config_local.fish
-    source $HOME/.config/fish/config_local.fish
+if test -e $HOME/.config/fish/local.config.fish
+    source $HOME/.config/fish/local.config.fish
 end
 
 source $HOME/.config/fish/color_scheme.fish
