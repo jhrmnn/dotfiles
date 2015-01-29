@@ -22,7 +22,7 @@ Plugin 'tpope/vim-repeat' " improved .
 Plugin 'tpope/vim-surround' " better brackets
 Plugin 'rking/ag.vim' " faster grep
 Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
-" Plugin 'ervandew/screen' " screen support
+Plugin 'ervandew/screen' " screen support
 Plugin 'dhruvasagar/vim-table-mode' " plain-text table formatting
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
@@ -115,6 +115,10 @@ let g:tagbar_previewwin_pos = 'abo'
 
 let vimrplugin_vsplit = 1
 
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
 nnoremap <c-tab> :bnext<CR>
 nnoremap <c-s-tab> :bprevious<CR>
 nnoremap <Leader><tab> :bnext<CR>
