@@ -28,7 +28,9 @@ Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
-Plugin 'Valloric/YouCompleteMe' " fast code completion
+if $VIM_NO_YCM != '1'
+    Plugin 'Valloric/YouCompleteMe' " fast code completion
+endif
 Plugin 'godlygeek/tabular' " automatic alignment
 Plugin 'kien/ctrlp.vim' " fuzzy file search [ctrl-p]
 Plugin 'scrooloose/syntastic' " linter support
