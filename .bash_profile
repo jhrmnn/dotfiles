@@ -11,9 +11,6 @@ export HISTIGNORE='ls:bg:fg:history'
 export HISTTIMEFORMAT='%F %T '
 export PROMPT_COMMAND='history -a ; echo -ne "\033]0;${PWD}\007" ; $PROMPT_COMMAND'
 
-export PATH=$HOME/software/anaconda/bin:$PATH
-export PATH=~/bin:$PATH
-
 export REMOTE=`last -n 1 -a 2>/dev/null | head -1 | awk '{print $NF}'`
 
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
