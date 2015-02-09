@@ -38,10 +38,10 @@ $Black\$\
 
 shopt -s histappend
 shopt -s cmdhist
-HISTFILESIZE=1000000
-HISTCONTROL=ignoreboth
-HISTIGNORE=ls:bg:fg:history
-HISTTIMEFORMAT="%F %T"
+export HISTFILESIZE=1000000
+export HISTCONTROL=ignoreboth
+export HISTIGNORE=ls:bg:fg:history
+export HISTTIMEFORMAT="%F %T"
 export TMPDIR=/tmp
 
 export GREP_OPTIONS="--color=auto"
