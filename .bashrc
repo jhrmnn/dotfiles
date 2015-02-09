@@ -1,4 +1,4 @@
-[[ -e ~/.bashrc.local ]] && . ~/.bashrc.local
+[[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 
 export PATH=$HOME/local/bin:$PATH
 export PATH=$HOME/bin:$PATH

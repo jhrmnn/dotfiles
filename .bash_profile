@@ -1,4 +1,5 @@
 [[ -s ~/.bashrc ]] && . ~/.bashrc
+[[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
@@ -45,6 +46,4 @@ export TMPDIR=/tmp
 export GREP_OPTIONS="--color=auto"
 alias ls="ls -hG"
 
-[[ -e ~/.bash_aliases ]] && . ~/.bash_aliases
-
-[[ -s ~/.rvm/scripts/rvm ]] && . ~/.rvm/scripts/rvm
+[[ -s ~/.bash_aliases ]] && . ~/.bash_aliases
