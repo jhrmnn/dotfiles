@@ -1,4 +1,3 @@
-[[ -e ~/.bash_aliases ]] && . ~/.bash_aliases
 [[ -e ~/.bashrc.local ]] && . ~/.bashrc.local
 
 export PATH=$HOME/local/bin:$PATH
