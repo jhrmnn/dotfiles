@@ -1,4 +1,4 @@
-[[ -s ~/.bashrc ]] && . ~/.bashrc
+[[ -s ~/.bashrc && -z $BASHRC_SOURCED ]] && . ~/.bashrc
 [[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
 Color_Off='\[\e[0m\]'
