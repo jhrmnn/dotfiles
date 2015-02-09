@@ -45,6 +45,10 @@ HISTTIMEFORMAT="%F %T"
 export TMPDIR=/tmp
 
 export GREP_OPTIONS="--color=auto"
-alias ls="ls -hG"
+if ls --color=none &>/dev/null; then
+    alias ls="ls -h --color=auto"
+else
+    alias ls="ls -hG"
+fi
 
 [[ -s ~/.bash_aliases ]] && . ~/.bash_aliases
