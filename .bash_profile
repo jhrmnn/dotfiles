@@ -19,8 +19,10 @@ PROMPT_COMMAND='\
 PS1="\
 \A\
  $Cyan\$(cut -c1-3 <<<\u)$Blue@$Cyan\$(cut -c1-5 <<<\h)\
- $Yellow\$(`if sed --version &>/dev/null; then echo "sed -r"; else echo "sed -E"; fi` \
- 's|/(.)[^/]*/|/\1/|g' <<<'\w')\
+ $Yellow\$(awk -F '/' '{ORS=\"\";\
+                        for (i=1; i<NF; i++) print substr(\$i, 1, 1) \"/\";\
+                        print \$NF}' \
+           <<<'\w')\
 \$(if git status &>/dev/null; then\
     echo -n ' ';\
     if git status --porcelain | egrep . &>/dev/null; then\
