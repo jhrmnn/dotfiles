@@ -59,10 +59,6 @@ let g:ycm_semantic_triggers = {
             \  'tex'  : ['{'],
             \ }
 " the default ones plus '}\?' at the end
-let g:LatexBox_ref_pattern
-            \ = '\m\C\\v\?\(eq\|page\|[cC]\)\?ref\*\?\_\s*{}\?'
-let g:LatexBox_cite_pattern
-            \ = '\m\c\\\a*cite\a*\*\?\(\[[^\]]*\]\)\_\s*{}\?'
 imap íí \begin{
 imap éé <Plug>LatexCloseCurEnv
 nmap <Leader>ce <Plug>LatexChangeEnv
@@ -207,6 +203,8 @@ autocmd FileType cpp setlocal cino+=(0
 autocmd FileType mkd setlocal textwidth=80
 autocmd FileType mkd setlocal formatoptions=twanb1
 autocmd FileType mkd setlocal spell
+
+autocmd FileType plaintex setlocal filetype=tex
 
 autocmd FileType tex setlocal textwidth=80
 autocmd FileType tex setlocal formatoptions=twab1
