@@ -39,6 +39,7 @@ $Black\$\
 
 shopt -s histappend
 shopt -s cmdhist
+shopt -s histverify
 export HISTFILESIZE=1000000
 export HISTSIZE=1000000
 export HISTCONTROL=ignoreboth
