@@ -53,4 +53,9 @@ else
     alias ls="ls -hG"
 fi
 
+hs () {
+    history | grep "$1" | less
+}
+
 [[ -s ~/.bash_aliases ]] && . ~/.bash_aliases
+

@@ -25,6 +25,7 @@ Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
 Plugin 'ervandew/screen' " screen support
 Plugin 'dhruvasagar/vim-table-mode' " plain-text table formatting
 Plugin 'Raimondi/delimitMate' " autobrackets
+Plugin 'mhinz/vim-hugefile' " better handling of large files
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
@@ -41,7 +42,8 @@ Plugin 'jcfaria/Vim-R-plugin' " R support
 Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
-Plugin 'plasticboy/vim-markdown' "markdown support
+Plugin 'plasticboy/vim-markdown' " markdown support
+Plugin 'ryanss/vim-hackernews' " hackernews
 
 call vundle#end()
 
@@ -63,6 +65,7 @@ imap íí \begin{
 imap éé <Plug>LatexCloseCurEnv
 nmap <Leader>ce <Plug>LatexChangeEnv
 nmap <Leader>se <Plug>LatexToggleStarEnv
+vmap <Leader>we <Plug>LatexEnvWrapSelection
 
 let g:clever_f_smart_case = 1
 
@@ -71,10 +74,17 @@ let g:ctrlp_follow_symlinks = 2
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_use_caching = 0
 
+let g:LatexBox_custom_indent = 0
 let g:LatexBox_latexmk_async = 1
 let g:LatexBox_latexmk_preview_continuously = 1
 let g:LatexBox_viewer = 'open -a Skim'
 let g:LatexBox_quickfix = 2
+let g:LatexBox_ignore_warnings = [
+            \ 'Underfull', 'Overfull', 'specifier changed to',
+            \ "'babel/polyglossia' detected",
+            \ "Token not allowed in a PDF string",
+            \ "unicode-math warning"
+            \ ]
 
 let g:gitgutter_max_signs = 10000
 
@@ -156,7 +166,6 @@ set secure
 set hlsearch
 set ignorecase
 set smartcase
-set modeline
 set incsearch
 set mouse=a
 set showmode
