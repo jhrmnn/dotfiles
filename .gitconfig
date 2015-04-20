@@ -9,3 +9,5 @@
     path = ~/.gitconfig_local
 [blame]
     date = short
+[github]
+	user = azag0

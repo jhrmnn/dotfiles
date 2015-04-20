@@ -39,6 +39,10 @@ Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
 Plugin 'tpope/vim-fugitive' " git support
 Plugin 'airblade/vim-gitgutter' " git gutter
 Plugin 'jcfaria/Vim-R-plugin' " R support
+Plugin 'othree/html5.vim' " html5 support
+Plugin 'pangloss/vim-javascript' " javascript support
+Plugin 'mattn/webapi-vim' " supports web apis
+Plugin 'mattn/gist-vim' " gist support
 Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
@@ -105,6 +109,8 @@ let g:syntastic_python_checkers = ['pylama']
 let g:syntastic_python_pylama_args = 
            \ '-i C901,D100,D101,D102,D103 -l pep8,pyflakes,pep257'
 let g:syntastic_fortran_checkers = ['gfortran']
+let g:syntastic_html_checkers = ['w3']
+let g:syntastic_javascript_checkers = ['jshint']
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -202,6 +208,9 @@ autocmd FileType fortran setlocal number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
 autocmd FileType python setlocal formatoptions=cqroanw
+
+autocmd FileType javascript setlocal colorcolumn=80
+autocmd FileType javascript setlocal number
 
 autocmd FileType cpp setlocal colorcolumn=80
 autocmd FileType cpp setlocal textwidth=80
