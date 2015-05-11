@@ -1,6 +1,7 @@
 set shell=/bin/bash
 set nocompatible
-let mapleader = "\<Space>"
+let mapleader = ' '
+let maplocalleader = ' '
 syntax on
 
 filetype off
@@ -54,17 +55,14 @@ call vundle#end()
 filetype plugin on
 filetype indent on
 
-let maplocalleader = ","
-
 set omnifunc=syntaxcomplete#Complete
 
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_register_as_syntastic_checker = 0
 let g:ycm_semantic_triggers = {
-            \  'tex'  : ['{'],
+            \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
-" the default ones plus '}\?' at the end
 imap íí \begin{
 imap éé <Plug>LatexCloseCurEnv
 nmap <Leader>ce <Plug>LatexChangeEnv
@@ -74,6 +72,7 @@ vmap <Leader>we <Plug>LatexEnvWrapSelection
 let g:clever_f_smart_case = 1
 
 nnoremap <Leader>p :CtrlP<CR>
+nnoremap <Leader>f :CtrlPLine<CR>
 let g:ctrlp_follow_symlinks = 2
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_use_caching = 0
@@ -87,7 +86,8 @@ let g:LatexBox_ignore_warnings = [
             \ 'Underfull', 'Overfull', 'specifier changed to',
             \ "'babel/polyglossia' detected",
             \ "Token not allowed in a PDF string",
-            \ "unicode-math warning"
+            \ "unicode-math warning",
+            \ "Marginpar"
             \ ]
 
 let g:gitgutter_max_signs = 10000
@@ -128,6 +128,17 @@ let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = 'abo'
 
 let vimrplugin_vsplit = 1
+
+nnoremap <Leader>a :call ToggleAutoFormatting()<CR>
+function! ToggleAutoFormatting()
+    if &fo =~ "a"
+        setl fo-=a
+        echo "Autoformat off"
+    else
+        setl fo+=a
+        echo "Autoformat on"
+    endif
+endfunction
 
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
@@ -200,6 +211,16 @@ if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
 endif
 
+autocmd InsertLeave * :call StripTrailingWhitespace()
+function StripTrailingWhitespace()
+    if col(".") == col("$")-1
+        let l:cursor_pos = getpos('.')
+        :substitute/\s\+$//e
+        let l:cursor_pos[2] = col('$')-1
+        call setpos('.', l:cursor_pos)
+    endif
+endfun
+
 autocmd FileType fortran setlocal colorcolumn=80 
 autocmd FileType fortran setlocal comments=:!>,:!
 autocmd FileType fortran setlocal textwidth=80
@@ -219,18 +240,17 @@ autocmd FileType cpp setlocal number
 autocmd FileType cpp setlocal cino+=(0
 
 autocmd FileType mkd setlocal textwidth=80
-autocmd FileType mkd setlocal formatoptions=twanb1
+autocmd FileType mkd setlocal formatoptions=twanb1vb
 autocmd FileType mkd setlocal spell
 
-autocmd FileType plaintex setlocal filetype=tex
-
-autocmd FileType tex setlocal textwidth=80
-autocmd FileType tex setlocal formatoptions=twab1
-autocmd FileType tex setlocal number
-autocmd FileType tex setlocal ts=2
-autocmd FileType tex setlocal sw=2
-autocmd FileType tex setlocal sts=2
-autocmd FileType tex setlocal spell
+autocmd FileType *tex setlocal textwidth=80
+autocmd FileType *tex setlocal formatoptions=twb1a
+autocmd FileType *tex setlocal number
+autocmd FileType *tex setlocal ts=2
+autocmd FileType *tex setlocal sw=2
+autocmd FileType *tex setlocal sts=2
+autocmd FileType *tex setlocal spell
+autocmd FileType *tex syntax spell toplevel
 
 autocmd FileType yaml setlocal ts=2
 autocmd FileType yaml setlocal sw=2

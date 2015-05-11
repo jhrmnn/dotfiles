@@ -1,6 +1,8 @@
 [[ -s ~/.bashrc && -z $BASHRC_SOURCED ]] && . ~/.bashrc
 [[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
+export LANG=en_US.UTF-8
+
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
 Red='\[\e[0;31m\]'
