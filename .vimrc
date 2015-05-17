@@ -122,7 +122,7 @@ function! AirlineThemePatch(palette)
   let a:palette.tabline.airline_tabmod = [0, 0, 8, 1]
   let a:palette.tabline.airline_tabmod_unsel =  [0, 0, 1, 8]
   let a:palette.tabline.airline_tabhid = [0, 0, 11, 8]
-  let a:palette.tabline.airline_tabtype = [0, 0, 13, 13]
+  " let a:palette.tabline.airline_tabtype = [0, 0, 13, 13]
   " let a:palette.tabline.airline_tab =    [0, 0, 0, 1]
 endfunction
 
