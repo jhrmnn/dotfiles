@@ -228,7 +228,7 @@ function! StripTrailingWhitespace()
     endif
 endfunction
 
-autocmd FileType fortran let b:hascolorcolumn=80 
+autocmd FileType fortran setlocal colorcolumn=80 
 autocmd FileType fortran setlocal comments=:!>,:!
 autocmd FileType fortran setlocal textwidth=80
 autocmd FileType fortran setlocal formatoptions=cqroanw2
@@ -237,10 +237,10 @@ autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
 autocmd FileType python setlocal formatoptions=cqroanw
 
-autocmd FileType javascript let b:hascolorcolumn=80
+autocmd FileType javascript setlocal colorcolumn=80
 autocmd FileType javascript setlocal number
 
-autocmd FileType cpp let b:hascolorcolumn=80
+autocmd FileType cpp setlocal colorcolumn=80
 autocmd FileType cpp setlocal textwidth=80
 autocmd FileType cpp setlocal formatoptions=cqroanw
 autocmd FileType cpp setlocal number
@@ -265,8 +265,15 @@ autocmd FileType yaml setlocal sts=2
 
 augroup BgHighlight
     autocmd!
-    autocmd WinEnter * if exists("b:hascolorcolumn") | setlocal colorcolumn=80" | endif
-    autocmd WinLeave * setlocal colorcolumn=0
+    autocmd WinEnter * 
+                \ if exists("b:hadcolorcolumn") | 
+                \     execute "set colorcolumn=".b:hadcolorcolumn | 
+                \ endif
+    autocmd WinLeave * 
+                \ if exists("&colorcolumn") && &colorcolumn > 0 |
+                \     let b:hadcolorcolumn = &colorcolumn |
+                \     setlocal colorcolumn=0 |
+                \ endif
 augroup END
 
 autocmd BufReadPost *
