@@ -30,7 +30,8 @@ Plugin 'mhinz/vim-hugefile' " better handling of large files
 Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
-if $VIM_NO_YCM != '1'
+Plugin 'danro/rename.vim'
+if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
     Plugin 'Valloric/YouCompleteMe' " fast code completion
 endif
 Plugin 'godlygeek/tabular' " automatic alignment
@@ -164,9 +165,10 @@ vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
 vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
 nnoremap \ :Ag<SPACE>"
 
-set t_Co=256
-set background=dark
-colorscheme base16-eighties
+if &term == 'xterm-256color'
+    set term=xterm-16color
+endif
+set background=light
 hi Normal ctermbg=none
 hi link EasyMotionTarget2First Question
 hi link EasyMotionTarget2Second Question
@@ -224,7 +226,7 @@ endfun
 autocmd FileType fortran setlocal colorcolumn=80 
 autocmd FileType fortran setlocal comments=:!>,:!
 autocmd FileType fortran setlocal textwidth=80
-autocmd FileType fortran setlocal formatoptions=cqroanw
+autocmd FileType fortran setlocal formatoptions=cqroanw2
 autocmd FileType fortran setlocal number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
@@ -287,7 +289,7 @@ endfunction
 
 autocmd StdinReadPre * let g:my_is_stdin = 1
 
-if argc() == 0
+if argc() == 0 && v:version > 703
     autocmd VimLeave * call SaveSession(FindProjectName())
     autocmd VimEnter * nested call RestoreSession(FindProjectName())
 end

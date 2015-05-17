@@ -10,4 +10,5 @@ alias lt="ls -ltr"
 
 alias vi="vim"
 alias py="ptpython --vi"
+alias ipy="ptipython --vi"
 

@@ -5,3 +5,6 @@ set guioptions-=l
 set guioptions-=L
 set lines=50
 set columns=90
+set background=dark
+colorscheme base16-eighties
+
