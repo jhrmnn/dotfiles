@@ -14,7 +14,6 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'Shougo/vimproc' " makes some plugins faster
 Plugin 'bling/vim-airline' " better status line
 Plugin 'terryma/vim-multiple-cursors' " sublime text-like behaviour [ctrl-n]
-Plugin 'chriskempson/base16-vim' " base16 color scheme
 Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
 Plugin 'dag/vim-fish' " fish shell syntax highlight
 Plugin 'moll/vim-bbye' " better bdelete
@@ -108,13 +107,24 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_python_checkers = ['pylama']
 let g:syntastic_python_pylama_args = 
-           \ '-i C901,D100,D101,D102,D103 -l pep8,pyflakes,pep257'
+            \ '-i C901,D100,D101,D102,D103 -l pep8,pyflakes,pep257'
 let g:syntastic_fortran_checkers = ['gfortran']
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+
+let g:airline_theme_patch_func = 'AirlineThemePatch'
+function! AirlineThemePatch(palette)
+  let a:palette.tabline = {}
+  let a:palette.tabline.airline_tabsel = [0, 0, 8, 2]
+  let a:palette.tabline.airline_tabmod = [0, 0, 8, 1]
+  let a:palette.tabline.airline_tabmod_unsel =  [0, 0, 1, 8]
+  let a:palette.tabline.airline_tabhid = [0, 0, 11, 8]
+  let a:palette.tabline.airline_tabtype = [0, 0, 13, 13]
+  " let a:palette.tabline.airline_tab =    [0, 0, 0, 1]
+endfunction
 
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is done by youcompleteme
@@ -144,12 +154,10 @@ endfunction
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
-nnoremap <c-tab> :bnext<CR>
-nnoremap <c-s-tab> :bprevious<CR>
-nnoremap <Leader><tab> :bnext<CR>
-nnoremap <Leader><s-tab> :bprevious<CR>
-nnoremap <c-s-tab> :bprevious<CR>
+nnoremap <c-tab> :bnext!<CR>
+nnoremap <c-s-tab> :bprevious!<CR>
+nnoremap <Leader><tab> :bnext!<CR>
+nnoremap <Leader><s-tab> :bprevious!<CR>
 nnoremap <Leader>w :Bdelete<CR>
 nnoremap <c-x> :Bdelete<CR>
 vmap v <Plug>(expand_region_expand)
@@ -165,16 +173,12 @@ vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
 vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
 nnoremap \ :Ag<SPACE>"
 
-if &term == 'xterm-256color'
-    set term=xterm-16color
-endif
 set background=light
 hi Normal ctermbg=none
 hi link EasyMotionTarget2First Question
 hi link EasyMotionTarget2Second Question
 hi link EasyMotionIncSearch IncSearch
 
-set clipboard=unnamed
 set wildmenu
 set backspace=indent,eol,start
 set gdefault
@@ -186,7 +190,8 @@ set hlsearch
 set ignorecase
 set smartcase
 set incsearch
-set mouse=a
+set mouse=r
+set clipboard=unnamed
 set showmode
 set showmatch
 set nolist
@@ -214,16 +219,16 @@ if filereadable("~/.vimrc_local")
 endif
 
 autocmd InsertLeave * :call StripTrailingWhitespace()
-function StripTrailingWhitespace()
+function! StripTrailingWhitespace()
     if col(".") == col("$")-1
         let l:cursor_pos = getpos('.')
         :substitute/\s\+$//e
         let l:cursor_pos[2] = col('$')-1
         call setpos('.', l:cursor_pos)
     endif
-endfun
+endfunction
 
-autocmd FileType fortran setlocal colorcolumn=80 
+autocmd FileType fortran let b:hascolorcolumn=80 
 autocmd FileType fortran setlocal comments=:!>,:!
 autocmd FileType fortran setlocal textwidth=80
 autocmd FileType fortran setlocal formatoptions=cqroanw2
@@ -232,10 +237,10 @@ autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
 autocmd FileType python setlocal formatoptions=cqroanw
 
-autocmd FileType javascript setlocal colorcolumn=80
+autocmd FileType javascript let b:hascolorcolumn=80
 autocmd FileType javascript setlocal number
 
-autocmd FileType cpp setlocal colorcolumn=80
+autocmd FileType cpp let b:hascolorcolumn=80
 autocmd FileType cpp setlocal textwidth=80
 autocmd FileType cpp setlocal formatoptions=cqroanw
 autocmd FileType cpp setlocal number
@@ -258,9 +263,15 @@ autocmd FileType yaml setlocal ts=2
 autocmd FileType yaml setlocal sw=2
 autocmd FileType yaml setlocal sts=2
 
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * if exists("b:hascolorcolumn") | setlocal colorcolumn=80" | endif
+    autocmd WinLeave * setlocal colorcolumn=0
+augroup END
+
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
-            \     exe "normal! g`\"" |
+            \     exe ":normal! g`\"" |
             \ endif
 
 function! FindProjectName()
