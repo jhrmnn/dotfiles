@@ -44,7 +44,8 @@ Plugin 'othree/html5.vim' " html5 support
 Plugin 'pangloss/vim-javascript' " javascript support
 Plugin 'mattn/webapi-vim' " supports web apis
 Plugin 'mattn/gist-vim' " gist support
-Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
+" Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
+Plugin 'lervag/vimtex' " latex support
 Plugin 'JuliaLang/julia-vim' " julia support
 Plugin 'klen/python-mode'  " python support
 Plugin 'plasticboy/vim-markdown' " markdown support
@@ -63,32 +64,34 @@ let g:ycm_register_as_syntastic_checker = 0
 let g:ycm_semantic_triggers = {
             \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
-imap íí \begin{
-imap éé <Plug>LatexCloseCurEnv
-nmap <Leader>ce <Plug>LatexChangeEnv
-nmap <Leader>se <Plug>LatexToggleStarEnv
-vmap <Leader>we <Plug>LatexEnvWrapSelection
+" imap íí \begin{
+" imap éé <Plug>LatexCloseCurEnv
+" nmap <Leader>ce <Plug>LatexChangeEnv
+" nmap <Leader>se <Plug>LatexToggleStarEnv
+" vmap <Leader>we <Plug>LatexEnvWrapSelection
 
 let g:clever_f_smart_case = 1
 
 nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>f :CtrlPLine<CR>
 let g:ctrlp_follow_symlinks = 2
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_user_command = 'ag %s -l -g ""'
 let g:ctrlp_use_caching = 0
 
-let g:LatexBox_custom_indent = 0
-let g:LatexBox_latexmk_async = 1
-let g:LatexBox_latexmk_preview_continuously = 1
-let g:LatexBox_viewer = 'open -a Skim'
-let g:LatexBox_quickfix = 2
-let g:LatexBox_ignore_warnings = [
+" let g:LatexBox_custom_indent = 0
+" let g:LatexBox_latexmk_async = 1
+" let g:LatexBox_latexmk_preview_continuously = 2
+" let g:LatexBox_viewer = 'open -a Skim'
+" let g:LatexBox_quickfix = 2
+let g:vimtex_quickfix_ignored_warnings = [
             \ 'Underfull', 'Overfull', 'specifier changed to',
             \ "'babel/polyglossia' detected",
             \ "Token not allowed in a PDF string",
             \ "unicode-math warning",
             \ "Marginpar"
             \ ]
+
+let g:vimtex_fold_enabled = 0
 
 let g:gitgutter_max_signs = 10000
 
@@ -105,25 +108,45 @@ map M <Leader><Leader>b
 let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
-let g:syntastic_python_checkers = ['pylama']
-let g:syntastic_python_pylama_args = 
-            \ '-i C901,D100,D101,D102,D103 -l pep8,pyflakes,pep257'
+let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_fortran_checkers = ['gfortran']
+let g:syntastic_fortran_gfortran_exe = ['gfortran_ -ffree-line-length-none']
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_tab_type = 0
+let g:airline#extensions#tabline#fnametruncate = 17
 
 let g:airline_theme_patch_func = 'AirlineThemePatch'
 function! AirlineThemePatch(palette)
   let a:palette.tabline = {}
   let a:palette.tabline.airline_tabsel = [0, 0, 8, 2]
+  let a:palette.tabline.airline_tab = [0, 0, 2, 16]
   let a:palette.tabline.airline_tabmod = [0, 0, 8, 1]
-  let a:palette.tabline.airline_tabmod_unsel =  [0, 0, 1, 8]
-  let a:palette.tabline.airline_tabhid = [0, 0, 11, 8]
-  " let a:palette.tabline.airline_tabtype = [0, 0, 13, 13]
-  " let a:palette.tabline.airline_tab =    [0, 0, 0, 1]
+  let a:palette.tabline.airline_tabmod_unsel = [0, 0, 1, 16]
+  let a:palette.tabline.airline_tabhid = [0, 0, 8, 16]
+  let l:green = airline#themes#generate_color_map(
+              \ [0, 0, 8, 2], [0, 0, 8, 2], [0, 0, 16, 16])
+  let l:red = airline#themes#generate_color_map(
+              \ [0, 0, 8, 1], [0, 0, 8, 1], [0, 0, 16, 16])
+  let l:blue = airline#themes#generate_color_map(
+              \ [0, 0, 8, 4], [0, 0, 8, 4], [0, 0, 16, 16])
+  let l:gray = airline#themes#generate_color_map(
+              \ [0, 0, 16, 8], [0, 0, 16, 8], [0, 0, 16, 8])
+  let a:palette.normal = l:green
+  let a:palette.normal_modified = l:red
+  let a:palette.normal_paste = l:blue
+  let a:palette.insert = l:green
+  let a:palette.insert_modified = l:red
+  let a:palette.insert_paste = l:blue
+  let a:palette.visual = l:green
+  let a:palette.visual_modified = l:red
+  let a:palette.visual_paste = l:blue
+  let a:palette.inactive = l:gray
+  let a:palette.inactive_modified = l:gray
+  let a:palette.inactive_paste = l:gray
 endfunction
 
 let g:pymode_lint = 0 " we do this with syntastic
@@ -133,7 +156,6 @@ let g:pymode_folding = 0
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
 let g:tagbar_autopreview = 1
-let g:tagbar_sort = 0
 let g:tagbar_compact = 1
 let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = 'abo'
@@ -151,9 +173,9 @@ function! ToggleAutoFormatting()
     endif
 endfunction
 
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
+" nnoremap <c-h> <c-w>h
+" nnoremap <c-j> <c-w>j
+" nnoremap <c-k> <c-w>k
 nnoremap <c-tab> :bnext!<CR>
 nnoremap <c-s-tab> :bprevious!<CR>
 nnoremap <Leader><tab> :bnext!<CR>
@@ -172,8 +194,9 @@ nmap <Space> <Plug>RDSendLine
 vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
 vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
 nnoremap \ :Ag<SPACE>"
+nnoremap <Leader>q :cclose<CR>:lclose<CR>
 
-set background=light
+set background=dark
 hi Normal ctermbg=none
 hi link EasyMotionTarget2First Question
 hi link EasyMotionTarget2Second Question
@@ -228,6 +251,8 @@ function! StripTrailingWhitespace()
     endif
 endfunction
 
+highlight ColorColumn ctermbg=8
+
 autocmd FileType fortran setlocal colorcolumn=80 
 autocmd FileType fortran setlocal comments=:!>,:!
 autocmd FileType fortran setlocal textwidth=80
@@ -236,6 +261,7 @@ autocmd FileType fortran setlocal number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 
 autocmd FileType python setlocal formatoptions=cqroanw
+autocmd FileType python setlocal textwidth=79
 
 autocmd FileType javascript setlocal colorcolumn=80
 autocmd FileType javascript setlocal number
@@ -263,19 +289,6 @@ autocmd FileType yaml setlocal ts=2
 autocmd FileType yaml setlocal sw=2
 autocmd FileType yaml setlocal sts=2
 
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * 
-                \ if exists("b:hadcolorcolumn") | 
-                \     execute "set colorcolumn=".b:hadcolorcolumn | 
-                \ endif
-    autocmd WinLeave * 
-                \ if exists("&colorcolumn") && &colorcolumn > 0 |
-                \     let b:hadcolorcolumn = &colorcolumn |
-                \     setlocal colorcolumn=0 |
-                \ endif
-augroup END
-
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \     exe ":normal! g`\"" |
@@ -291,7 +304,6 @@ function! RestoreSession(name)
     if exists("g:my_is_stdin")
         return
     endif
-    echo "test"
     echo exists("g:my_is_stdin")
     if filereadable($HOME . "/.vim/sessions/" . a:name)
         execute 'source ' . $HOME . "/.vim/sessions/" . a:name
