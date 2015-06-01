@@ -9,7 +9,7 @@ Red='\[\e[0;31m\]'
 Green='\[\e[0;32m\]'
 Yellow='\[\e[0;33m\]'
 Blue='\[\e[0;34m\]'
-Purple='\[\e[0;35m\]'
+Magenta='\[\e[0;35m\]'
 Cyan='\[\e[0;36m\]'
 White='\[\e[0;37m\]'
 
@@ -24,7 +24,7 @@ PS1="\
                         for (i=1; i<NF; i++) print substr(\$i, 1, 1) \"/\";\
                         print \$NF}' \
            <<<'\w')\
-\$(if git status &>/dev/null; then\
+\$(if git rev-parse --is-inside-work-tree &>/dev/null; then\
     echo -n ' ';\
     if git status --porcelain | egrep . &>/dev/null; then\
         echo -n '$Red';\
@@ -33,7 +33,7 @@ PS1="\
     fi;\
     git rev-parse --abbrev-ref HEAD;\
     fi)\
- $Blue\$(if [[ \j > 0 ]]; then echo \j; fi)\
+ $Blue\$(if [[ \j > 0 ]]; then echo '\j '; fi)\
 $Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \"[\$PS_STATUS]\"; fi)\
 $Black\$\
  $Color_Off\
