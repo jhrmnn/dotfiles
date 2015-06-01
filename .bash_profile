@@ -5,7 +5,6 @@ export LANG=en_US.UTF-8
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
-BrightBlack='\[\e[0;90m\]'
 Red='\[\e[0;31m\]'
 Green='\[\e[0;32m\]'
 Yellow='\[\e[0;33m\]'
@@ -36,7 +35,7 @@ PS1="\
     fi)\
  $Blue\$(if [[ \j > 0 ]]; then echo \j; fi)\
 $Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \"[\$PS_STATUS]\"; fi)\
-$BrightBlack\$\
+$Black\$\
  $Color_Off\
 "
 

@@ -241,16 +241,16 @@ if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
 endif
 
-autocmd InsertLeave * :call StripTrailingWhitespace()
-function! StripTrailingWhitespace()
-    if col(".") == col("$")-1
-        let l:cursor_pos = getpos('.')
-        :substitute/\s\+$//e
-        let l:cursor_pos[2] = col('$')-1
-        call setpos('.', l:cursor_pos)
-    endif
-endfunction
-
+" autocmd InsertLeave * :call StripTrailingWhitespace()
+" function! StripTrailingWhitespace()
+"     if col(".") == col("$")-1
+"         let l:cursor_pos = getpos('.')
+"         :substitute/\s\+$//e
+"         let l:cursor_pos[2] = col('$')-1
+"         call setpos('.', l:cursor_pos)
+"     endif
+" endfunction
+"
 highlight ColorColumn ctermbg=8
 
 autocmd FileType fortran setlocal colorcolumn=80 
