@@ -77,6 +77,8 @@ nnoremap <Leader>f :CtrlPLine<CR>
 let g:ctrlp_follow_symlinks = 2
 let g:ctrlp_user_command = 'ag %s -l -g ""'
 let g:ctrlp_use_caching = 0
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+set grepprg=ag\ --nogroup\ --nocolor
 
 " let g:LatexBox_custom_indent = 0
 " let g:LatexBox_latexmk_async = 1
