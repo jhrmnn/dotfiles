@@ -1,5 +1,9 @@
-if [[ $BASHRC_SOURCED ]]; then exit; fi
+if [[ $BASHRC_SOURCED ]]; then return; fi
 export BASHRC_SOURCED=1
+
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 

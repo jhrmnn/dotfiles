@@ -40,6 +40,7 @@ Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
 Plugin 'tpope/vim-fugitive' " git support
 Plugin 'airblade/vim-gitgutter' " git gutter
 Plugin 'jcfaria/Vim-R-plugin' " R support
+Plugin 'davidoc/taskpaper.vim' " taskpaper support
 Plugin 'othree/html5.vim' " html5 support
 Plugin 'pangloss/vim-javascript' " javascript support
 Plugin 'mattn/webapi-vim' " supports web apis
@@ -215,7 +216,7 @@ set hlsearch
 set ignorecase
 set smartcase
 set incsearch
-set mouse=r
+set mouse=a
 set clipboard=unnamed
 set showmode
 set showmatch
@@ -238,21 +239,12 @@ set laststatus=2
 set encoding=utf-8
 set noerrorbells visualbell t_vb=
 set sessionoptions-=options
+set breakindent
 
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
 endif
 
-" autocmd InsertLeave * :call StripTrailingWhitespace()
-" function! StripTrailingWhitespace()
-"     if col(".") == col("$")-1
-"         let l:cursor_pos = getpos('.')
-"         :substitute/\s\+$//e
-"         let l:cursor_pos[2] = col('$')-1
-"         call setpos('.', l:cursor_pos)
-"     endif
-" endfunction
-"
 highlight ColorColumn ctermbg=8
 
 autocmd FileType fortran setlocal colorcolumn=80 
@@ -277,24 +269,20 @@ autocmd FileType cpp setlocal cino+=(0
 autocmd FileType mkd setlocal textwidth=80
 autocmd FileType mkd setlocal formatoptions=twanb1vb
 autocmd FileType mkd setlocal spell
+autocmd FileType mkd setlocal noet ci pi sts=0 sw=4 ts=4
 
-autocmd FileType *tex setlocal textwidth=80
-autocmd FileType *tex setlocal formatoptions=twb1a
-autocmd FileType *tex setlocal number
-autocmd FileType *tex setlocal ts=2
-autocmd FileType *tex setlocal sw=2
-autocmd FileType *tex setlocal sts=2
-autocmd FileType *tex setlocal spell
-autocmd FileType *tex syntax spell toplevel
+autocmd FileType tex setlocal textwidth=80
+autocmd FileType tex setlocal formatoptions=tcwb1a
+autocmd FileType tex setlocal number
+autocmd FileType tex setlocal ts=2
+autocmd FileType tex setlocal sw=2
+autocmd FileType tex setlocal sts=2
+autocmd FileType tex setlocal spell
+autocmd FileType tex syntax spell toplevel
 
 autocmd FileType yaml setlocal ts=2
 autocmd FileType yaml setlocal sw=2
 autocmd FileType yaml setlocal sts=2
-
-autocmd BufReadPost *
-            \ if line("'\"") > 1 && line("'\"") <= line("$") |
-            \     exe ":normal! g`\"" |
-            \ endif
 
 function! FindProjectName()
     let s:name = fnamemodify(getcwd(), ":t") . "." . 

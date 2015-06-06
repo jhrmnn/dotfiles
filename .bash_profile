@@ -55,8 +55,19 @@ else
     alias ls="ls -hG"
 fi
 
-hs () {
-    history | grep "$1" | less
+hlvs () {
+    tmux split-window -v
+    tmux select-layout even-horizontal
+    tmux select-pane -t 0
+    clear
+}
+
+thrds () {
+    tmux split-window -v
+    tmux split-window -v
+    tmux select-layout even-horizontal
+    tmux select-pane -t 0
+    clear
 }
 
 [[ -s ~/.bash_aliases ]] && . ~/.bash_aliases
