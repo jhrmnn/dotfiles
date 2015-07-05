@@ -2,9 +2,6 @@ set shell=/bin/bash
 set nocompatible
 let mapleader = ' '
 let maplocalleader = ' '
-syntax on
-
-filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -30,6 +27,7 @@ Plugin 'terryma/vim-expand-region' " region expansion
 Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'danro/rename.vim'
+Plugin 'tpope/vim-dispatch.git' " asynchronous make
 if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
     Plugin 'Valloric/YouCompleteMe' " fast code completion
 endif
@@ -48,28 +46,21 @@ Plugin 'mattn/gist-vim' " gist support
 " Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
 Plugin 'lervag/vimtex' " latex support
 Plugin 'JuliaLang/julia-vim' " julia support
+" Plugin 'hdima/python-syntax' " better python syntax
 Plugin 'klen/python-mode'  " python support
 Plugin 'plasticboy/vim-markdown' " markdown support
 Plugin 'ryanss/vim-hackernews' " hackernews
 
 call vundle#end()
 
-filetype plugin on
-filetype indent on
-
 set omnifunc=syntaxcomplete#Complete
 
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_register_as_syntastic_checker = 0
 let g:ycm_semantic_triggers = {
             \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
-" imap íí \begin{
-" imap éé <Plug>LatexCloseCurEnv
-" nmap <Leader>ce <Plug>LatexChangeEnv
-" nmap <Leader>se <Plug>LatexToggleStarEnv
-" vmap <Leader>we <Plug>LatexEnvWrapSelection
 
 let g:clever_f_smart_case = 1
 
@@ -81,11 +72,6 @@ let g:ctrlp_use_caching = 0
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 set grepprg=ag\ --nogroup\ --nocolor
 
-" let g:LatexBox_custom_indent = 0
-" let g:LatexBox_latexmk_async = 1
-" let g:LatexBox_latexmk_preview_continuously = 2
-" let g:LatexBox_viewer = 'open -a Skim'
-" let g:LatexBox_quickfix = 2
 let g:vimtex_quickfix_ignored_warnings = [
             \ 'Underfull', 'Overfull', 'specifier changed to',
             \ "'babel/polyglossia' detected",
@@ -94,6 +80,9 @@ let g:vimtex_quickfix_ignored_warnings = [
             \ "Marginpar"
             \ ]
 
+nnoremap <Leader>mk :Make<CR>
+
+let g:tex_flavor = "latex"
 let g:vimtex_fold_enabled = 0
 
 let g:gitgutter_max_signs = 10000
@@ -111,9 +100,24 @@ map M <Leader><Leader>b
 let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
-let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_python_checkers = ['flake8', 'pep257']
+let g:syntastic_python_pep257_args = ['--ignore=D100,D101,D102,D103']
+let g:syntastic_python_flake8_args = ['--ignore=E501,E226']
+let g:syntastic_python_flake8_quiet_messages =  {
+            \ "regex": [
+            \    "undefined name 'basestring'",
+            \    "undefined name 'unicode'"
+            \ ]}
 let g:syntastic_fortran_checkers = ['gfortran']
-let g:syntastic_fortran_gfortran_exe = ['gfortran_ -ffree-line-length-none']
+let g:syntastic_fortran_errorformat =
+            \ '%-C %#,'.
+            \ '%-C  %#%.%#,'.
+            \ '%A%f:%l\[.:\]%c:,'.
+            \ '%Z%trror: %m,'.
+            \ '%ZFatal %trror: %m,'.
+            \ '%Z%tarning: %m,'.
+            \ '%-G%.%#'
+let g:syntastic_fortran_gfortran_args = ['-ffree-line-length-none']
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 
@@ -155,6 +159,7 @@ endfunction
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is done by youcompleteme
 let g:pymode_folding = 0
+" let g:pymode_python = 'python3'
 
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
@@ -199,6 +204,10 @@ vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
 nnoremap \ :Ag<SPACE>"
 nnoremap <Leader>q :cclose<CR>:lclose<CR>
 
+filetype plugin on
+filetype indent on
+syntax on
+
 set background=dark
 hi Normal ctermbg=none
 hi link EasyMotionTarget2First Question
@@ -211,7 +220,6 @@ set gdefault
 set encoding=utf-8 nobomb
 set directory=~/.vim/swaps
 set exrc
-set secure
 set hlsearch
 set ignorecase
 set smartcase
@@ -253,9 +261,13 @@ autocmd FileType fortran setlocal textwidth=80
 autocmd FileType fortran setlocal formatoptions=cqroanw2
 autocmd FileType fortran setlocal number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
+autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
 
+autocmd FileType python setlocal colorcolumn=80
 autocmd FileType python setlocal formatoptions=cqroanw
 autocmd FileType python setlocal textwidth=79
+autocmd FileType python setlocal number
+autocmd FileType python setlocal cino+=(0
 
 autocmd FileType javascript setlocal colorcolumn=80
 autocmd FileType javascript setlocal number
@@ -267,12 +279,12 @@ autocmd FileType cpp setlocal number
 autocmd FileType cpp setlocal cino+=(0
 
 autocmd FileType mkd setlocal textwidth=80
-autocmd FileType mkd setlocal formatoptions=twanb1vb
+autocmd FileType mkd setlocal formatoptions=wnb1vb
 autocmd FileType mkd setlocal spell
 autocmd FileType mkd setlocal noet ci pi sts=0 sw=4 ts=4
 
 autocmd FileType tex setlocal textwidth=80
-autocmd FileType tex setlocal formatoptions=tcwb1a
+autocmd FileType tex setlocal formatoptions=tcqroaw1
 autocmd FileType tex setlocal number
 autocmd FileType tex setlocal ts=2
 autocmd FileType tex setlocal sw=2
@@ -283,6 +295,11 @@ autocmd FileType tex syntax spell toplevel
 autocmd FileType yaml setlocal ts=2
 autocmd FileType yaml setlocal sw=2
 autocmd FileType yaml setlocal sts=2
+
+autocmd BufReadPost *
+            \ if line("'\"") > 1 && line("'\"") <= line("$") |
+            \     exe ":normal! g`\"" |
+            \ endif
 
 function! FindProjectName()
     let s:name = fnamemodify(getcwd(), ":t") . "." . 
