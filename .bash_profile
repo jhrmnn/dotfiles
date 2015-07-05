@@ -31,7 +31,7 @@ PS1="\
     else\
         echo -n '$Green';\
     fi;\
-    git rev-parse --abbrev-ref HEAD;\
+    git rev-parse --abbrev-ref HEAD 2>/dev/null;\
     fi)\
  $Blue\$(if [[ \j > 0 ]]; then echo '\j '; fi)\
 $Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \"[\$PS_STATUS]\"; fi)\
