@@ -248,6 +248,8 @@ set encoding=utf-8
 set noerrorbells visualbell t_vb=
 set sessionoptions-=options
 set breakindent
+set breakindentopt=shift:-2
+let &showbreak = '> '
 
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
