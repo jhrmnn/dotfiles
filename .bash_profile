@@ -74,5 +74,5 @@ thrds () {
 
 set -o vi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_COMPLETION_TRIGGER='**'
+export FZF_COMPLETION_TRIGGER='§§'
 export FZF_DEFAULT_OPTS="-x"
