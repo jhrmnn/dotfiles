@@ -109,15 +109,7 @@ let g:syntastic_python_flake8_quiet_messages =  {
             \    "undefined name 'unicode'"
             \ ]}
 let g:syntastic_fortran_checkers = ['gfortran']
-let g:syntastic_fortran_errorformat =
-            \ '%-C %#,'.
-            \ '%-C  %#%.%#,'.
-            \ '%A%f:%l\[.:\]%c:,'.
-            \ '%Z%trror: %m,'.
-            \ '%ZFatal %trror: %m,'.
-            \ '%Z%tarning: %m,'.
-            \ '%-G%.%#'
-let g:syntastic_fortran_gfortran_args = ['-ffree-line-length-none']
+let g:syntastic_fortran_compiler_options = '-ffree-line-length-none'
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 
