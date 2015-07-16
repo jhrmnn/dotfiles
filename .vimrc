@@ -51,6 +51,8 @@ highlight link EasyMotionTarget2First Question
 highlight link EasyMotionTarget2Second Question
 highlight link EasyMotionIncSearch IncSearch
 
+let mapleader = ' '
+let maplocalleader = ' '
 nnoremap <c-tab> :bnext!<CR>
 nnoremap <c-s-tab> :bprevious!<CR>
 nnoremap <Leader><tab> :bnext!<CR>
@@ -146,8 +148,6 @@ if argc() == 0 && v:version > 703
     autocmd VimLeave * call SaveSession(FindProjectName())
     autocmd VimEnter * nested call RestoreSession(FindProjectName())
 end
-let mapleader = ' '
-let maplocalleader = ' '
 
 "" settings below concerns plugins
 
