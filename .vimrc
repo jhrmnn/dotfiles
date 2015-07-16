@@ -1,7 +1,155 @@
-set shell=/bin/bash
+filetype plugin indent on
+syntax on
+
 set nocompatible
+set shell=/bin/bash
+set background=dark
+set wildmenu
+set backspace=indent,eol,start
+set gdefault
+set encoding=utf-8 nobomb
+set directory=~/.vim/swaps
+set exrc
+set hlsearch
+set ignorecase
+set smartcase
+set incsearch
+set mouse=a
+set clipboard=unnamed
+set showmode
+set showmatch
+set nolist
+set title
+set autoindent
+set smartindent
+set smarttab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set shiftround
+set wrap linebreak nolist
+set viminfo='100,<100,:100,n~/.viminfo
+set undofile
+set undodir=~/.vim/undo
+set nofoldenable
+set laststatus=2
+set encoding=utf-8
+set noerrorbells visualbell t_vb=
+set sessionoptions-=options
+let g:tex_flavor = "latex"
+let g:clever_f_smart_case = 1
+if v:version > 704 || v:version == 704 && has('patch338')
+    set breakindent
+    set breakindentopt=shift:2
+    let &showbreak = '> '
+endif
+
+highlight Normal ctermbg=none
+highlight ColorColumn ctermbg=8
+highlight link EasyMotionTarget2First Question
+highlight link EasyMotionTarget2Second Question
+highlight link EasyMotionIncSearch IncSearch
+
+nnoremap <c-tab> :bnext!<CR>
+nnoremap <c-s-tab> :bprevious!<CR>
+nnoremap <Leader><tab> :bnext!<CR>
+nnoremap <Leader><s-tab> :bprevious!<CR>
+nnoremap <Leader>w :Bdelete<CR>
+nnoremap <c-x> :Bdelete<CR>
+nnoremap <Leader>n :noh<CR>
+nnoremap <Leader>, :set invpaste<CR>
+nnoremap <Leader>a :call ToggleAutoFormatting()<CR>
+
+autocmd FileType fortran setlocal colorcolumn=80 
+autocmd FileType fortran setlocal comments=:!>,:!
+autocmd FileType fortran setlocal textwidth=80
+autocmd FileType fortran setlocal formatoptions=cqroanw2
+autocmd FileType fortran setlocal number
+autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
+autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
+
+autocmd FileType python setlocal colorcolumn=80
+autocmd FileType python setlocal formatoptions=cqroanw
+autocmd FileType python setlocal textwidth=79
+autocmd FileType python setlocal number
+autocmd FileType python setlocal cino+=(0
+
+autocmd FileType javascript setlocal colorcolumn=80
+autocmd FileType javascript setlocal number
+
+autocmd FileType cpp setlocal colorcolumn=80
+autocmd FileType cpp setlocal textwidth=80
+autocmd FileType cpp setlocal formatoptions=cqroanw
+autocmd FileType cpp setlocal number
+autocmd FileType cpp setlocal cino+=(0
+
+autocmd FileType mkd setlocal textwidth=80
+autocmd FileType mkd setlocal formatoptions=wnb1vb
+autocmd FileType mkd setlocal spell
+autocmd FileType mkd setlocal noet ci pi sts=0 sw=4 ts=4
+
+autocmd FileType tex setlocal textwidth=80
+autocmd FileType tex setlocal formatoptions=tcqroaw1
+autocmd FileType tex setlocal number
+autocmd FileType tex setlocal ts=2
+autocmd FileType tex setlocal sw=2
+autocmd FileType tex setlocal sts=2
+autocmd FileType tex setlocal spell
+autocmd FileType tex syntax spell toplevel
+
+autocmd FileType yaml setlocal ts=2
+autocmd FileType yaml setlocal sw=2
+autocmd FileType yaml setlocal sts=2
+
+autocmd BufReadPost *
+            \ if line("'\"") > 1 && line("'\"") <= line("$") |
+            \     exe ":normal! g`\"" |
+            \ endif
+
+function! ToggleAutoFormatting()
+    if &fo =~ "a"
+        setl fo-=a
+        echo "Autoformat off"
+    else
+        setl fo+=a
+        echo "Autoformat on"
+    endif
+endfunction
+
+function! FindProjectName()
+    let s:name = fnamemodify(getcwd(), ":t") . "." . 
+                \ md5#md5(getcwd()) . ".vim"
+    return s:name
+endfunction
+
+function! RestoreSession(name)
+    if exists("g:my_is_stdin")
+        return
+    endif
+    echo exists("g:my_is_stdin")
+    if filereadable($HOME . "/.vim/sessions/" . a:name)
+        execute 'source ' . $HOME . "/.vim/sessions/" . a:name
+    end
+endfunction
+
+function! SaveSession(name)
+    if exists("g:my_is_stdin")
+        return
+    endif
+    execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
+endfunction
+
+autocmd StdinReadPre * let g:my_is_stdin = 1
+
+if argc() == 0 && v:version > 703
+    autocmd VimLeave * call SaveSession(FindProjectName())
+    autocmd VimEnter * nested call RestoreSession(FindProjectName())
+end
 let mapleader = ' '
 let maplocalleader = ' '
+
+"" settings below concerns plugins
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -20,6 +168,7 @@ Plugin 'tpope/vim-surround' " better brackets
 Plugin 'rking/ag.vim' " faster grep
 Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
 Plugin 'ervandew/screen' " screen support
+Plugin 'chriskempson/base16-vim' " base16 for gvim
 Plugin 'dhruvasagar/vim-table-mode' " plain-text table formatting
 Plugin 'Raimondi/delimitMate' " autobrackets
 Plugin 'mhinz/vim-hugefile' " better handling of large files
@@ -28,7 +177,7 @@ Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'danro/rename.vim'
 Plugin 'tpope/vim-dispatch.git' " asynchronous make
-if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
+if v:version > 703 || v:version == 703 && has('patch584')
     Plugin 'Valloric/YouCompleteMe' " fast code completion
 endif
 Plugin 'godlygeek/tabular' " automatic alignment
@@ -54,7 +203,6 @@ Plugin 'ryanss/vim-hackernews' " hackernews
 call vundle#end()
 
 set omnifunc=syntaxcomplete#Complete
-
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_register_as_syntastic_checker = 0
@@ -62,14 +210,17 @@ let g:ycm_semantic_triggers = {
             \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
 
-let g:clever_f_smart_case = 1
-
 nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>f :CtrlPLine<CR>
 let g:ctrlp_follow_symlinks = 2
 let g:ctrlp_user_command = 'ag %s -l -g ""'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
+vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
+nnoremap \ :Ag<SPACE>"
+nnoremap <Leader>q :cclose<CR>:lclose<CR>
 set grepprg=ag\ --nogroup\ --nocolor
 
 let g:vimtex_quickfix_ignored_warnings = [
@@ -82,7 +233,6 @@ let g:vimtex_quickfix_ignored_warnings = [
 
 nnoremap <Leader>mk :Make<CR>
 
-let g:tex_flavor = "latex"
 let g:vimtex_fold_enabled = 0
 
 let g:gitgutter_max_signs = 10000
@@ -96,7 +246,6 @@ map S <Plug>(easymotion-F2)
 map m <Leader><Leader>w
 map M <Leader><Leader>b
 
-" let g:syntastic_check_on_open = 1
 let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
@@ -148,10 +297,15 @@ function! AirlineThemePatch(palette)
   let a:palette.inactive_paste = l:gray
 endfunction
 
+let g:task_paper_styles ={ 
+            \    'flagged': 'ctermfg=Red guifg=Red',
+            \    'due': 'ctermfg=Yellow guifg=Yellow',
+            \    'waiting': 'ctermfg=Green guifg=Green',
+            \ }
+
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is done by youcompleteme
 let g:pymode_folding = 0
-" let g:pymode_python = 'python3'
 
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
@@ -159,168 +313,15 @@ let g:tagbar_autopreview = 1
 let g:tagbar_compact = 1
 let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = 'abo'
+nnoremap <Leader>t :TagbarToggle<CR>
 
 let vimrplugin_vsplit = 1
-
-nnoremap <Leader>a :call ToggleAutoFormatting()<CR>
-function! ToggleAutoFormatting()
-    if &fo =~ "a"
-        setl fo-=a
-        echo "Autoformat off"
-    else
-        setl fo+=a
-        echo "Autoformat on"
-    endif
-endfunction
-
-" nnoremap <c-h> <c-w>h
-" nnoremap <c-j> <c-w>j
-" nnoremap <c-k> <c-w>k
-nnoremap <c-tab> :bnext!<CR>
-nnoremap <c-s-tab> :bprevious!<CR>
-nnoremap <Leader><tab> :bnext!<CR>
-nnoremap <Leader><s-tab> :bprevious!<CR>
-nnoremap <Leader>w :Bdelete<CR>
-nnoremap <c-x> :Bdelete<CR>
-vmap v <Plug>(expand_region_expand)
-vmap <Leader>v <Plug>(expand_region_shrink)
-nnoremap <Leader>t :TagbarToggle<CR>
-nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>, :set invpaste<CR>
-
 vmap <Space> <Plug>RDSendSelection
 nmap <Space> <Plug>RDSendLine
 
-vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
-vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
-nnoremap \ :Ag<SPACE>"
-nnoremap <Leader>q :cclose<CR>:lclose<CR>
-
-filetype plugin on
-filetype indent on
-syntax on
-
-set background=dark
-hi Normal ctermbg=none
-hi link EasyMotionTarget2First Question
-hi link EasyMotionTarget2Second Question
-hi link EasyMotionIncSearch IncSearch
-
-set wildmenu
-set backspace=indent,eol,start
-set gdefault
-set encoding=utf-8 nobomb
-set directory=~/.vim/swaps
-set exrc
-set hlsearch
-set ignorecase
-set smartcase
-set incsearch
-set mouse=a
-set clipboard=unnamed
-set showmode
-set showmatch
-set nolist
-set title
-set autoindent
-set smartindent
-set smarttab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set shiftround
-set wrap linebreak nolist
-set viminfo='100,<100,:100,n~/.viminfo
-set undofile
-set undodir=~/.vim/undo
-set nofoldenable
-set laststatus=2
-set encoding=utf-8
-set noerrorbells visualbell t_vb=
-set sessionoptions-=options
-set breakindent
-set breakindentopt=shift:-2
-let &showbreak = '> '
+vmap v <Plug>(expand_region_expand)
+vmap <Leader>v <Plug>(expand_region_shrink)
 
 if filereadable("~/.vimrc_local")
     so ~/.vimrc_local
 endif
-
-highlight ColorColumn ctermbg=8
-
-autocmd FileType fortran setlocal colorcolumn=80 
-autocmd FileType fortran setlocal comments=:!>,:!
-autocmd FileType fortran setlocal textwidth=80
-autocmd FileType fortran setlocal formatoptions=cqroanw2
-autocmd FileType fortran setlocal number
-autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
-autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
-
-autocmd FileType python setlocal colorcolumn=80
-autocmd FileType python setlocal formatoptions=cqroanw
-autocmd FileType python setlocal textwidth=79
-autocmd FileType python setlocal number
-autocmd FileType python setlocal cino+=(0
-
-autocmd FileType javascript setlocal colorcolumn=80
-autocmd FileType javascript setlocal number
-
-autocmd FileType cpp setlocal colorcolumn=80
-autocmd FileType cpp setlocal textwidth=80
-autocmd FileType cpp setlocal formatoptions=cqroanw
-autocmd FileType cpp setlocal number
-autocmd FileType cpp setlocal cino+=(0
-
-autocmd FileType mkd setlocal textwidth=80
-autocmd FileType mkd setlocal formatoptions=wnb1vb
-autocmd FileType mkd setlocal spell
-autocmd FileType mkd setlocal noet ci pi sts=0 sw=4 ts=4
-
-autocmd FileType tex setlocal textwidth=80
-autocmd FileType tex setlocal formatoptions=tcqroaw1
-autocmd FileType tex setlocal number
-autocmd FileType tex setlocal ts=2
-autocmd FileType tex setlocal sw=2
-autocmd FileType tex setlocal sts=2
-autocmd FileType tex setlocal spell
-autocmd FileType tex syntax spell toplevel
-
-autocmd FileType yaml setlocal ts=2
-autocmd FileType yaml setlocal sw=2
-autocmd FileType yaml setlocal sts=2
-
-autocmd BufReadPost *
-            \ if line("'\"") > 1 && line("'\"") <= line("$") |
-            \     exe ":normal! g`\"" |
-            \ endif
-
-function! FindProjectName()
-    let s:name = fnamemodify(getcwd(), ":t") . "." . 
-                \ md5#md5(getcwd()) . ".vim"
-    return s:name
-endfunction
-
-function! RestoreSession(name)
-    if exists("g:my_is_stdin")
-        return
-    endif
-    echo exists("g:my_is_stdin")
-    if filereadable($HOME . "/.vim/sessions/" . a:name)
-        execute 'source ' . $HOME . "/.vim/sessions/" . a:name
-    end
-endfunction
-
-function! SaveSession(name)
-    if exists("g:my_is_stdin")
-        return
-    endif
-    execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
-endfunction
-
-autocmd StdinReadPre * let g:my_is_stdin = 1
-
-if argc() == 0 && v:version > 703
-    autocmd VimLeave * call SaveSession(FindProjectName())
-    autocmd VimEnter * nested call RestoreSession(FindProjectName())
-end
