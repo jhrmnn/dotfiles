@@ -177,7 +177,7 @@ Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'danro/rename.vim'
 Plugin 'tpope/vim-dispatch.git' " asynchronous make
-if v:version > 703 || v:version == 703 && has('patch584')
+if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
     Plugin 'Valloric/YouCompleteMe' " fast code completion
 endif
 Plugin 'godlygeek/tabular' " automatic alignment
