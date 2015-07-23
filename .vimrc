@@ -13,6 +13,7 @@ set exrc
 set hlsearch
 set ignorecase
 set smartcase
+set diffopt+=iwhite
 set incsearch
 set mouse=a
 set clipboard=unnamed
@@ -151,6 +152,8 @@ end
 
 "" settings below concerns plugins
 
+filetype off
+
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -165,6 +168,7 @@ Plugin 'moll/vim-bbye' " better bdelete
 Plugin 'rhysd/clever-f.vim' " improved f F 
 Plugin 'tpope/vim-repeat' " improved .
 Plugin 'tpope/vim-surround' " better brackets
+Plugin 'junegunn/fzf'
 Plugin 'rking/ag.vim' " faster grep
 Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
 Plugin 'ervandew/screen' " screen support
@@ -177,6 +181,8 @@ Plugin 'tomtom/tcomment_vim.git' " fast commenting
 Plugin 'Lokaltog/vim-easymotion' " fast motion
 Plugin 'danro/rename.vim'
 Plugin 'tpope/vim-dispatch.git' " asynchronous make
+Plugin 'chrisbra/vim-diff-enhanced'
+Plugin 'AndrewRadev/linediff.vim' " diffing ranges
 if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
     Plugin 'Valloric/YouCompleteMe' " fast code completion
 endif
@@ -202,6 +208,8 @@ Plugin 'ryanss/vim-hackernews' " hackernews
 
 call vundle#end()
 
+filetype plugin indent on
+
 set omnifunc=syntaxcomplete#Complete
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -217,6 +225,10 @@ let g:ctrlp_user_command = 'ag %s -l -g ""'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
+vnoremap <Leader>ldf :Linediff<CR>
+nnoremap <Leader>ldf :LinediffReset<CR>
+let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
+
 vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
 vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
 nnoremap \ :Ag<SPACE>"
@@ -228,7 +240,8 @@ let g:vimtex_quickfix_ignored_warnings = [
             \ "'babel/polyglossia' detected",
             \ "Token not allowed in a PDF string",
             \ "unicode-math warning",
-            \ "Marginpar"
+            \ "Marginpar",
+            \ "Package hyperref Warning: Rerun to get /PageLabels entry."
             \ ]
 
 nnoremap <Leader>mk :Make<CR>
