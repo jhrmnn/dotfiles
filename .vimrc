@@ -41,7 +41,7 @@ nnoremap <Leader><tab> :bnext!<CR>
 nnoremap <Leader><s-tab> :bprevious!<CR>
 nnoremap <Leader>w :bdelete<CR>
 nnoremap <Leader>i :set invpaste<CR>
-noremap <BS> :noh<CR>
+nnoremap <BS> :noh<CR>
 nnoremap <Leader>q :cclose<CR>:lclose<CR>
 nnoremap <S-Enter> O
 nnoremap <Enter> o
@@ -159,9 +159,7 @@ nnoremap <Leader>p :FZF<CR>
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
 
-let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
-
-vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
+vnoremap \ y:Ag\ '<C-R><C-R>"'<CR>
 nnoremap \ :Ag<SPACE>"
 set grepprg=ag\ --nogroup\ --nocolor
 
@@ -264,8 +262,6 @@ let g:tagbar_previewwin_pos = 'abo'
 nnoremap <Leader>t :TagbarToggle<CR>
 
 let vimrplugin_vsplit = 1
-vmap <Space> <Plug>RDSendSelection
-nmap <Space> <Plug>RDSendLine
 
 vmap v <Plug>(expand_region_expand)
 vmap <Leader>v <Plug>(expand_region_shrink)
