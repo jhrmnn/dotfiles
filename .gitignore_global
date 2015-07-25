@@ -1,6 +1,5 @@
 .DS_Store
 *.swp
-*.sublime-project
-*.sublime-workspace
 .ropeproject
 _vimrc
+.*.un~
