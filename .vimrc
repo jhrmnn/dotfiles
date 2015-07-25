@@ -137,13 +137,13 @@ Plugin 'gmarik/Vundle.vim'
 " new functionality
 Plugin 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
 Plugin 'tpope/vim-surround' " key: cs, ds, ys
-Plugin 'terryma/vim-expand-region' " key: <Enter>
+Plugin 'terryma/vim-expand-region' " key: <Tab>
 Plugin 'tomtom/tcomment_vim.git' " automatic comments, key: gc
 Plugin 'justinmk/vim-sneak' " 2-letter f, key: s S f t
 Plugin 'tpope/vim-dispatch.git' " asynchronous make, key: <Leader>mk
 Plugin 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
 Plugin 'tyru/open-browser.vim' " key: gx
-Plugin 'osyo-manga/vim-over' " better substitute, key: <Leader>s
+Plugin 'osyo-manga/vim-over' " better substitute, key: <Enter>
 Plugin 'majutsushi/tagbar' " ctags, key: <Leader>t
 Plugin 'junegunn/fzf' " key: <Leader>p
 Plugin 'tpope/vim-fugitive' " git
@@ -182,11 +182,6 @@ filetype plugin indent on
 
 " global variables
  
-let g:rainbow_active = 1 
-let g:rainbow_conf = {
-            \    'ctermfgs': ['blue', 'yellow', 'red', 'green', 'magenta'],
-            \ }
-
 let g:tex_flavor = "latex"
 
 let g:gitgutter_max_signs = 10000
@@ -199,6 +194,11 @@ let g:sneak#streak = 1
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is done by youcompleteme
 let g:pymode_folding = 0
+
+let g:rainbow_active = 1 
+let g:rainbow_conf = {
+            \    'ctermfgs': ['blue', 'yellow', 'red', 'green', 'magenta'],
+            \ }
 
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
