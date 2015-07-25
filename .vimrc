@@ -41,14 +41,14 @@ highlight ColorColumn ctermbg=8
 let mapleader = " "
 let maplocalleader = " "
 
-nnoremap <Enter> o
-nnoremap <S-Enter> O
-vmap <Enter> <Plug>(expand_region_expand)
-vmap <BS> <Plug>(expand_region_shrink)
+vmap <Tab> <Plug>(expand_region_expand)
+vmap <S-Tab> <Plug>(expand_region_shrink)
 vnoremap <F9> ~
 nnoremap <BS> :nohlsearch<CR>
 vnoremap \ y:Ag\ '<C-R><C-R>"'<CR>
 nnoremap \ :Ag<SPACE>""<left>
+nnoremap <Enter> :OverCommandLine<CR>
+vnoremap <Enter> :OverCommandLine<CR>
 nnoremap <Leader><tab> :bnext!<CR>
 nnoremap <Leader><s-tab> :bprevious!<CR>
 nnoremap <Leader>w :bdelete<CR>
@@ -59,8 +59,6 @@ nnoremap <Leader>mk :Make<CR>
 nnoremap <Leader>p :FZF<CR>
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
-nnoremap <Leader>s :OverCommandLine<CR>
-vnoremap <Leader>s :OverCommandLine<CR>
 " windows movements
 nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
