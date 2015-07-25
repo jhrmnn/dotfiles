@@ -46,46 +46,16 @@ nnoremap <Leader>q :cclose<CR>:lclose<CR>
 nnoremap <S-Enter> O
 nnoremap <Enter> o
 
-autocmd FileType fortran setlocal colorcolumn=80 
-autocmd FileType fortran setlocal comments=:!>,:!
-autocmd FileType fortran setlocal textwidth=80
-autocmd FileType fortran setlocal formatoptions=cqroanw2
-autocmd FileType fortran setlocal number
+autocmd FileType fortran setlocal cc=80 comments=:!>,:! tw=80 fo=cqroanw2 number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
-
-autocmd FileType python setlocal colorcolumn=80
-autocmd FileType python setlocal formatoptions=cqroanw
-autocmd FileType python setlocal textwidth=79
-autocmd FileType python setlocal number
-autocmd FileType python setlocal cino+=(0
-
-autocmd FileType javascript setlocal colorcolumn=80
-autocmd FileType javascript setlocal number
-
-autocmd FileType cpp setlocal colorcolumn=80
-autocmd FileType cpp setlocal textwidth=80
-autocmd FileType cpp setlocal formatoptions=cqroanw
-autocmd FileType cpp setlocal number
-autocmd FileType cpp setlocal cino+=(0
-
-autocmd FileType mkd setlocal textwidth=80
-autocmd FileType mkd setlocal formatoptions=wnb1vb
-autocmd FileType mkd setlocal spell
-autocmd FileType mkd setlocal noet ci pi sts=0 sw=4 ts=4
-
-autocmd FileType tex setlocal textwidth=80
-autocmd FileType tex setlocal formatoptions=tcqroaw1
-autocmd FileType tex setlocal number
-autocmd FileType tex setlocal ts=2
-autocmd FileType tex setlocal sw=2
-autocmd FileType tex setlocal sts=2
-autocmd FileType tex setlocal spell
+autocmd FileType python setlocal cc=80 fo=cqroanw tw=79 number cino+=(0
+autocmd FileType javascript setlocal cc=80 number
+autocmd FileType cpp setlocal cc=80 tw=80 fo=cqroanw number cino+=(0
+autocmd FileType mkd setlocal tw=80 fo=wnb1vb spell noet ci pi sts=0 sw=4 ts=4
+autocmd FileType tex setlocal tw=80 fo=tcqroaw1 number ts=2 sw=2 sts=2 spell
 autocmd FileType tex syntax spell toplevel
-
-autocmd FileType yaml setlocal ts=2
-autocmd FileType yaml setlocal sw=2
-autocmd FileType yaml setlocal sts=2
+autocmd FileType yaml setlocal ts=2 sw=2 sts=2
 
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -248,12 +218,6 @@ let g:airline#extensions#tabline#fnametruncate = 17
 
 let g:airline_theme_patch_func = 'AirlineThemePatch'
 function! AirlineThemePatch(palette)
-  let a:palette.tabline = {}
-  let a:palette.tabline.airline_tabsel = [0, 0, 8, 2]
-  let a:palette.tabline.airline_tab = [0, 0, 2, 16]
-  let a:palette.tabline.airline_tabmod = [0, 0, 8, 1]
-  let a:palette.tabline.airline_tabmod_unsel = [0, 0, 1, 16]
-  let a:palette.tabline.airline_tabhid = [0, 0, 8, 16]
   let l:green = airline#themes#generate_color_map(
               \ [0, 0, 8, 2], [0, 0, 8, 2], [0, 0, 16, 16])
   let l:red = airline#themes#generate_color_map(
@@ -274,6 +238,12 @@ function! AirlineThemePatch(palette)
   let a:palette.inactive = l:gray
   let a:palette.inactive_modified = l:gray
   let a:palette.inactive_paste = l:gray
+  let a:palette.tabline = {}
+  let a:palette.tabline.airline_tabsel = [0, 0, 8, 2]
+  let a:palette.tabline.airline_tab = [0, 0, 2, 16]
+  let a:palette.tabline.airline_tabmod = [0, 0, 8, 1]
+  let a:palette.tabline.airline_tabmod_unsel = [0, 0, 1, 16]
+  let a:palette.tabline.airline_tabhid = [0, 0, 8, 16]
 endfunction
 
 let g:task_paper_styles ={ 
