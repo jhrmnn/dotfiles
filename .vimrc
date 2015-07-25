@@ -1,68 +1,50 @@
 filetype plugin indent on
 syntax on
 
-set nocompatible
-set shell=/bin/bash
 set background=dark
 set wildmenu
 set backspace=indent,eol,start
 set gdefault
 set encoding=utf-8 nobomb
-set directory=~/.vim/swaps
 set exrc
-set hlsearch
-set ignorecase
-set smartcase
+set hlsearch incsearch
+set ignorecase smartcase
 set diffopt+=iwhite
-set incsearch
 set mouse=a
 set clipboard=unnamed
-set showmode
+set noshowmode
 set showmatch
-set nolist
 set title
-set autoindent
-set smartindent
-set smarttab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set shiftround
+set autoindent smartindent smarttab
+set tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 set wrap linebreak nolist
 set viminfo='100,<100,:100,n~/.viminfo
 set undofile
-set undodir=~/.vim/undo
 set nofoldenable
 set laststatus=2
-set encoding=utf-8
 set noerrorbells visualbell t_vb=
 set sessionoptions-=options
 let g:tex_flavor = "latex"
-let g:clever_f_smart_case = 1
 if v:version > 704 || v:version == 704 && has('patch338')
-    set breakindent
-    set breakindentopt=shift:2
+    set breakindent breakindentopt=shift:2
     let &showbreak = '> '
 endif
 
 highlight Normal ctermbg=none
 highlight ColorColumn ctermbg=8
-highlight link EasyMotionTarget2First Question
-highlight link EasyMotionTarget2Second Question
-highlight link EasyMotionIncSearch IncSearch
 
 let mapleader = ' '
 let maplocalleader = ' '
-nnoremap <c-tab> :bnext!<CR>
-nnoremap <c-s-tab> :bprevious!<CR>
+
+nnoremap <Leader>T :enew<CR>
 nnoremap <Leader><tab> :bnext!<CR>
 nnoremap <Leader><s-tab> :bprevious!<CR>
-nnoremap <Leader>w :Bdelete<CR>
-nnoremap <c-x> :Bdelete<CR>
-nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>, :set invpaste<CR>
-nnoremap <Leader>a :call ToggleAutoFormatting()<CR>
+nnoremap <Leader>w :bdelete<CR>
+nnoremap <Leader>i :set invpaste<CR>
+noremap <BS> :noh<CR>
+nnoremap <Leader>q :cclose<CR>:lclose<CR>
+nnoremap <S-Enter> O
+nnoremap <Enter> o
 
 autocmd FileType fortran setlocal colorcolumn=80 
 autocmd FileType fortran setlocal comments=:!>,:!
@@ -110,16 +92,6 @@ autocmd BufReadPost *
             \     exe ":normal! g`\"" |
             \ endif
 
-function! ToggleAutoFormatting()
-    if &fo =~ "a"
-        setl fo-=a
-        echo "Autoformat off"
-    else
-        setl fo+=a
-        echo "Autoformat on"
-    endif
-endfunction
-
 function! FindProjectName()
     let s:name = fnamemodify(getcwd(), ":t") . "." . 
                 \ md5#md5(getcwd()) . ".vim"
@@ -159,52 +131,46 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
+" improving plugins
 Plugin 'Shougo/vimproc' " makes some plugins faster
-Plugin 'bling/vim-airline' " better status line
-Plugin 'terryma/vim-multiple-cursors' " sublime text-like behaviour [ctrl-n]
-Plugin 'Chiel92/vim-autoformat' " beautifier [:Autoformat]
-Plugin 'dag/vim-fish' " fish shell syntax highlight
-Plugin 'moll/vim-bbye' " better bdelete
-Plugin 'rhysd/clever-f.vim' " improved f F 
-Plugin 'tpope/vim-repeat' " improved .
-Plugin 'tpope/vim-surround' " better brackets
+Plugin 'tpope/vim-repeat' " makes . accessible for plugins
+Plugin 'moll/vim-bbye' " layout stays as is on buffer close
+Plugin 'mattn/webapi-vim'
 Plugin 'junegunn/fzf'
-Plugin 'rking/ag.vim' " faster grep
-Plugin 'christoomey/vim-tmux-navigator' " navigating to tmux
-Plugin 'ervandew/screen' " screen support
+Plugin 'rking/ag.vim'
+Plugin 'Raimondi/delimitMate' " automatic closing of paired delimiters
+Plugin 'mhinz/vim-hugefile'
+
+" new functionality
 Plugin 'chriskempson/base16-vim' " base16 for gvim
-Plugin 'dhruvasagar/vim-table-mode' " plain-text table formatting
-Plugin 'Raimondi/delimitMate' " autobrackets
-Plugin 'mhinz/vim-hugefile' " better handling of large files
-Plugin 'terryma/vim-expand-region' " region expansion
-Plugin 'tomtom/tcomment_vim.git' " fast commenting
-Plugin 'Lokaltog/vim-easymotion' " fast motion
-Plugin 'danro/rename.vim'
+Plugin 'bling/vim-airline' " status and buffer line
+Plugin 'scrooloose/syntastic' " linters in vim
+Plugin 'majutsushi/tagbar' " ctags
+Plugin 'tpope/vim-fugitive' " git
+Plugin 'airblade/vim-gitgutter'
+Plugin 'klen/python-mode'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'jcfaria/Vim-R-plugin'
+Plugin 'davidoc/taskpaper.vim'
+Plugin 'othree/html5.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mattn/gist-vim'
+Plugin 'lervag/vimtex'
+Plugin 'JuliaLang/julia-vim'
+
+" new key commands
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tpope/vim-surround'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'terryma/vim-expand-region'
+Plugin 'tomtom/tcomment_vim.git' " automatic comments
+Plugin 'justinmk/vim-sneak' " 2-letter f
 Plugin 'tpope/vim-dispatch.git' " asynchronous make
-Plugin 'chrisbra/vim-diff-enhanced'
 Plugin 'AndrewRadev/linediff.vim' " diffing ranges
+
 if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
     Plugin 'Valloric/YouCompleteMe' " fast code completion
 endif
-Plugin 'godlygeek/tabular' " automatic alignment
-Plugin 'kien/ctrlp.vim' " fuzzy file search [ctrl-p]
-Plugin 'scrooloose/syntastic' " linter support
-Plugin 'majutsushi/tagbar' " ctags support [ctrl-b]
-Plugin 'tpope/vim-fugitive' " git support
-Plugin 'airblade/vim-gitgutter' " git gutter
-Plugin 'jcfaria/Vim-R-plugin' " R support
-Plugin 'davidoc/taskpaper.vim' " taskpaper support
-Plugin 'othree/html5.vim' " html5 support
-Plugin 'pangloss/vim-javascript' " javascript support
-Plugin 'mattn/webapi-vim' " supports web apis
-Plugin 'mattn/gist-vim' " gist support
-" Plugin 'LaTeX-Box-Team/LaTeX-Box' " latex suport
-Plugin 'lervag/vimtex' " latex support
-Plugin 'JuliaLang/julia-vim' " julia support
-" Plugin 'hdima/python-syntax' " better python syntax
-Plugin 'klen/python-mode'  " python support
-Plugin 'plasticboy/vim-markdown' " markdown support
-Plugin 'ryanss/vim-hackernews' " hackernews
 
 call vundle#end()
 
@@ -218,23 +184,18 @@ let g:ycm_semantic_triggers = {
             \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
 
-nnoremap <Leader>p :CtrlP<CR>
-nnoremap <Leader>f :CtrlPLine<CR>
-let g:ctrlp_follow_symlinks = 2
-let g:ctrlp_user_command = 'ag %s -l -g ""'
-let g:ctrlp_use_caching = 0
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+nnoremap <Leader>p :FZF<CR>
 
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
+
 let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
 
 vnoremap <C-K> y:Ag\ "<C-R><C-R>""<CR>
-vnoremap <Leader>kf y:Ag\ "<C-R><C-R>"" --fortran<CR>
 nnoremap \ :Ag<SPACE>"
-nnoremap <Leader>q :cclose<CR>:lclose<CR>
 set grepprg=ag\ --nogroup\ --nocolor
 
+let g:vimtex_fold_enabled = 0
 let g:vimtex_quickfix_ignored_warnings = [
             \ 'Underfull', 'Overfull', 'specifier changed to',
             \ "'babel/polyglossia' detected",
@@ -246,18 +207,22 @@ let g:vimtex_quickfix_ignored_warnings = [
 
 nnoremap <Leader>mk :Make<CR>
 
-let g:vimtex_fold_enabled = 0
-
 let g:gitgutter_max_signs = 10000
 
-let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvqxyz'
-let g:EasyMotion_startofline = 0
-let g:EasyMotion_smartcase = 1
-let g:EasyMotion_target_hl_inc_cursor = 3
-map s <Plug>(easymotion-f2)
-map S <Plug>(easymotion-F2)
-map m <Leader><Leader>w
-map M <Leader><Leader>b
+let g:sneak#s_next = 1
+let g:sneak#streak = 1
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
 
 let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
@@ -272,6 +237,7 @@ let g:syntastic_python_flake8_quiet_messages =  {
             \ ]}
 let g:syntastic_fortran_checkers = ['gfortran']
 let g:syntastic_fortran_compiler_options = '-ffree-line-length-none'
+let g:syntastic_tex_chktex_args = ['--nowarn 3']
 let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 
@@ -322,7 +288,6 @@ let g:pymode_folding = 0
 
 let g:tagbar_autoclose = 1
 let g:tagbar_autofocus = 1
-let g:tagbar_autopreview = 1
 let g:tagbar_compact = 1
 let g:tagbar_width = 35
 let g:tagbar_previewwin_pos = 'abo'
