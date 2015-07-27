@@ -12,6 +12,7 @@ set ignorecase smartcase
 set diffopt+=iwhite
 set pastetoggle=<F9>
 set mouse=a
+set timeoutlen=500
 set clipboard=unnamed
 set noshowmode
 set showmatch
@@ -29,7 +30,6 @@ set laststatus=2
 set noerrorbells visualbell t_vb=
 set omnifunc=syntaxcomplete#Complete
 set sessionoptions-=options
-let &grepprg = "ag --nogroup --nocolor"
 if v:version > 704 || v:version == 704 && has('patch338')
     set breakindent breakindentopt=shift:2
     let &showbreak = "> "
@@ -44,19 +44,29 @@ let maplocalleader = " "
 vmap <Tab> <Plug>(expand_region_expand)
 vmap <S-Tab> <Plug>(expand_region_shrink)
 vnoremap <F9> ~
-nnoremap <BS> :nohlsearch<CR>
-vnoremap \ y:Ag\ '<C-R><C-R>"'<CR>
-nnoremap \ :Ag<SPACE>""<left>
-nnoremap <Enter> :OverCommandLine<CR>
-vnoremap <Enter> :OverCommandLine<CR>
-nnoremap <Leader><tab> :bnext!<CR>
-nnoremap <Leader><s-tab> :bprevious!<CR>
-nnoremap <Leader>w :bdelete<CR>
-nnoremap <Leader>; :tabclose<CR>
-nnoremap <Leader>q :cclose<CR>:lclose<CR>:pclose<CR>
-nnoremap <Leader>t :TagbarToggle<CR>
-nnoremap <Leader>mk :Make<CR>
+nnoremap <BS> <C-O>
+vnoremap \ y:Ag!<Space>'<C-R><C-R>"'<CR>
+nnoremap \ :Ag!<Space>""<left>
+nnoremap <F4> :bnext!<CR>
+nnoremap <F3> :bprevious!<CR>
+nnoremap é :bnext!<CR>
+nnoremap í :bprevious!<CR>
+nnoremap <Leader>q :quit<CR>
+nnoremap <Leader>w :Bdelete<CR>
+nnoremap <Leader>e :edit<Space>
+nnoremap <Leader>n :nohlsearch<CR>
+nnoremap <Leader>s :OverCommandLine<CR>%s/
+vnoremap <Leader>s :OverCommandLine<CR>s/
+nnoremap <Leader>f :FZFLinesBuffer<CR>
+nnoremap <Leader>; :cclose<CR>:lclose<CR>:pclose<CR>
+" nnoremap <Leader>t :TagbarToggle<CR>
 nnoremap <Leader>p :FZF<CR>
+nnoremap <Leader>mk :Make<CR>
+nnoremap <Leader>gf :FZFLines<CR>
+nnoremap <Leader>ggf :FZFLinesAll<CR>
+nnoremap <Leader>t :FZFTagsBuffer<CR>
+nnoremap <Leader>gt :FZFTags<CR>
+nnoremap <Leader>T :call<Space>MakeTags()<CR>
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
 " windows movements
@@ -64,9 +74,6 @@ nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
-" remap / and ?
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
 " remap f and t to sneak
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
@@ -101,6 +108,12 @@ function! FindProjectName()
     let s:name = fnamemodify(getcwd(), ":t") . "." . 
                 \ md5#md5(getcwd()) . ".vim"
     return s:name
+endfunction
+
+function! MakeTags()
+    echo 'Preparing tags...'
+    call system('ctags -R')
+    echo 'Tags done'
 endfunction
 
 function! RestoreSession(name)
@@ -144,7 +157,7 @@ Plugin 'tpope/vim-dispatch.git' " asynchronous make, key: <Leader>mk
 Plugin 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
 Plugin 'tyru/open-browser.vim' " key: gx
 Plugin 'osyo-manga/vim-over' " better substitute, key: <Enter>
-Plugin 'majutsushi/tagbar' " ctags, key: <Leader>t
+" Plugin 'majutsushi/tagbar' " ctags, key: <Leader>t
 Plugin 'junegunn/fzf' " key: <Leader>p
 Plugin 'tpope/vim-fugitive' " git
 Plugin 'gregsexton/gitv'
@@ -154,7 +167,6 @@ Plugin 'bling/vim-airline' " status and buffer line
 Plugin 'scrooloose/syntastic' " linters in vim
 Plugin 'Raimondi/delimitMate' " automatic closing of paired delimiters
 Plugin 'luochen1990/rainbow' " rainbow parentheses
-Plugin 'haya14busa/incsearch.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'klen/python-mode'
 Plugin 'plasticboy/vim-markdown'
@@ -197,14 +209,14 @@ let g:pymode_folding = 0
 
 let g:rainbow_active = 1 
 let g:rainbow_conf = {
-            \    'ctermfgs': ['blue', 'yellow', 'red', 'green', 'magenta'],
+            \    'ctermfgs': ['red', 'yellow', 'green', 'blue', 'magenta'],
             \ }
 
-let g:tagbar_autoclose = 1
-let g:tagbar_autofocus = 1
-let g:tagbar_compact = 1
-let g:tagbar_width = 35
-let g:tagbar_previewwin_pos = 'abo'
+" let g:tagbar_autoclose = 1
+" let g:tagbar_autofocus = 1
+" let g:tagbar_compact = 1
+" let g:tagbar_width = 35
+" let g:tagbar_sort = 0
 
 let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -276,3 +288,52 @@ function! AirlineThemePatch(palette)
   let a:palette.tabline.airline_tabmod_unsel = [0, 0, 1, 16]
   let a:palette.tabline.airline_tabhid = [0, 0, 8, 16]
 endfunction
+
+command! FZFLinesAll call fzf#run({
+            \   'source': 'ag .',
+            \   'sink': function('<sid>line_handler'),
+            \   'options': '--nth=3..'
+            \ })
+
+command! FZFLines call fzf#run({
+            \   'source': 'ag . ' . join(map(filter(range(0, bufnr("$")), 
+            \              "buflisted(v:val)"), "bufname(v:val)")),
+            \   'sink': function('<SID>line_handler'),
+            \   'options': '--nth=3..'
+            \ })
+
+function! s:line_handler(l)
+    let keys = split(a:l, ':')
+    exec 'edit' keys[0]
+    exec keys[1]
+endfunction
+
+command! FZFLinesBuffer call fzf#run({
+            \   'source': 'ag . ' . bufname(""),
+            \   'sink': function('<SID>buff_line_handler'),
+            \   'options': '--nth=2..'
+            \ })
+
+function! s:buff_line_handler(l)
+    let keys = split(a:l, ':')
+    exec keys[0]
+endfunction
+
+command! -bar FZFTags if !empty(tagfiles()) | 
+            \ call fzf#run({
+            \   'source': 'gsed ''/^\\!/ d; s/^\([^\t]*\)\t.*\t\(\w\)\(\t.*\)\?/\2\t\1/; /^l/ d'' ' . join(tagfiles()) . ' | uniq',
+            \   'sink': function('<SID>tag_line_handler'),
+            \ }) | else | call MakeTags() | FZFTags | endif
+
+
+command! FZFTagsBuffer call fzf#run({
+            \   'source': 'ctags -f - --sort=no ' . bufname("") . ' | gsed ''s/^\([^\t]*\)\t.*\t\(\w\)\(\t.*\)\?/\2\t\1/'' | sort -k 1.1,1.1 -s',
+            \   'sink': function('<SID>tag_line_handler'),
+            \   'options': '--tac',
+            \ })
+
+function! s:tag_line_handler(l)
+    let keys = split(a:l, '\t')
+    exec 'tag' keys[1]
+endfunction
+

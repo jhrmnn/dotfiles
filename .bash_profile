@@ -1,4 +1,4 @@
-[[ -s ~/.bashrc && -z $BASHRC_SOURCED ]] && . ~/.bashrc
+[[ -s ~/.bashrc ]] && . ~/.bashrc
 [[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
 alias ..="cd .."
@@ -33,12 +33,21 @@ else
     alias ls="ls -hG"
 fi
 
-[[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
-export FZF_COMPLETION_TRIGGER='§§'
-export FZF_DEFAULT_OPTS="-x"
-export FZF_DEFAULT_COMMAND='ag -l -g ""'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export LANG=en_US.UTF-8
+if [[ -f ~/.fzf.bash ]]; then
+    . ~/.fzf.bash
+    export FZF_COMPLETION_TRIGGER='§§'
+    export FZF_DEFAULT_OPTS="-x --bind=ctrl-u:page-up,ctrl-d:page-down"
+    export FZF_DEFAULT_COMMAND='ag -l -g ""'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
+vim () {
+    if [[ $# == 1 && -d $1 ]]; then
+        (cd $1 && command vim --servername VIM)
+    else
+        command vim --servername VIM "$@"
+    fi
+}
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
@@ -49,51 +58,6 @@ Blue='\[\e[0;34m\]'
 Magenta='\[\e[0;35m\]'
 Cyan='\[\e[0;36m\]'
 White='\[\e[0;37m\]'
-
-vim () {
-    if [[ $# == 1 && -d $1 ]]; then
-        (cd $1 && command vim --servername VIM)
-    else
-        command vim --servername VIM "$@"
-    fi
-}
-
-hlvs () {
-    tmux split-window -v
-    tmux select-layout even-horizontal
-    tmux select-pane -t 0
-    clear
-}
-
-thrds () {
-    tmux split-window -v
-    tmux split-window -v
-    tmux select-layout even-horizontal
-    tmux select-pane -t 0
-    clear
-}
-
-# https://gist.github.com/junegunn/f4fca918e937e6bf5bad
-fshow() {
-    local out shas sha q k
-    while out=$(
-        git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-        fzf --ansi --multi --no-sort --reverse --query="$q" \
-            --print-query --expect=ctrl-d --toggle-sort=\`); do
-        q=$(head -1 <<< "$out")
-        k=$(head -2 <<< "$out" | tail -1)
-        shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}')
-        [ -z "$shas" ] && continue
-        if [ "$k" = ctrl-d ]; then
-            git diff --color=always $shas | less -R
-        else
-            for sha in $shas; do
-                git show --color=always $sha | less -R
-            done
-        fi
-    done
-}
 
 PROMPT_COMMAND="PS_STATUS=\$?; history -a; $PROMPT_COMMAND"
 PS1="\
@@ -117,3 +81,25 @@ $Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \"[\$PS_STATUS]\"; fi)\
 $Black\$\
  $Color_Off\
 "
+
+# https://gist.github.com/junegunn/f4fca918e937e6bf5bad
+fshow() {
+    local out shas sha q k
+    while out=$(
+        git log --graph --color=always \
+            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+        fzf --ansi --multi --no-sort --reverse --query="$q" \
+            --print-query --expect=ctrl-d --toggle-sort=\`); do
+        q=$(head -1 <<< "$out")
+        k=$(head -2 <<< "$out" | tail -1)
+        shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}')
+        [ -z "$shas" ] && continue
+        if [ "$k" = ctrl-d ]; then
+            git diff --color=always $shas | less -R
+        else
+            for sha in $shas; do
+                git show --color=always $sha | less -R
+            done
+        fi
+    done
+}
