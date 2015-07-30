@@ -45,7 +45,7 @@ vmap <Tab> <Plug>(expand_region_expand)
 vmap <S-Tab> <Plug>(expand_region_shrink)
 vnoremap <F9> ~
 nnoremap <BS> <C-O>
-vnoremap \ y:Ag!<Space>'<C-R><C-R>"'<CR>
+vnoremap \ y:Ag!<Space>"<C-R><C-R>""<CR>
 nnoremap \ :Ag!<Space>""<left>
 nnoremap <F4> :bnext!<CR>
 nnoremap <F3> :bprevious!<CR>
