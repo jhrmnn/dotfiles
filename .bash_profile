@@ -14,6 +14,7 @@ alias sp="tmux split"
 alias vsp="tmux split -h"
 alias kp="tmux kill-pane"
 alias make..="make -C .."
+alias xargs="xargs -o"
 
 set -o vi
 shopt -s histappend
@@ -33,12 +34,21 @@ else
     alias ls="ls -hG"
 fi
 
-if [[ -f ~/.fzf.bash ]]; then
-    . ~/.fzf.bash
+insertinreadline() {
+    READLINE_LINE=${READLINE_LINE:0:$READLINE_POINT}$1${READLINE_LINE:$READLINE_POINT}
+    READLINE_POINT=`expr $READLINE_POINT + ${#1}`
+}
+
+if which fzf &>/dev/null
+then
+    bind -x '"\C-t": insertinreadline "`locate . | fzf`"'
+    bind -x '"\C-r": insertinreadline \
+        "`HISTTIMEFORMAT= history | \
+        fzf --tac --no-sort -n 2.. --tiebreak=index --toggle-sort=ctrl-r | \
+        sed \"s/^ *[0-9]* *//\"`"'
     export FZF_COMPLETION_TRIGGER='§§'
     export FZF_DEFAULT_OPTS="-x --bind=ctrl-u:page-up,ctrl-d:page-down"
-    export FZF_DEFAULT_COMMAND='ag -l -g ""'
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    which ag &>/dev/null && export FZF_DEFAULT_COMMAND='ag -l -g ""'
 fi
 
 vim () {
