@@ -69,6 +69,7 @@ nnoremap <Leader>gt :FZFTags<CR>
 nnoremap <Leader>T :call<Space>MakeTags()<CR>
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
+nnoremap <Leader>go :Goyo<CR>
 " windows movements
 nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
@@ -167,6 +168,7 @@ Plugin 'bling/vim-airline' " status and buffer line
 Plugin 'scrooloose/syntastic' " linters in vim
 Plugin 'Raimondi/delimitMate' " automatic closing of paired delimiters
 Plugin 'luochen1990/rainbow' " rainbow parentheses
+Plugin 'junegunn/goyo.vim' " distraction-free vim
 Plugin 'airblade/vim-gitgutter'
 Plugin 'klen/python-mode'
 Plugin 'plasticboy/vim-markdown'
@@ -193,6 +195,11 @@ call vundle#end()
 filetype plugin indent on
 
 " global variables
+
+let g:goyo_width = 81
+let g:goyo_height = '100%'
+autocmd! User GoyoLeave
+autocmd  User GoyoLeave nested set background=dark
  
 let g:tex_flavor = "latex"
 
@@ -238,9 +245,9 @@ let g:syntastic_python_flake8_quiet_messages = {
             \ ]}
 let g:syntastic_fortran_checkers = ['gfortran']
 let g:syntastic_fortran_compiler_options = '-ffree-line-length-none'
-let g:syntastic_tex_chktex_args = ['--nowarn 3']
-let g:syntastic_html_checkers = ['w3']
+" let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_tex_checkers = ['chktex']
 
 let g:task_paper_styles = { 
             \    'flagged': 'ctermfg=Red guifg=Red',
