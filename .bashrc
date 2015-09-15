@@ -1,4 +1,4 @@
-[[ $BASHRC_SOURCED ]] && return || export BASHRC_SOURCED=1
+shopt -q login_shell && [[ -z $BASH_PROFILE_SOURCED ]] && return
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 
 export LANGUAGE=en_US.UTF-8
