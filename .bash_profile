@@ -26,9 +26,9 @@ export HISTCONTROL=ignoreboth
 export HISTIGNORE=ls:bg:fg:history
 export HISTTIMEFORMAT="%F %T "
 
+export GREP_OPTIONS="--color=auto"
 if ls --color=none &>/dev/null
 then
-    export GREP_OPTIONS="--color=auto"
     alias ls="ls -h --color"
 else
     alias ls="ls -hG"
