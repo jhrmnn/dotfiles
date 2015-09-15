@@ -1,7 +1,4 @@
-if [[ $BASHRC_SOURCED ]]; then
-    return
-fi
-export BASHRC_SOURCED=1
+[[ $BASHRC_SOURCED ]] && return || export BASHRC_SOURCED=1
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 
 export LANGUAGE=en_US.UTF-8

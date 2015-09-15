@@ -171,6 +171,7 @@ Plugin 'luochen1990/rainbow' " rainbow parentheses
 Plugin 'junegunn/goyo.vim' " distraction-free vim
 Plugin 'airblade/vim-gitgutter'
 Plugin 'klen/python-mode'
+Plugin 'hdima/python-syntax'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'jcfaria/Vim-R-plugin'
 Plugin 'davidoc/taskpaper.vim'
@@ -213,10 +214,19 @@ let g:sneak#streak = 1
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is done by youcompleteme
 let g:pymode_folding = 0
+let g:pymode_syntax = 0
+
+let python_highlight_all = 1
 
 let g:rainbow_active = 1 
 let g:rainbow_conf = {
             \    'ctermfgs': ['red', 'yellow', 'green', 'blue', 'magenta'],
+            \    'separately': {
+            \         'sh': {
+            \              'parentheses': ['start=/\[\[/ end=/\]\]/',
+            \                              'start=/((/ end=/))/']
+            \         }
+            \     }
             \ }
 
 " let g:tagbar_autoclose = 1
@@ -225,7 +235,6 @@ let g:rainbow_conf = {
 " let g:tagbar_width = 35
 " let g:tagbar_sort = 0
 
-let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_register_as_syntastic_checker = 0
 let g:ycm_semantic_triggers = {
