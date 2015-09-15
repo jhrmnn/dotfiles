@@ -1,6 +1,7 @@
 filetype plugin indent on
 syntax on
 
+set nocompatible
 set background=dark
 set wildmenu
 set backspace=indent,eol,start
@@ -352,4 +353,3 @@ function! s:tag_line_handler(l)
     let keys = split(a:l, '\t')
     exec 'tag' keys[1]
 endfunction
-

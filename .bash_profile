@@ -52,10 +52,11 @@ then
 fi
 
 vim () {
+    [[ -z VIM_NO_YCM ]] && vimcmd="vim --servername VIM" || vimcmd="vim"
     if [[ $# == 1 && -d $1 ]]; then
-        (cd $1 && command vim --servername VIM)
+        (cd $1 && command $vimcmd)
     else
-        command vim --servername VIM "$@"
+        command $vimcmd "$@"
     fi
 }
 
