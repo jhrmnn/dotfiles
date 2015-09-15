@@ -34,32 +34,6 @@ else
     alias ls="ls -hG"
 fi
 
-insertinreadline() {
-    READLINE_LINE=${READLINE_LINE:0:$READLINE_POINT}$1${READLINE_LINE:$READLINE_POINT}
-    READLINE_POINT=`expr $READLINE_POINT + ${#1}`
-}
-
-if which fzf &>/dev/null
-then
-    bind -x '"\C-t": insertinreadline "`locate . | fzf`"'
-    bind -x '"\C-r": insertinreadline \
-        "`HISTTIMEFORMAT= history | \
-        fzf --tac --no-sort -n 2.. --tiebreak=index --toggle-sort=ctrl-r | \
-        sed \"s/^ *[0-9]* *//\"`"'
-    export FZF_COMPLETION_TRIGGER='§§'
-    export FZF_DEFAULT_OPTS="-x --bind=ctrl-u:page-up,ctrl-d:page-down"
-    which ag &>/dev/null && export FZF_DEFAULT_COMMAND='ag -l -g ""'
-fi
-
-vim () {
-    [[ -z VIM_NO_YCM ]] && vimcmd="vim --servername VIM" || vimcmd="vim"
-    if [[ $# == 1 && -d $1 ]]; then
-        (cd $1 && command $vimcmd)
-    else
-        command $vimcmd "$@"
-    fi
-}
-
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
 Red='\[\e[0;31m\]'
@@ -92,25 +66,3 @@ $Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \"[\$PS_STATUS]\"; fi)\
 $Black\$\
  $Color_Off\
 "
-
-# https://gist.github.com/junegunn/f4fca918e937e6bf5bad
-fshow() {
-    local out shas sha q k
-    while out=$(
-        git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-        fzf --ansi --multi --no-sort --reverse --query="$q" \
-            --print-query --expect=ctrl-k --toggle-sort=\`); do
-        q=$(head -1 <<< "$out")
-        k=$(head -2 <<< "$out" | tail -1)
-        shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}')
-        [ -z "$shas" ] && continue
-        if [ "$k" = ctrl-k ]; then
-            git diff --color=always $shas | less -R
-        else
-            for sha in $shas; do
-                git show --color=always $sha | less -R
-            done
-        fi
-    done
-}
