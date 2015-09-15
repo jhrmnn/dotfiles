@@ -29,7 +29,7 @@ export HISTTIMEFORMAT="%F %T "
 if ls --color=none &>/dev/null
 then
     export GREP_OPTIONS="--color=auto"
-    alias ls="ls -h"
+    alias ls="ls -h --color"
 else
     alias ls="ls -hG"
 fi
