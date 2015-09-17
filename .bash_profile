@@ -14,7 +14,6 @@ alias sp="tmux split"
 alias vsp="tmux split -h"
 alias kp="tmux kill-pane"
 alias make..="make -C .."
-alias xargs="xargs -o"
 alias gitk="gitk --all"
 
 set -o vi
