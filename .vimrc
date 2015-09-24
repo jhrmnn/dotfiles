@@ -31,10 +31,6 @@ set laststatus=2
 set noerrorbells visualbell t_vb=
 set omnifunc=syntaxcomplete#Complete
 set sessionoptions-=options
-if v:version > 704 || v:version == 704 && has('patch338')
-    set breakindent breakindentopt=shift:2
-    let &showbreak = "> "
-endif
 
 highlight Normal ctermbg=none
 highlight ColorColumn ctermbg=8
@@ -76,28 +72,15 @@ nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
-" remap f and t to sneak
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
 
-autocmd FileType fortran setlocal cc=80 comments=:!>,:! tw=80 fo=cqroanw2 number
+autocmd FileType fortran setlocal cc=80 tw=80 comments=:!>,:! fo=croqwa number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
-autocmd FileType python setlocal cc=80 fo=cqroanw tw=79 number cino+=(0
+autocmd FileType python setlocal cc=80 tw=79 fo=croqwa number cino+=(0
 autocmd FileType javascript setlocal cc=80 number
-autocmd FileType cpp setlocal cc=80 tw=80 fo=cqroanw number cino+=(0
-autocmd FileType mkd setlocal tw=80 fo=wnb1vb spell noet ci pi sts=0 sw=4 ts=4
-autocmd FileType tex setlocal tw=80 fo=tcqroaw1 number ts=2 sw=2 sts=2 spell
+autocmd FileType cpp setlocal cc=80 tw=80 fo=croqwa number cino+=(0
+autocmd FileType markdown setlocal tw=80 spell noet ci pi sts=0 sw=4 ts=4
+autocmd FileType tex setlocal tw=80 ts=2 sw=2 sts=2 spell
 autocmd FileType yaml setlocal ts=2 sw=2 sts=2
 
 " restore position in a buffer
@@ -154,26 +137,26 @@ Plugin 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
 Plugin 'tpope/vim-surround' " key: cs, ds, ys
 Plugin 'terryma/vim-expand-region' " key: <Tab>
 Plugin 'tomtom/tcomment_vim.git' " automatic comments, key: gc
-Plugin 'justinmk/vim-sneak' " 2-letter f, key: s S f t
-Plugin 'tpope/vim-dispatch.git' " asynchronous make, key: <Leader>mk
-Plugin 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
 Plugin 'tyru/open-browser.vim' " key: gx
-Plugin 'osyo-manga/vim-over' " better substitute, key: <Enter>
-" Plugin 'majutsushi/tagbar' " ctags, key: <Leader>t
+Plugin 'justinmk/vim-sneak' " 2-letter f, key: s S f t
+Plugin 'rking/ag.vim' " silver searcher, key: \
+Plugin 'tpope/vim-dispatch.git' " asynchronous make, key: <Leader>mk
+Plugin 'osyo-manga/vim-over' " better substitute, key: <Leader>s
+Plugin 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
+Plugin 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
 Plugin 'junegunn/fzf' " key: <Leader>p
 Plugin 'tpope/vim-fugitive' " git
-Plugin 'gregsexton/gitv'
 " automatic functionality
 Plugin 'chriskempson/base16-vim' " base16 for gvim
 Plugin 'bling/vim-airline' " status and buffer line
 Plugin 'scrooloose/syntastic' " linters in vim
+Plugin 'reedes/vim-pencil' " vim for prose
 Plugin 'Raimondi/delimitMate' " automatic closing of paired delimiters
 Plugin 'luochen1990/rainbow' " rainbow parentheses
-Plugin 'junegunn/goyo.vim' " distraction-free vim
 Plugin 'airblade/vim-gitgutter'
 Plugin 'klen/python-mode'
 Plugin 'hdima/python-syntax'
-Plugin 'plasticboy/vim-markdown'
+Plugin 'tpope/vim-markdown'
 Plugin 'jcfaria/Vim-R-plugin'
 Plugin 'davidoc/taskpaper.vim'
 Plugin 'othree/html5.vim'
@@ -190,7 +173,6 @@ Plugin 'tpope/vim-repeat' " makes . accessible for plugins
 Plugin 'moll/vim-bbye' " layout stays as is on buffer close
 Plugin 'mattn/webapi-vim'
 Plugin 'mhinz/vim-hugefile'
-Plugin 'rking/ag.vim' " silver searcher
 
 call vundle#end()
 
@@ -201,16 +183,28 @@ filetype plugin indent on
 let g:goyo_width = 81
 let g:goyo_height = '100%'
 autocmd! User GoyoLeave
-autocmd  User GoyoLeave nested set background=dark
+autocmd User GoyoLeave nested set background=dark
+autocmd User GoyoLeave nested syntax off
+autocmd User GoyoLeave nested syntax on
+autocmd User GoyoLeave nested AirlineRefresh
+
+let g:pencil#wrapModeDefault = 'soft'
+let g:pencil#conceallevel = 0
+augroup pencil
+  autocmd!
+  autocmd FileType markdown call pencil#init()
+  autocmd FileType tex call pencil#init()
+augroup END
  
 let g:tex_flavor = "latex"
 
 let g:gitgutter_max_signs = 10000
 
+let g:multi_cursor_exit_from_insert_mode = 0
+
 let vimrplugin_vsplit = 1
 
 let g:sneak#s_next = 1
-let g:sneak#streak = 1
 
 let g:pymode_lint = 0 " we do this with syntastic
 let g:pymode_rope = 0 " this is done by youcompleteme
@@ -221,7 +215,7 @@ let python_highlight_all = 1
 
 let g:rainbow_active = 1 
 let g:rainbow_conf = {
-            \    'ctermfgs': ['red', 'yellow', 'green', 'blue', 'magenta'],
+            \    'ctermfgs': ['red', 'yellow', 'green', 'blue'],
             \    'separately': {
             \         'sh': {
             \              'parentheses': ['start=/\[\[/ end=/\]\]/',
@@ -258,6 +252,7 @@ let g:syntastic_fortran_compiler_options = '-ffree-line-length-none'
 " let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_tex_checkers = ['chktex']
+let g:syntastic_tex_chktex_args = ['--nowarn', '29']
 
 let g:task_paper_styles = { 
             \    'flagged': 'ctermfg=Red guifg=Red',
