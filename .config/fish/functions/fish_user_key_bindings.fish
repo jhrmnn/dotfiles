@@ -12,3 +12,6 @@ end
 
 bind -M insert \cc new-line
 bind -M default -m insert \cc new-line
+bind -M insert \cp history-token-search-backward
+bind -M insert \cn history-token-search-forward
+bind -M insert \cu history-search-backward
