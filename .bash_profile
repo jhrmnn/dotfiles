@@ -16,16 +16,6 @@ alias kp="tmux kill-pane"
 alias make..="make -C .."
 alias gitk="gitk --all"
 
-set -o vi
-shopt -s histappend
-shopt -s cmdhist
-shopt -s histverify
-export HISTFILESIZE=1000000
-export HISTSIZE=1000000
-export HISTCONTROL=ignoreboth
-export HISTIGNORE=ls:bg:fg:history
-export HISTTIMEFORMAT="%F %T "
-
 export GREP_OPTIONS="--color=auto"
 if ls --color=none &>/dev/null
 then
