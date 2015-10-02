@@ -19,7 +19,7 @@ alias make.. "make -C .."
 
 set -x GREP_OPTIONS "--color=auto"
 
-if ls --color=none ^/dev/null
+if ls --color=none >/dev/null ^&1
     alias ls "ls -h --color"
 else
     alias ls "ls -hG"
