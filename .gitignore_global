@@ -1,7 +1,5 @@
 .DS_Store
 *.swp
 *.swo
-.ropeproject
 _vimrc
-.*.un~
 tags
