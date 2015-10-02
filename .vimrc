@@ -26,6 +26,7 @@ set autoindent smartindent smarttab
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
 set wrap linebreak nolist
 set undofile
+set undodir=$HOME/.vim/undo 
 set nofoldenable
 set laststatus=2
 set noerrorbells visualbell t_vb=
@@ -156,6 +157,7 @@ Plugin 'Raimondi/delimitMate' " automatic closing of paired delimiters
 Plugin 'luochen1990/rainbow' " rainbow parentheses
 Plugin 'tshirtman/vim-cython'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'dag/vim-fish'
 Plugin 'klen/python-mode'
 Plugin 'hdima/python-syntax'
 Plugin 'tpope/vim-markdown'
