@@ -29,10 +29,4 @@ else
     alias ls "ls -hG"
 end
 
-alias jupy "jupyter notebook"
-alias xargs "xargs -o"
-alias vpn "sudo vpn"
-alias wolfram "/Applications/Mathematica.app/Contents/MacOS/MathKernel"
-alias python "python3"
-
 set -g fish_key_bindings fish_vi_key_bindings
