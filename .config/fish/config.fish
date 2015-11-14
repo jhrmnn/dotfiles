@@ -1,11 +1,6 @@
-if test -e ~/.config/fish/local.config.fish
+if test -f ~/.config/fish/local.config.fish
     . ~/.config/fish/local.config.fish
 end
-
-set -x PATH $HOME/local/bin $PATH
-set -x PATH $HOME/bin $PATH
-set -x LD_LIBRARY_PATH $HOME/local/lib:$HOME/local/lib64 $LD_LIBRARY_PATH
-set -x PYTHONPATH $HOME/local/lib $PYTHONPATH
 
 alias .. "cd .."
 alias ... "cd ../.."
