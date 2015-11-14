@@ -1,5 +1,6 @@
-shopt -q login_shell && [[ -z $BASH_PROFILE_SOURCED ]] && return
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
+[[ $BASHRC_SOURCED ]] && return
+export BASHRC_SOURCED=1
 
 set -o vi
 shopt -s histappend

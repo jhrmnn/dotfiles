@@ -1,4 +1,6 @@
+[[ $BASH_PROFILE_SOURCED ]] && return
 export BASH_PROFILE_SOURCED=1
+
 [[ -s ~/.bashrc ]] && . ~/.bashrc
 [[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
