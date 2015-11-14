@@ -1,5 +1,9 @@
 .DS_Store
 *.swp
 *.swo
+*.idlk
+.ipynb_checkpoints
 _vimrc
+.Rhistory
 tags
+*.latexmain
