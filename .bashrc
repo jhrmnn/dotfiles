@@ -18,6 +18,6 @@ export LC_ALL=en_US.UTF-8
 export PATH=$HOME/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export LD_LIBRARY_PATH=$HOME/local/lib:$HOME/local/lib64:$LD_LIBRARY_PATH
-export PYTHONPATH=$HOME/local/lib:$PYTHONPATH
+export PYTHONPATH="$PYTHONPATH:$HOME/local/lib"
 
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
