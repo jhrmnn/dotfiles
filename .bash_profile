@@ -2,7 +2,6 @@
 export BASH_PROFILE_SOURCED=1
 
 [[ -s ~/.bashrc ]] && . ~/.bashrc
-[[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -57,3 +56,5 @@ $Blue\$(if [[ \j > 0 ]]; then echo ' \j'; fi)\
 $Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \" [\$PS_STATUS]\"; fi)\
  $Color_Off\
 "
+
+[[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
