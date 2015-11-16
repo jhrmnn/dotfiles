@@ -151,6 +151,7 @@ Plugin 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
 Plugin 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
 Plugin 'junegunn/fzf' " key: <Leader>p
 Plugin 'tpope/vim-fugitive' " git
+Plugin 'christoomey/vim-tmux-navigator' " tmux
 " automatic functionality
 Plugin 'chriskempson/base16-vim' " base16 for gvim
 Plugin 'bling/vim-airline' " status and buffer line
@@ -277,7 +278,7 @@ let g:vimtex_quickfix_ignored_warnings = [
             \ "Package hyperref Warning: Rerun to get /PageLabels entry."
             \ ]
 
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#fnametruncate = 17
