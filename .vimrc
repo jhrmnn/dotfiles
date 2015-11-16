@@ -12,7 +12,7 @@ set exrc
 set hlsearch incsearch
 set ignorecase smartcase
 set diffopt+=iwhite
-set pastetoggle=<F9>
+set pastetoggle=<F10>
 set mouse=a
 set timeoutlen=500
 set clipboard=unnamed
@@ -58,6 +58,7 @@ nnoremap <Leader>s :OverCommandLine<CR>%s/
 vnoremap <Leader>s :OverCommandLine<CR>s/
 nnoremap <Leader>f :FZFLinesBuffer<CR>
 nnoremap <Leader>; :cclose<CR>:lclose<CR>:pclose<CR>
+nnoremap <Leader>, <F10>
 " nnoremap <Leader>t :TagbarToggle<CR>
 nnoremap <Leader>p :FZF<CR>
 nnoremap <Leader>mk :Make<CR>
