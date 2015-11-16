@@ -190,11 +190,25 @@ filetype plugin indent on
 
 let g:goyo_width = 81
 let g:goyo_height = '100%'
-autocmd! User GoyoLeave
-autocmd User GoyoLeave nested set background=dark
-autocmd User GoyoLeave nested syntax off
-autocmd User GoyoLeave nested syntax on
-autocmd User GoyoLeave nested AirlineRefresh
+
+function! s:goyo_enter()
+    silent !tmux set status off
+    set noshowmode
+    set noshowcmd
+endfunction
+
+function! s:goyo_leave()
+    silent !tmux set status on
+    set showmode
+    set showcmd
+    set background=dark
+    syntax off
+    syntax on
+    AirlineRefresh
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#conceallevel = 0
