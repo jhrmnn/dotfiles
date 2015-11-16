@@ -263,7 +263,7 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_python_checkers = ['flake8', 'pep257']
 let g:syntastic_python_pep257_args = ['--ignore=D100,D101,D102,D103']
-let g:syntastic_python_flake8_args = ['--ignore=E501,E226']
+let g:syntastic_python_flake8_args = ['--ignore=E501,E226,E402']
 let g:syntastic_python_flake8_quiet_messages = {
             \ "regex": [
             \    "undefined name 'basestring'",
