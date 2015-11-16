@@ -53,6 +53,7 @@ nnoremap í :bprevious!<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>w :Bdelete<CR>
 nnoremap <Leader>e :edit<Space>
+nnoremap <Leader>+ :silent !tmux split-window -v -p 25<CR>
 nnoremap <Leader>n :nohlsearch<CR>
 nnoremap <Leader>s :OverCommandLine<CR>%s/
 vnoremap <Leader>s :OverCommandLine<CR>s/
