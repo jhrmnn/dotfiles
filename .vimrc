@@ -1,6 +1,7 @@
 filetype plugin indent on
 syntax on
 
+set shell=/bin/bash
 set nocompatible
 set background=dark
 set wildmenu
