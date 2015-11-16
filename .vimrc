@@ -80,9 +80,9 @@ nnoremap <C-L> <C-W>l
 autocmd FileType fortran setlocal cc=80 tw=80 comments=:!>,:! fo=croqwa number
 autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
 autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
-autocmd FileType python setlocal cc=80 tw=79 fo=croqa number cino+=(0
+autocmd FileType python setlocal cc=80 tw=79 fo=croq number cino+=(0
 autocmd FileType javascript setlocal cc=80 number
-autocmd FileType cpp setlocal cc=80 tw=80 fo=croqwa number cino+=(0
+autocmd FileType cpp setlocal cc=80 tw=80 fo=croqw number cino+=(0
 autocmd FileType markdown setlocal tw=80 spell noet ci pi sts=0 sw=4 ts=4
 autocmd FileType tex setlocal tw=80 ts=2 sw=2 sts=2 spell
 autocmd FileType yaml setlocal ts=2 sw=2 sts=2
