@@ -12,6 +12,7 @@ set exrc
 set hlsearch incsearch
 set ignorecase smartcase
 set diffopt+=iwhite
+set hidden
 set pastetoggle=<F10>
 set mouse=a
 set timeoutlen=500
@@ -48,8 +49,8 @@ vnoremap \ y:Ag!<Space>"<C-R><C-R>""<CR>
 nnoremap \ :Ag!<Space>""<left>
 nnoremap <F4> :bnext!<CR>
 nnoremap <F3> :bprevious!<CR>
-nnoremap é :bnext!<CR>
-nnoremap í :bprevious!<CR>
+nnoremap é :bnext<CR>
+nnoremap í :bprevious<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>w :Bdelete<CR>
 nnoremap <Leader>e :edit<Space>
