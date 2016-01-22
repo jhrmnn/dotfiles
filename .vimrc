@@ -125,57 +125,56 @@ end
 
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/plugged')
 
 " new functionality
-Plugin 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
-Plugin 'tpope/vim-surround' " key: cs, ds, ys
-Plugin 'terryma/vim-expand-region' " key: <Tab>
-Plugin 'tomtom/tcomment_vim.git' " automatic comments, key: gc
-Plugin 'tyru/open-browser.vim' " key: gx
-Plugin 'justinmk/vim-sneak' " 2-letter f, key: s S f t
-Plugin 'rking/ag.vim' " silver searcher, key: \
-Plugin 'tpope/vim-dispatch.git' " asynchronous make, key: <Leader>mk
-Plugin 'osyo-manga/vim-over' " better substitute, key: <Leader>s
-Plugin 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
-Plugin 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
-Plugin 'junegunn/fzf' " key: <Leader>p
-Plugin 'tpope/vim-fugitive' " git
-Plugin 'christoomey/vim-tmux-navigator' " tmux
+Plug 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
+Plug 'tpope/vim-surround' " key: cs, ds, ys
+Plug 'terryma/vim-expand-region' " key: <Tab>
+Plug 'tomtom/tcomment_vim' " automatic comments, key: gc
+Plug 'tyru/open-browser.vim' " key: gx
+Plug 'justinmk/vim-sneak' " 2-letter f, key: s S f t
+Plug 'rking/ag.vim' " silver searcher, key: \
+Plug 'tpope/vim-dispatch' " asynchronous make, key: <Leader>mk
+Plug 'osyo-manga/vim-over' " better substitute, key: <Leader>s
+Plug 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
+Plug 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
+Plug 'junegunn/fzf' " key: <Leader>p
+Plug 'tpope/vim-fugitive' " git
+Plug 'junegunn/gv.vim' " commit browser
+Plug 'christoomey/vim-tmux-navigator' " tmux
 " automatic functionality
-Plugin 'chriskempson/base16-vim' " base16 for gvim
-Plugin 'bling/vim-airline' " status and buffer line
-Plugin 'scrooloose/syntastic' " linters in vim
-Plugin 'reedes/vim-pencil' " vim for prose
-Plugin 'Raimondi/delimitMate' " automatic closing of paired delimiters
-Plugin 'luochen1990/rainbow' " rainbow parentheses
-Plugin 'tshirtman/vim-cython'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'dag/vim-fish'
-Plugin 'klen/python-mode'
-Plugin 'hdima/python-syntax'
-Plugin 'tpope/vim-markdown'
-Plugin 'jcfaria/Vim-R-plugin'
-Plugin 'davidoc/taskpaper.vim'
-Plugin 'othree/html5.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mattn/gist-vim'
-Plugin 'lervag/vimtex'
-Plugin 'JuliaLang/julia-vim'
+Plug 'chriskempson/base16-vim' " base16 for gvim
+Plug 'bling/vim-airline' " status and buffer line
+Plug 'scrooloose/syntastic' " linters in vim
+Plug 'reedes/vim-pencil' " vim for prose
+Plug 'Raimondi/delimitMate' " automatic closing of paired delimiters
+Plug 'luochen1990/rainbow' " rainbow parentheses
+Plug 'tshirtman/vim-cython'
+Plug 'airblade/vim-gitgutter'
+Plug 'dag/vim-fish'
+Plug 'klen/python-mode'
+Plug 'hdima/python-syntax'
+Plug 'tpope/vim-markdown'
+Plug 'jcfaria/Vim-R-plugin'
+Plug 'davidoc/taskpaper.vim'
+Plug 'othree/html5.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mattn/gist-vim'
+Plug 'lervag/vimtex'
+Plug 'JuliaLang/julia-vim'
 if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
-    Plugin 'Valloric/YouCompleteMe' " fast code completion
+    Plug 'Valloric/YouCompleteMe', {'for': ['fortran', 'python'], 'do': './install.py'} " fast code completion
+    autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 endif
 " helper plugins
-Plugin 'Shougo/vimproc' " makes some plugins faster
-Plugin 'tpope/vim-repeat' " makes . accessible for plugins
-Plugin 'moll/vim-bbye' " layout stays as is on buffer close
-Plugin 'mattn/webapi-vim'
-Plugin 'mhinz/vim-hugefile'
+Plug 'Shougo/vimproc', {'do': 'make'} " makes some plugins faster
+Plug 'tpope/vim-repeat' " makes . accessible for plugins
+Plug 'moll/vim-bbye' " layout stays as is on buffer close
+Plug 'mattn/webapi-vim'
+Plug 'mhinz/vim-hugefile'
 
-call vundle#end()
+call plug#end()
 
 filetype plugin indent on
 
