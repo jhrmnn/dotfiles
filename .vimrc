@@ -100,12 +100,6 @@ function! FindProjectName()
     return s:name
 endfunction
 
-function! MakeTags()
-    echo 'Preparing tags...'
-    call system('ctags -R')
-    echo 'Tags done'
-endfunction
-
 function! RestoreSession(name)
     if exists("g:my_is_stdin")
         return
@@ -353,20 +347,29 @@ function! s:buff_line_handler(l)
     exec keys[0]
 endfunction
 
-command! -bar FZFTags if !empty(tagfiles()) | 
-            \ call fzf#run({
-            \   'source': 'gsed ''/^\\!/ d; s/^\([^\t]*\)\t.*\t\(\w\)\(\t.*\)\?/\2\t\1/; /^l/ d'' ' . join(tagfiles()) . ' | uniq',
-            \   'sink': function('<SID>tag_line_handler'),
+function! MakeTags()
+    echo 'Preparing tags...'
+    call system('ctags -R')
+    echo 'Tags done'
+endfunction
+
+command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
+            \   'source': 'gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t\1\t\2\t\5\t\3/; /^l/ d'' ' . join(tagfiles()) . ' | awk -F $''\t'' ''{print $1"\t|..|"$2"\t|..|"$3"\t|..|"$4"|..|"$5}'' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
+            \   'options': '-d "\t" -n 2 --with-nth 1..4',
+            \   'sink': function('s:tags_sink'),
             \ }) | else | call MakeTags() | FZFTags | endif
 
+function! s:tags_sink(line)
+    execute "edit" split(a:line, "\t")[3]
+    execute join(split(a:line, "\t")[4:], "\t")
+endfunction
 
 command! FZFTagsBuffer call fzf#run({
-            \   'source': 'ctags -f - --sort=no ' . bufname("") . ' | gsed ''s/^\([^\t]*\)\t.*\t\(\w\)\(\t.*\)\?/\2\t\1/'' | sort -k 1.1,1.1 -s',
-            \   'sink': function('<SID>tag_line_handler'),
-            \   'options': '--tac',
-            \ })
+            \   'source': printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')) . ' | gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t\1\t\5\t\2\t\3/; /^l/ d'' | awk -F $''\t'' ''{print $1"\t|..|"$2"\t|..|"$3"|..|"$4"|..|"$5}'' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
+            \   'sink': function('s:buffer_tags_sink'),
+            \   'options': '-d "\t" -n 2 --with-nth 1..3 --tiebreak=index --tac',
+            \   'down': '40%'})
 
-function! s:tag_line_handler(l)
-    let keys = split(a:l, '\t')
-    exec 'tag' keys[1]
+function! s:buffer_tags_sink(line)
+    execute join(split(a:line, "\t")[4:], "\t")
 endfunction
