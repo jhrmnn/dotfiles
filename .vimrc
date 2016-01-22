@@ -262,7 +262,17 @@ let g:syntastic_python_flake8_quiet_messages = {
             \    "undefined name 'unicode'"
             \ ]}
 let g:syntastic_fortran_checkers = ['gfortran']
-let g:syntastic_fortran_compiler_options = '-ffree-line-length-none'
+let g:syntastic_fortran_compiler_options = '-ffree-line-length-none -fcoarray=single'
+            \ . ' -fall-intrinsics'
+command FortranGNU let b:syntastic_fortran_cflags = "-std=gnu"
+command FortranNormal let b:syntastic_fortran_cflags = "-std=f95"
+command FortranPedant let b:syntastic_fortran_cflags = 
+            \ '-std=f95 -Wall -pedantic -Waliasing -Wcharacter-truncation' 
+            \ . ' -Wextra -Wimplicit-procedure -Wintrinsics-std -Wsurprising'
+command Fortran08 let b:syntastic_fortran_cflags = "-std=f2008"
+command Fortran08Pedant let b:syntastic_fortran_cflags = 
+            \ '-Wall -pedantic -Waliasing -Wcharacter-truncation' 
+            \ . ' -Wextra -Wimplicit-procedure -Wintrinsics-std -Wsurprising -std=f2008'
 " let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_tex_checkers = ['chktex']
