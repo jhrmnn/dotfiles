@@ -77,9 +77,7 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
-autocmd FileType fortran setlocal cc=80 tw=80 comments=:!>,:! fo=croqwa number
-autocmd BufRead,BufNewFile *.f90 let b:fortran_do_enddo=1
-autocmd BufRead,BufNewFile *.f90 let b:fortran_more_precise=1
+autocmd FileType fortran setlocal cc=80,133 tw=80 comments=:!>,:! fo=croqw number
 autocmd FileType python setlocal cc=80 tw=79 fo=croq number cino+=(0
 autocmd FileType javascript setlocal cc=80 number
 autocmd FileType cpp setlocal cc=80 tw=80 fo=croqw number cino+=(0
