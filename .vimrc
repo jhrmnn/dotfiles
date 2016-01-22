@@ -44,28 +44,23 @@ let maplocalleader = " "
 vmap <Tab> <Plug>(expand_region_expand)
 vmap <S-Tab> <Plug>(expand_region_shrink)
 vnoremap <F9> ~
-nnoremap <BS> <C-O>
 vnoremap \ y:Ag!<Space>"<C-R><C-R>""<CR>
 nnoremap \ :Ag!<Space>""<left>
-nnoremap <F4> :bnext!<CR>
-nnoremap <F3> :bprevious!<CR>
 nnoremap é :bnext<CR>
 nnoremap í :bprevious<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>w :Bdelete<CR>
-nnoremap <Leader>e :edit<Space>
 nnoremap <Leader>+ :silent !tmux split-window -v -p 25<CR>
 nnoremap <Leader>n :nohlsearch<CR>
 nnoremap <Leader>s :OverCommandLine<CR>%s/
 vnoremap <Leader>s :OverCommandLine<CR>s/
 nnoremap <Leader>f :FZFLinesBuffer<CR>
-nnoremap <Leader>; :cclose<CR>:lclose<CR>:pclose<CR>
-nnoremap <Leader>, <F10>
-" nnoremap <Leader>t :TagbarToggle<CR>
-nnoremap <Leader>p :FZF<CR>
-nnoremap <Leader>mk :Make<CR>
 nnoremap <Leader>gf :FZFLines<CR>
 nnoremap <Leader>ggf :FZFLinesAll<CR>
+nnoremap <Leader>; :cclose<CR>:lclose<CR>:pclose<CR>
+nnoremap <Leader>, <F10>
+nnoremap <Leader>p :FZF<CR>
+nnoremap <Leader>mk :Make<CR>
 nnoremap <Leader>t :FZFTagsBuffer<CR>
 nnoremap <Leader>gt :FZFTags<CR>
 nnoremap <Leader>T :call<Space>MakeTags()<CR>
@@ -238,12 +233,6 @@ let g:rainbow_conf = {
             \     }
             \ }
 
-" let g:tagbar_autoclose = 1
-" let g:tagbar_autofocus = 1
-" let g:tagbar_compact = 1
-" let g:tagbar_width = 35
-" let g:tagbar_sort = 0
-
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_register_as_syntastic_checker = 0
 let g:ycm_semantic_triggers = {
@@ -331,31 +320,31 @@ endfunction
 
 command! FZFLinesAll call fzf#run({
             \   'source': 'ag .',
-            \   'sink': function('<sid>line_handler'),
+            \   'sink': function('s:line_handler'),
             \   'options': '--nth=3..'
             \ })
 
 command! FZFLines call fzf#run({
             \   'source': 'ag . ' . join(map(filter(range(0, bufnr("$")), 
             \              "buflisted(v:val)"), "bufname(v:val)")),
-            \   'sink': function('<SID>line_handler'),
+            \   'sink': function('s:line_handler'),
             \   'options': '--nth=3..'
             \ })
 
-function! s:line_handler(l)
-    let keys = split(a:l, ':')
+function! s:line_handler(line)
+    let keys = split(a:line, ':')
     exec 'edit' keys[0]
     exec keys[1]
 endfunction
 
 command! FZFLinesBuffer call fzf#run({
             \   'source': 'ag . ' . bufname(""),
-            \   'sink': function('<SID>buff_line_handler'),
+            \   'sink': function('s:buff_line_handler'),
             \   'options': '--nth=2..'
             \ })
 
-function! s:buff_line_handler(l)
-    let keys = split(a:l, ':')
+function! s:buff_line_handler(line)
+    let keys = split(a:line, ':')
     exec keys[0]
 endfunction
 
