@@ -355,7 +355,8 @@ function! MakeTags()
 endfunction
 
 command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
-            \   'source': 'gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t\1\t\2\t\5\t\3/; /^l/ d'' ' . join(tagfiles()) . ' | awk -F $''\t'' ''{print $1"\t|..|"$2"\t|..|"$3"\t|..|"$4"|..|"$5}'' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
+            \   'source': 'gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'' ' 
+            \              . join(tagfiles()) . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
             \   'options': '-d "\t" -n 2 --with-nth 1..4',
             \   'sink': function('s:tags_sink'),
             \ }) | else | call MakeTags() | FZFTags | endif
@@ -366,9 +367,11 @@ function! s:tags_sink(line)
 endfunction
 
 command! FZFTagsBuffer call fzf#run({
-            \   'source': printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')) . ' | gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t\1\t\5\t\2\t\3/; /^l/ d'' | awk -F $''\t'' ''{print $1"\t|..|"$2"\t|..|"$3"|..|"$4"|..|"$5}'' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
+            \   'source': printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')) 
+            \             . ' | gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'''
+            \             . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
             \   'sink': function('s:buffer_tags_sink'),
-            \   'options': '-d "\t" -n 2 --with-nth 1..3 --tiebreak=index --tac',
+            \   'options': '-d "\t" -n 2 --with-nth 1,2,4 --tiebreak=index --tac',
             \   'down': '40%'})
 
 function! s:buffer_tags_sink(line)
