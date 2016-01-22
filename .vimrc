@@ -291,7 +291,11 @@ let g:vimtex_quickfix_ignored_warnings = [
             \ "Token not allowed in a PDF string",
             \ "unicode-math warning",
             \ "Marginpar",
-            \ "Package hyperref Warning: Rerun to get /PageLabels entry."
+            \ "Package hyperref Warning: Rerun to get /PageLabels entry.",
+            \ "biblatex Warning: The following entry could not be found",
+            \ "WARN - I didn't find a database entry",
+            \ "Suppressing link with empty target",
+            \ "characters which cannot be encoded in 'ascii'"
             \ ]
 
 " let g:airline_powerline_fonts = 1
