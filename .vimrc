@@ -44,26 +44,28 @@ let maplocalleader = " "
 vmap <Tab> <Plug>(expand_region_expand)
 vmap <S-Tab> <Plug>(expand_region_shrink)
 vnoremap <F9> ~
-vnoremap \ y:Ag!<Space>"<C-R><C-R>""<CR>
-nnoremap \ :Ag!<Space>""<left>
 nnoremap é :bnext<CR>
 nnoremap í :bprevious<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>w :Bdelete<CR>
 nnoremap <Leader>+ :silent !tmux split-window -v -p 25<CR>
 nnoremap <Leader>n :nohlsearch<CR>
-nnoremap <Leader>s :OverCommandLine<CR>%s/
-vnoremap <Leader>s :OverCommandLine<CR>s/
-nnoremap <Leader>f :FZFLinesBuffer<CR>
-nnoremap <Leader>gf :FZFLines<CR>
-nnoremap <Leader>ggf :FZFLinesAll<CR>
 nnoremap <Leader>; :cclose<CR>:lclose<CR>:pclose<CR>
 nnoremap <Leader>, <F10>
+nnoremap <Leader>d :setlocal foldmethod=syntax<CR>
 nnoremap <Leader>p :FZF<CR>
-nnoremap <Leader>mk :Make<CR>
+nnoremap \\ :FZFLinesBuffer<Space>
+nnoremap \ :FZFLinesAll<Space>
+vnoremap \\ y:FZFLinesBuffer<Space><C-R><C-R>"<CR>
+vnoremap \ y:FZFLinesAll<Space><C-R><C-R>"<CR>
+nnoremap <Space>\\ :FZFLinesBuffer<CR>
+nnoremap <Space>\ :FZFLinesAll<CR>
 nnoremap <Leader>t :FZFTagsBuffer<CR>
 nnoremap <Leader>gt :FZFTags<CR>
 nnoremap <Leader>T :call<Space>MakeTags()<CR>
+nnoremap <Leader>s :OverCommandLine<CR>%s/
+vnoremap <Leader>s :OverCommandLine<CR>s/
+nnoremap <Leader>mk :Make<CR>
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
 nnoremap <Leader>go :Goyo<CR>
@@ -129,7 +131,6 @@ Plug 'terryma/vim-expand-region' " key: <Tab>
 Plug 'tomtom/tcomment_vim' " automatic comments, key: gc
 Plug 'tyru/open-browser.vim' " key: gx
 Plug 'justinmk/vim-sneak' " 2-letter f, key: s S f t
-Plug 'rking/ag.vim' " silver searcher, key: \
 Plug 'tpope/vim-dispatch' " asynchronous make, key: <Leader>mk
 Plug 'osyo-manga/vim-over' " better substitute, key: <Leader>s
 Plug 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
@@ -318,34 +319,61 @@ function! AirlineThemePatch(palette)
   let a:palette.tabline.airline_tabhid = [0, 0, 8, 16]
 endfunction
 
-command! FZFLinesAll call fzf#run({
-            \   'source': 'ag .',
-            \   'sink': function('s:line_handler'),
-            \   'options': '--nth=3..'
+command! -nargs=? FZFLinesAll call fzf#run({
+            \   'source': printf('ag --nogroup --column --color "%s"', 
+            \         escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-')),
+            \   'sink*': function('s:line_handler'),
+            \   'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" ' .
+            \         '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,4 --color'
             \ })
 
-command! FZFLines call fzf#run({
-            \   'source': 'ag . ' . join(map(filter(range(0, bufnr("$")), 
-            \              "buflisted(v:val)"), "bufname(v:val)")),
-            \   'sink': function('s:line_handler'),
-            \   'options': '--nth=3..'
-            \ })
-
-function! s:line_handler(line)
-    let keys = split(a:line, ':')
-    exec 'edit' keys[0]
-    exec keys[1]
+function! s:ag_to_qf(line)
+    let parts = split(a:line, ':')
+    return {'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0], 
+                \ 'lnum': parts[1], 
+                \ 'col': parts[2],
+                \ 'text': join(parts[3:], ':')}
 endfunction
 
-command! FZFLinesBuffer call fzf#run({
-            \   'source': 'ag . ' . bufname(""),
-            \   'sink': function('s:buff_line_handler'),
-            \   'options': '--nth=2..'
+function! s:line_handler(lines)
+    if len(a:lines) == 0
+        return
+    endif
+    let list = map(a:lines, 's:ag_to_qf(v:val)')
+    exec 'edit' list[0].filename
+    exec list[0].lnum
+    exec 'normal!' list[0].col . '|zz'
+    if len(a:lines) > 1
+        call setqflist(list)
+        copen
+    endif
+endfunction
+
+command! -nargs=? FZFLinesBuffer call fzf#run({
+            \   'source': printf('ag --nogroup --column --color "%s" %s', 
+            \        escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-'), bufname("")),
+            \   'sink*': function('s:buff_line_handler'),
+            \   'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" ' .
+            \         '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,3 --color'
             \ })
 
-function! s:buff_line_handler(line)
-    let keys = split(a:line, ':')
-    exec keys[0]
+function! s:buff_ag_to_qf(line)
+    let parts = split(a:line, ':')
+    return {'filename': bufname(""), 
+                \ 'lnum': parts[0], 'col': parts[1], 'text': join(parts[2:], ':')}
+endfunction
+
+function! s:buff_line_handler(lines)
+    if len(a:lines) == 0
+        return
+    endif
+    let list = map(a:lines, 's:buff_ag_to_qf(v:val)')
+    exec list[0].lnum
+    exec 'normal!' list[0].col . '|zz'
+    if len(a:lines) > 1
+        call setqflist(list)
+        copen
+    endif
 endfunction
 
 function! MakeTags()
