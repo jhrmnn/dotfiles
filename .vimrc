@@ -12,6 +12,7 @@ set exrc
 set hlsearch incsearch
 set ignorecase smartcase
 set diffopt+=iwhite
+set shortmess+=s
 set hidden
 set pastetoggle=<F10>
 set mouse=a
@@ -52,14 +53,14 @@ nnoremap <Leader>+ :silent !tmux split-window -v -p 25<CR>
 nnoremap <Leader>n :nohlsearch<CR>
 nnoremap <Leader>; :cclose<CR>:lclose<CR>:pclose<CR>
 nnoremap <Leader>, <F10>
-nnoremap <Leader>d :setlocal foldmethod=syntax<CR>
+nnoremap <Leader>d :call ToggleFold()<CR>
 nnoremap <Leader>p :FZF<CR>
 nnoremap \\ :FZFLinesBuffer<Space>
 nnoremap \ :FZFLinesAll<Space>
 vnoremap \\ y:FZFLinesBuffer<Space><C-R><C-R>"<CR>
 vnoremap \ y:FZFLinesAll<Space><C-R><C-R>"<CR>
-nnoremap <Space>\\ :FZFLinesBuffer<CR>
-nnoremap <Space>\ :FZFLinesAll<CR>
+nnoremap <Space>f :FZFLinesBuffer<CR>
+nnoremap <Space>gf :FZFLinesAll<CR>
 nnoremap <Leader>t :FZFTagsBuffer<CR>
 nnoremap <Leader>gt :FZFTags<CR>
 nnoremap <Leader>T :call<Space>MakeTags()<CR>
@@ -89,6 +90,16 @@ autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \     exe ":normal! g`\"" |
             \ endif
+
+function! ToggleFold()
+    if &foldmethod == "manual"
+        setlocal foldmethod=syntax
+        echo "syntax"
+    elseif &foldmethod == "syntax"
+        setlocal foldmethod=manual
+        echo "manual"
+    endif
+endfunction
 
 function! FindProjectName()
     let s:name = fnamemodify(getcwd(), ":t") . "." . 
@@ -226,6 +237,7 @@ let python_highlight_all = 1
 let g:rainbow_active = 1 
 let g:rainbow_conf = {
             \    'ctermfgs': ['red', 'yellow', 'green', 'blue'],
+            \    'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/'],
             \    'separately': {
             \         'sh': {
             \              'parentheses': ['start=/\[\[/ end=/\]\]/',
@@ -324,7 +336,7 @@ command! -nargs=? FZFLinesAll call fzf#run({
             \         escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-')),
             \   'sink*': function('s:line_handler'),
             \   'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" ' .
-            \         '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,4 --color'
+            \         '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,4.. --color'
             \ })
 
 function! s:ag_to_qf(line)
@@ -344,8 +356,8 @@ function! s:line_handler(lines)
     exec list[0].lnum
     exec 'normal!' list[0].col . '|zz'
     if len(a:lines) > 1
-        call setqflist(list)
-        copen
+        call setqflist(reverse(list))
+        botright copen
     endif
 endfunction
 
@@ -354,7 +366,7 @@ command! -nargs=? FZFLinesBuffer call fzf#run({
             \        escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-'), bufname("")),
             \   'sink*': function('s:buff_line_handler'),
             \   'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" ' .
-            \         '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,3 --color'
+            \         '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,3.. --color'
             \ })
 
 function! s:buff_ag_to_qf(line)
@@ -371,8 +383,8 @@ function! s:buff_line_handler(lines)
     exec list[0].lnum
     exec 'normal!' list[0].col . '|zz'
     if len(a:lines) > 1
-        call setqflist(list)
-        copen
+        call setqflist(reverse(list))
+        botright copen
     endif
 endfunction
 
@@ -390,7 +402,7 @@ command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
             \ }) | else | call MakeTags() | FZFTags | endif
 
 function! s:tags_sink(line)
-    execute "edit" split(a:line, "\t")[3]
+    execute "edit" split(a:line, "\t")[2]
     execute join(split(a:line, "\t")[4:], "\t")
 endfunction
 
