@@ -1,6 +1,6 @@
 [user]
     name = Jan Hermann
-    email = jan@janhermann.cz
+    email = jh@janhermann.cz
 [core]
     excludesfile = ~/.gitignore_global
 [push]
