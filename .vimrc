@@ -19,6 +19,7 @@ set mouse=a
 set timeoutlen=500
 set clipboard=unnamed
 set noshowmode
+set modelines=10
 set showmatch
 set display+=lastline
 set title
@@ -59,6 +60,7 @@ nnoremap \\ :FZFLinesBuffer<Space>
 nnoremap \ :FZFLinesAll<Space>
 vnoremap \\ y:FZFLinesBuffer<Space><C-R><C-R>"<CR>
 vnoremap \ y:FZFLinesAll<Space><C-R><C-R>"<CR>
+xmap ga <Plug>(EasyAlign)
 nnoremap <Space>f :FZFLinesBuffer<CR>
 nnoremap <Space>gf :FZFLinesAll<CR>
 nnoremap <Leader>t :FZFTagsBuffer<CR>
@@ -138,6 +140,7 @@ call plug#begin('~/.vim/plugged')
 " new functionality
 Plug 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
 Plug 'tpope/vim-surround' " key: cs, ds, ys
+Plug 'junegunn/vim-easy-align'
 Plug 'terryma/vim-expand-region' " key: <Tab>
 Plug 'tomtom/tcomment_vim' " automatic comments, key: gc
 Plug 'tyru/open-browser.vim' " key: gx
@@ -150,6 +153,7 @@ Plug 'junegunn/fzf' " key: <Leader>p
 Plug 'tpope/vim-fugitive' " git
 Plug 'junegunn/gv.vim' " commit browser
 Plug 'christoomey/vim-tmux-navigator' " tmux
+Plug 'krisajenkins/vim-pipe'
 " automatic functionality
 Plug 'chriskempson/base16-vim' " base16 for gvim
 Plug 'bling/vim-airline' " status and buffer line
@@ -159,8 +163,10 @@ Plug 'Raimondi/delimitMate' " automatic closing of paired delimiters
 Plug 'luochen1990/rainbow' " rainbow parentheses
 Plug 'tshirtman/vim-cython'
 Plug 'airblade/vim-gitgutter'
+" Plug 'mhinz/vim-signify'
 Plug 'dag/vim-fish'
 Plug 'klen/python-mode'
+Plug 'toyamarinyon/vim-swift'
 Plug 'hdima/python-syntax'
 Plug 'tpope/vim-markdown'
 Plug 'jcfaria/Vim-R-plugin'
@@ -171,7 +177,7 @@ Plug 'mattn/gist-vim'
 Plug 'lervag/vimtex'
 Plug 'JuliaLang/julia-vim'
 if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
-    Plug 'Valloric/YouCompleteMe', {'for': ['fortran', 'python'], 'do': './install.py'} " fast code completion
+    Plug 'Valloric/YouCompleteMe', {'for': ['fortran', 'python', 'tex'], 'do': './install.py'} " fast code completion
     autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 endif
 " helper plugins
@@ -189,6 +195,9 @@ filetype plugin indent on
 
 let g:goyo_width = 81
 let g:goyo_height = '100%'
+
+let g:vimpipe_invoke_map = '<Leader>r'
+let g:vimpipe_close_map = '<Leader>x'
 
 function! s:goyo_enter()
     silent !tmux set status off
@@ -220,6 +229,7 @@ augroup END
 let g:tex_flavor = "latex"
 
 let g:gitgutter_max_signs = 10000
+let g:gitgutter_diff_args = '--word-diff=color'
 
 let g:multi_cursor_exit_from_insert_mode = 0
 
@@ -242,6 +252,10 @@ let g:rainbow_conf = {
             \         'sh': {
             \              'parentheses': ['start=/\[\[/ end=/\]\]/',
             \                              'start=/((/ end=/))/']
+            \         },
+            \         'liquid': {
+            \              'parentheses': ['start=/{%/ end=/%}/',
+            \                              'start=/{{/ end=/}}/']
             \         }
             \     }
             \ }
@@ -256,7 +270,7 @@ let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_python_checkers = ['flake8', 'pep257']
-let g:syntastic_python_pep257_args = ['--ignore=D100,D101,D102,D103,D105']
+let g:syntastic_python_pep257_args = ['--ignore=D100,D101,D102,D103,D105,D203']
 let g:syntastic_python_flake8_args = ['--ignore=E501,E226,E402']
 let g:syntastic_python_flake8_quiet_messages = {
             \ "regex": [
@@ -266,6 +280,10 @@ let g:syntastic_python_flake8_quiet_messages = {
 let g:syntastic_fortran_checkers = ['gfortran']
 let g:syntastic_fortran_compiler_options = '-ffree-line-length-none -fcoarray=single'
             \ . ' -fall-intrinsics'
+let g:syntastic_fortran_gfortran_quiet_messages = {
+            \ "regex": [
+            \    "unused dummy argument 'dummy",
+            \ ]}
 command FortranGNU let b:syntastic_fortran_cflags = "-std=gnu"
 command FortranNormal let b:syntastic_fortran_cflags = "-std=f95"
 command FortranPedant let b:syntastic_fortran_cflags = 
@@ -297,7 +315,6 @@ let g:vimtex_quickfix_ignored_warnings = [
             \ "biblatex Warning: The following entry could not be found",
             \ "WARN - I didn't find a database entry",
             \ "Suppressing link with empty target",
-            \ "characters which cannot be encoded in 'ascii'"
             \ ]
 
 let g:airline_powerline_fonts = 1
