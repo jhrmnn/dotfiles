@@ -15,7 +15,12 @@ function fish_prompt
         else
             set_color green
         end
-        echo -ns " " (git rev-parse --abbrev-ref HEAD)
+        set -l branch (git rev-parse --revs-only --abbrev-ref HEAD)
+        if test -n "$branch"
+            echo -ns " " $branch
+        else
+            echo -ns " <empty>"
+        end if
     end
     set -l njobs (jobs | wc -l | string trim)
     if test $njobs -gt 0
