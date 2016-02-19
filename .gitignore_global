@@ -7,3 +7,6 @@ _vimrc
 .Rhistory
 tags
 *.latexmain
+.csync_journal.db*
+.owncloudsync.log
+.pub.yaml
