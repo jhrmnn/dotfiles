@@ -1,3 +1,28 @@
+# echo "I am bashrc"
+if [[ -z "$BASH_PROFILE_DONE" ]]; then
+    # echo "bash profile did not run yet!"
+    if [[ -n "SSH_CLIENT" || -n "SSH_CLIENT2" ]]; then
+        # echo "bashrc on ssh"
+        if [[ ! "$-" =~ "i" ]]; then
+            # echo "bashrc is non-interactive, calling bash_profile and quitting"
+            . ~/.bash_profile
+            return
+        else
+            # echo "bashrc is interactive, quitting"
+            return
+        fi
+    else
+        echo "this should not happen! quitting"
+        return
+    fi
+fi
+if [[ -n "$BASHRC_DONE" ]]; then
+    # echo "bashrc already processed, quitting"
+    return
+fi
+BASHRC_DONE=1
+# echo "processing bashrc"
+
 set -o vi
 shopt -s histappend
 shopt -s cmdhist
