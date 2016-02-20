@@ -38,6 +38,7 @@ else
 fi
 
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
+[[ -s ~/.fzf.bash ]] && . ~/.fzf.bash
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
