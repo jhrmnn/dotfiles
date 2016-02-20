@@ -1,11 +1,11 @@
-if [[ -z "$BASH_PROFILE_DONE" ]]; then
+if [[ -z "$PROFILE_SOURCED" ]]; then
     if [[ -n "SSH_CLIENT" || -n "SSH_CLIENT2" ]]; then
         [[ ! "$-" =~ "i" ]] && . ~/.bash_profile
         return
     fi
 fi
-[[ -n "$BASHRC_DONE" ]] && return
-BASHRC_DONE=1
+[[ -n "$BASHRC_SOURCED" ]] && return
+BASHRC_SOURCED=1
 
 set -o vi
 shopt -s histappend

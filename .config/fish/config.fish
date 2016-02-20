@@ -1,7 +1,3 @@
-if test -f ~/.config/fish/local.config.fish
-    . ~/.config/fish/local.config.fish
-end
-
 alias .. "cd .."
 alias ... "cd ../.."
 alias ll "ls -l"
@@ -25,3 +21,8 @@ else
 end
 
 set -g fish_key_bindings fish_vi_key_bindings
+
+if test -f ~/.config/fish/local.config.fish
+    . ~/.config/fish/local.config.fish
+end
+
