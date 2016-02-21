@@ -4,8 +4,6 @@ if [[ -z "$PROFILE_SOURCED" ]]; then
         return
     fi
 fi
-[[ -n "$BASHRC_SOURCED" ]] && return
-BASHRC_SOURCED=1
 
 set -o vi
 shopt -s histappend
@@ -37,8 +35,9 @@ else
     alias ls="ls -hG"
 fi
 
-[[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 [[ -s ~/.fzf.bash ]] && . ~/.fzf.bash
+
+[[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[0;30m\]'
