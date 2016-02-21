@@ -1,6 +1,6 @@
 run_bashrc () { [[ "$-" =~ "i" ]] && [[ -s ~/.bashrc ]] && . ~/.bashrc; }
 
-[[ -n "$PROFILE_SOURCED" ]] && run_bashrc && return
+[[ -n "$PROFILE_SOURCED" ]] && { run_bashrc; return; }
 
 [[ -s ~/.profile ]] && . ~/.profile
 
