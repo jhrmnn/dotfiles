@@ -1,3 +1,6 @@
+[ -n "$PROFILE_SOURCED" ] && return
+export PROFILE_SOURCED=1
+
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -8,4 +11,4 @@ export PYTHONPATH="$PYTHONPATH:$HOME/local/lib"
 
 export GREP_OPTIONS="--color=auto"
 
-if [ -r  ~/.profile.local ]; then source ~/.profile.local; fi
+if [ -r ~/.profile.local ]; then source ~/.profile.local; fi
