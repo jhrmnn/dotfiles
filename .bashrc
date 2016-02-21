@@ -1,6 +1,6 @@
 if [[ -z "$PROFILE_SOURCED" ]]; then
     if [[ -n "SSH_CLIENT" || -n "SSH_CLIENT2" ]]; then
-        [[ ! "$-" =~ "i" ]] && . ~/.bash_profile
+        [[ ! "$-" =~ "i" ]] && [[ -s ~/.bash_profile ]] && . ~/.bash_profile
         return
     fi
 fi
