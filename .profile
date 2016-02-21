@@ -1,12 +1,12 @@
 [ -n "$PROFILE_SOURCED" ] && return
 export PROFILE_SOURCED=1
 
-export LANGUAGE=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+export LANGUAGE="en_US.UTF-8"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
-export PATH=$HOME/local/bin:$PATH
-export PATH=$HOME/bin:$PATH
+export PATH="$HOME/local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 export PYTHONPATH="$PYTHONPATH:$HOME/local/lib"
 
 export GREP_OPTIONS="--color=auto"

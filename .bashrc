@@ -9,10 +9,10 @@ set -o vi
 shopt -s histappend
 shopt -s cmdhist
 shopt -s histverify
-HISTFILESIZE=1000000
-HISTSIZE=1000000
-HISTCONTROL=ignoreboth
-HISTIGNORE=ls:bg:fg:history
+HISTFILESIZE="1000000"
+HISTSIZE="1000000"
+HISTCONTROL="ignoreboth"
+HISTIGNORE="ls:bg:fg:history"
 HISTTIMEFORMAT="%F %T "
 
 alias ..="cd .."
