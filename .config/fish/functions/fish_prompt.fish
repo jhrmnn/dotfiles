@@ -6,7 +6,7 @@ function fish_prompt
 
     if test -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2"
         set _name_color green
-        set _at_color yellow
+        set _at_color red
     else
         set _name_color cyan
         set _at_color blue
