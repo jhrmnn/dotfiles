@@ -35,8 +35,6 @@ else
     alias ls="ls -hG"
 fi
 
-[[ -s ~/.fzf.bash ]] && . ~/.fzf.bash
-
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 
 Color_Off='\[\e[0m\]'
