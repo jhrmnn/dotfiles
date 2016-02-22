@@ -41,11 +41,17 @@ Blue='\[\e[0;34m\]'
 Magenta='\[\e[0;35m\]'
 Cyan='\[\e[0;36m\]'
 White='\[\e[0;37m\]'
-
+if [[ -n "$SSH_CLIENT" || -n "$SSH_CLIENT2" ]]; then
+    _name_color=$Green
+    _at_color=$Red
+else
+    _name_color=$Cyan
+    _at_color=$Blue
+fi
 PROMPT_COMMAND="PS_STATUS=\$?; history -a; $PROMPT_COMMAND"
 PS1="\
 \A\
- $Cyan\$(cut -c1-3 <<<\u)$Blue@$Cyan\$(cut -c1-5 <<<\h)\
+ $_name_color\$(cut -c1-3 <<<\u)$_at_color@$_name_color\$(cut -c1-3 <<<\h)\
  $Yellow\$(awk -F '/' '{ORS=\"\";\
                         for (i=1; i<NF; i++) print substr(\$i, 1, 1) \"/\";\
                         print \$NF}' \
