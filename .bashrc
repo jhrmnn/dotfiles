@@ -1,9 +1,4 @@
-if [[ -z "$PROFILE_SOURCED" ]]; then
-    if [[ -n "$SSH_CLIENT" || -n "$SSH_CLIENT2" ]]; then
-        [[ ! "$-" =~ "i" ]] && [[ -s ~/.bash_profile ]] && . ~/.bash_profile
-        return
-    fi
-fi
+[[ -z "$PROFILE_SOURCED" ]] && { [[ -s ~/.bash_profile ]] && . ~/.bash_profile; return; }
 
 set -o vi
 shopt -s histappend
