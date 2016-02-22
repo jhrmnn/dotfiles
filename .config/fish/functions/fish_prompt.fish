@@ -4,8 +4,15 @@ function fish_prompt
         set -g __fish_prompt_hostname (hostname | cut -c1-3)
     end
 
-    echo -ns "🐟 " (set_color cyan) (echo $USER | cut -c1-3) \
-        (set_color blue) "@" (set_color cyan) $__fish_prompt_hostname " " \
+    if test -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2"
+        set _name_color green
+        set _at_color yellow
+    else
+        set _name_color cyan
+        set _at_color blue
+    end
+    echo -ns "🐟 " (set_color $_name_color) (echo $USER | cut -c1-3) \
+        (set_color $_at_color) "@" (set_color $_name_color) $__fish_prompt_hostname " " \
         (set_color yellow) (prompt_pwd | \
             awk -F '/' '{ORS=""; for (i=1; i<NF; i++) print substr($i, 1, 1) "/"; print $NF}')
 
