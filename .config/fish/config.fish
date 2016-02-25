@@ -1,16 +1,20 @@
-abbr -a ll="ls -l"
-abbr -a la="ls -a"
-abbr -a lla="ls -la"
-abbr -a lt="ls -ltr"
-abbr -a py="python"
-abbr -a py3="python3"
-abbr -a pty="ptpython"
-abbr -a ipty="ptipython"
-abbr -a sp="tmux split"
-abbr -a vsp="tmux split -h"
-abbr -a kp="tmux kill-pane"
-abbr -a gitk="gitk --all"
-abbr -a mku="make -C .."
+for w in (abbr -l)
+    abbr -e $w
+end
+abbr ll="ls -l"
+abbr op="open"
+abbr la="ls -a"
+abbr lla="ls -la"
+abbr lt="ls -ltr"
+abbr py="python"
+abbr py3="python3"
+abbr pty="ptpython"
+abbr ipty="ptipython"
+abbr sp="tmux split"
+abbr vsp="tmux split -h"
+abbr kp="tmux kill-pane"
+abbr gitk="gitk --all"
+abbr mku="make -C .."
 
 set -x GREP_OPTIONS "--color=auto"
 
