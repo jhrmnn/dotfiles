@@ -2,7 +2,7 @@
     name = Jan Hermann
     email = jh@janhermann.cz
 [core]
-    excludesfile = ~/.gitignore_global
+	excludesfile = /Users/hermann/.gitignore_global
 [push]
     default = matching
 [include]
@@ -31,9 +31,9 @@
 	smudge = git-lfs smudge %f
 	required = true
 [gui]
-	fontdiff = -family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family Hack -size 12 -weight normal -slant roman -underline 0 -overstrike 0
 	editor = gvim
 [cola]
-	fontdiff = Menlo,13,-1,5,50,0,0,0,0,0
+	fontdiff = Hack,13,-1,5,50,0,0,0,0,0
 	tabwidth = 4
 	textwidth = 72

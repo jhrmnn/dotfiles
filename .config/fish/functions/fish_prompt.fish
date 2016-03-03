@@ -1,3 +1,5 @@
+set -g fish_prompt_pwd_dir_length 2
+
 function fish_prompt
     set -l _status $status
     if not set -q __fish_prompt_hostname
@@ -13,8 +15,7 @@ function fish_prompt
     end
     echo -ns "🐟 " (set_color $_name_color) (echo $USER | cut -c1-3) \
         (set_color $_at_color) "@" (set_color $_name_color) $__fish_prompt_hostname " " \
-        (set_color yellow) (prompt_pwd | \
-            awk -F '/' '{ORS=""; for (i=1; i<NF; i++) print substr($i, 1, 1) "/"; print $NF}')
+        (set_color yellow) (prompt_pwd)
 
     if git rev-parse --is-inside-work-tree >/dev/null ^&1
         if git status --porcelain | egrep . >/dev/null ^&1

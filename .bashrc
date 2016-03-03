@@ -1,9 +1,11 @@
 [[ -z "$PROFILE_SOURCED" ]] && { [[ -s ~/.bash_profile ]] && . ~/.bash_profile; return; }
 
 set -o vi
+shopt -s checkwinsize
 shopt -s histappend
 shopt -s cmdhist
 shopt -s histverify
+shopt -s dirspell
 HISTFILESIZE="1000000"
 HISTSIZE="1000000"
 HISTCONTROL="ignoreboth"
@@ -16,13 +18,17 @@ alias ll="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
 alias lt="ls -ltr"
-alias py="ptpython"
-alias ipy="ptipython"
+alias py="python"
+alias py3="python3"
+alias pty="ptpython"
+alias ipty="ptipython"
+alias jupy="jupyter notebook"
 alias sp="tmux split"
 alias vsp="tmux split -h"
 alias kp="tmux kill-pane"
-alias make..="make -C .."
 alias gitk="gitk --all"
+alias mk="make"
+alias mku="make -C .."
 if ls --color=none &>/dev/null
 then
     alias ls="ls -h --color"
@@ -53,7 +59,7 @@ PS1="\
 \A\
  $_name_color\$(cut -c1-3 <<<\u)$_at_color@$_name_color\$(cut -c1-3 <<<\h)\
  $Yellow\$(awk -F '/' '{ORS=\"\";\
-                        for (i=1; i<NF; i++) print substr(\$i, 1, 1) \"/\";\
+                        for (i=1; i<NF; i++) print substr(\$i, 1, 2) \"/\";\
                         print \$NF}' \
            <<<'\w')\
 \$(if git rev-parse --is-inside-work-tree &>/dev/null; then\

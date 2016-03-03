@@ -2,7 +2,6 @@ for w in (abbr -l)
     abbr -e $w
 end
 abbr ll="ls -l"
-abbr op="open"
 abbr la="ls -a"
 abbr lla="ls -la"
 abbr lt="ls -ltr"
@@ -10,11 +9,14 @@ abbr py="python"
 abbr py3="python3"
 abbr pty="ptpython"
 abbr ipty="ptipython"
+abbr jupy="jupyter notebook"
 abbr sp="tmux split"
 abbr vsp="tmux split -h"
 abbr kp="tmux kill-pane"
 abbr gitk="gitk --all"
+abbr mk="make"
 abbr mku="make -C .."
+abbr caf="./caf"
 
 set -x GREP_OPTIONS "--color=auto"
 

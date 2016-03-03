@@ -168,7 +168,9 @@ Plug 'dag/vim-fish'
 Plug 'klen/python-mode'
 Plug 'toyamarinyon/vim-swift'
 Plug 'hdima/python-syntax'
-Plug 'tpope/vim-markdown'
+" Plug 'tpope/vim-markdown'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'jcfaria/Vim-R-plugin'
 Plug 'davidoc/taskpaper.vim'
 Plug 'othree/html5.vim'
@@ -224,6 +226,7 @@ augroup pencil
   autocmd!
   autocmd FileType markdown call pencil#init()
   autocmd FileType tex call pencil#init()
+  autocmd FileType rst call pencil#init()
 augroup END
  
 let g:tex_flavor = "latex"
@@ -264,6 +267,12 @@ let g:ycm_register_as_syntastic_checker = 0
 let g:ycm_semantic_triggers = {
             \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
+
+let g:pandoc#completion#bib#mode = 'citeproc'
+let g:pandoc#biblio#sources = 'b'
+let g:pandoc#syntax#conceal#use = 0
+let g:pandoc#syntax#conceal#urls = 1
+let g:pandoc#syntax#codeblocks#embeds#langs = ["python"]
 
 let g:syntastic_auto_jump = 2
 let g:syntastic_auto_loc_list = 1
