@@ -5,7 +5,6 @@ shopt -s checkwinsize
 shopt -s histappend
 shopt -s cmdhist
 shopt -s histverify
-shopt -s dirspell
 HISTFILESIZE="1000000"
 HISTSIZE="1000000"
 HISTCONTROL="ignoreboth"
