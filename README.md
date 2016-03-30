@@ -6,7 +6,8 @@ You should have [Vundle](https://github.com/gmarik/Vundle.vim) installed in
 `~/.vim/bundle/Vundle.vim`. You can have that with
 
 ```bash
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
 ## Install
