@@ -332,10 +332,10 @@ let g:airline#extensions#tabline#fnametruncate = 17
 let g:airline_theme_patch_func = 'AirlineThemePatch'
 
 function! AirlineThemePatch(palette)
-  let l:green = airline#themes#generate_color_map(['#ffffff', '#ffffff', 8, 2], ['#ffffff', '#ffffff', 8, 2], ['#ffffff', '#ffffff', 16, 16])
-  let l:red = airline#themes#generate_color_map(['#ffffff', '#ffffff', 8, 1], ['#ffffff', '#ffffff', 8, 1], ['#ffffff', '#ffffff', 16, 16])
-  let l:blue = airline#themes#generate_color_map(['#ffffff', '#ffffff', 8, 4], ['#ffffff', '#ffffff', 8, 4], ['#ffffff', '#ffffff', 16, 16])
-  let l:gray = airline#themes#generate_color_map(['#ffffff', '#ffffff', 16, 8], ['#ffffff', '#ffffff', 16, 8], ['#ffffff', '#ffffff', 16, 8])
+  let l:green = airline#themes#generate_color_map(['#303030', '#90A959', 8, 2], ['#303030', '#90A959', 8, 2], ['#181818', '#181818', 16, 16])
+  let l:red = airline#themes#generate_color_map(['#303030', '#AC4142', 8, 1], ['#303030', '#AC4142', 8, 1], ['#181818', '#181818', 16, 16])
+  let l:blue = airline#themes#generate_color_map(['#303030', '#4B7D98', 8, 4], ['#303030', '#4B7D98', 8, 4], ['#181818', '#181818', 16, 16])
+  let l:gray = airline#themes#generate_color_map(['#181818', '#303030', 16, 8], ['#181818', '#303030', 16, 8], ['#181818', '#181818', 16, 8])
   let a:palette.normal = l:green
   let a:palette.normal_modified = l:red
   let a:palette.normal_paste = l:blue
@@ -349,11 +349,11 @@ function! AirlineThemePatch(palette)
   let a:palette.inactive_modified = l:gray
   let a:palette.inactive_paste = l:gray
   let a:palette.tabline = {}
-  let a:palette.tabline.airline_tabsel = ['#ffffff', '#ffffff', 8, 2]
-  let a:palette.tabline.airline_tab = ['#ffffff', '#ffffff', 2, 16]
-  let a:palette.tabline.airline_tabmod = ['#ffffff', '#ffffff', 8, 1]
-  let a:palette.tabline.airline_tabmod_unsel = ['#ffffff', '#ffffff', 1, 16]
-  let a:palette.tabline.airline_tabhid = ['#ffffff', '#ffffff', 8, 16]
+  let a:palette.tabline.airline_tabsel = ['#505050', '#90A959', 8, 2]
+  let a:palette.tabline.airline_tab = ['#90A959', '#181818', 2, 16]
+  let a:palette.tabline.airline_tabmod = ['#505050', '#AC4142', 8, 1]
+  let a:palette.tabline.airline_tabmod_unsel = ['#AC4142', '#181818', 1, 16]
+  let a:palette.tabline.airline_tabhid = ['#505050', '#181818', 8, 16]
 endfunction
 
 command! -nargs=? FZFLinesAll call fzf#run({
