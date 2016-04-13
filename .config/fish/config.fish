@@ -17,6 +17,7 @@ abbr gitk="gitk --all"
 abbr mk="make"
 abbr mku="make -C .."
 abbr caf="./caf"
+abbr del="trash"
 
 set -x GREP_OPTIONS "--color=auto"
 
