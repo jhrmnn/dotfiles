@@ -286,7 +286,7 @@ let g:syntastic_python_flake8_quiet_messages = {
             \    "undefined name 'unicode'"
             \ ]}
 let g:syntastic_fortran_checkers = ['gfortran']
-let g:syntastic_fortran_compiler_options = '-ffree-line-length-none -fcoarray=single'
+let g:syntastic_fortran_compiler_options = '-ffree-line-length-none -fcoarray=single -fcheck=all'
             \ . ' -fall-intrinsics'
 let g:syntastic_fortran_gfortran_quiet_messages = {
             \ "regex": [
