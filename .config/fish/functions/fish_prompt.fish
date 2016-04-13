@@ -13,7 +13,9 @@ function fish_prompt
         set _name_color cyan
         set _at_color blue
     end
-    echo -ns "🐟 " (set_color $_name_color) (echo $USER | cut -c1-3) \
+    echo -ns "🐟 "
+    __mode_prompt
+    echo -ns " " (set_color $_name_color) (echo $USER | cut -c1-3) \
         (set_color $_at_color) "@" (set_color $_name_color) $__fish_prompt_hostname " " \
         (set_color yellow) (prompt_pwd)
 
@@ -40,20 +42,13 @@ function fish_prompt
     echo -ns (set_color normal) " "
 end
 
-function fish_right_prompt
-    date "+%H:%M"
-    echo -n " "
-    __mode_prompt
-end
-
 function __mode_prompt --description "Displays the current mode"
     switch $fish_bind_mode
-        case default
-            echo -ns (set_color -o -b red white) "[N]"
         case insert
-            echo -ns (set_color -o -b green white) "[I]"
+            echo -ns (set_color -o white)
         case visual
-            echo -ns (set_color -o -b magenta white) "[V]"
+            echo -ns (set_color magenta)
     end
+    echo -ns (date "+%H:%M")
     set_color normal
 end
