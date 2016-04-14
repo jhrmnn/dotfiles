@@ -23,6 +23,7 @@ set modelines=10
 set showmatch
 set display+=lastline
 set title
+set titleold=
 set autoread
 set history=1000
 set scrolloff=1
@@ -36,6 +37,11 @@ set laststatus=2
 set noerrorbells visualbell t_vb=
 set omnifunc=syntaxcomplete#Complete
 set sessionoptions-=options
+
+if !empty($TMUX)
+    set t_ts=Ptmux;]2;
+    set t_fs=\
+endif
 
 highlight Normal ctermbg=none
 highlight ColorColumn ctermbg=8

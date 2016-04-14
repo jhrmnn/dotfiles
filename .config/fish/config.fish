@@ -33,3 +33,5 @@ if test -f ~/.config/fish/local.config.fish
     . ~/.config/fish/local.config.fish
 end
 
+update_tmux_cwd
+
