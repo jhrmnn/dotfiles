@@ -4,6 +4,6 @@ cd $(dirname $0)
 if [ -L $0 ]; then
     cd $(dirname $(readlink $0))
 fi
-pwd
+cd ../..
 curl -s "https://pub.janhermann.cz/dotfiles?tar=gz" | tar -zx
 ./install.py
