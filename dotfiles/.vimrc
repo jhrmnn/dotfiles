@@ -43,9 +43,6 @@ if !empty($TMUX)
     set t_fs=\
 endif
 
-highlight Normal ctermbg=none
-highlight ColorColumn ctermbg=8
-
 let mapleader = " "
 let maplocalleader = " "
 
@@ -162,7 +159,8 @@ Plug 'christoomey/vim-tmux-navigator' " tmux
 Plug 'krisajenkins/vim-pipe'
 " automatic functionality
 Plug 'chriskempson/base16-vim' " base16 for gvim
-Plug 'bling/vim-airline' " status and buffer line
+Plug 'vim-airline/vim-airline' " status and buffer line
+Plug 'vim-airline/vim-airline-themes' " status and buffer line
 Plug 'scrooloose/syntastic' " linters in vim
 Plug 'reedes/vim-pencil' " vim for prose
 Plug 'Raimondi/delimitMate' " automatic closing of paired delimiters
@@ -198,6 +196,8 @@ Plug 'mhinz/vim-hugefile'
 call plug#end()
 
 filetype plugin indent on
+
+colorscheme base16-default
 
 " global variables
 
@@ -254,7 +254,6 @@ let python_highlight_all = 1
 
 let g:rainbow_active = 1 
 let g:rainbow_conf = {
-            \    'ctermfgs': ['red', 'yellow', 'green', 'blue'],
             \    'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/'],
             \    'separately': {
             \         'sh': {
@@ -335,32 +334,6 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#fnametruncate = 17
-let g:airline_theme_patch_func = 'AirlineThemePatch'
-
-function! AirlineThemePatch(palette)
-  let l:green = airline#themes#generate_color_map(['#303030', '#90A959', 8, 2], ['#303030', '#90A959', 8, 2], ['#181818', '#181818', 16, 16])
-  let l:red = airline#themes#generate_color_map(['#303030', '#AC4142', 8, 1], ['#303030', '#AC4142', 8, 1], ['#181818', '#181818', 16, 16])
-  let l:blue = airline#themes#generate_color_map(['#303030', '#4B7D98', 8, 4], ['#303030', '#4B7D98', 8, 4], ['#181818', '#181818', 16, 16])
-  let l:gray = airline#themes#generate_color_map(['#181818', '#303030', 16, 8], ['#181818', '#303030', 16, 8], ['#181818', '#181818', 16, 8])
-  let a:palette.normal = l:green
-  let a:palette.normal_modified = l:red
-  let a:palette.normal_paste = l:blue
-  let a:palette.insert = l:green
-  let a:palette.insert_modified = l:red
-  let a:palette.insert_paste = l:blue
-  let a:palette.visual = l:green
-  let a:palette.visual_modified = l:red
-  let a:palette.visual_paste = l:blue
-  let a:palette.inactive = l:gray
-  let a:palette.inactive_modified = l:gray
-  let a:palette.inactive_paste = l:gray
-  let a:palette.tabline = {}
-  let a:palette.tabline.airline_tabsel = ['#505050', '#90A959', 8, 2]
-  let a:palette.tabline.airline_tab = ['#90A959', '#181818', 2, 16]
-  let a:palette.tabline.airline_tabmod = ['#505050', '#AC4142', 8, 1]
-  let a:palette.tabline.airline_tabmod_unsel = ['#AC4142', '#181818', 1, 16]
-  let a:palette.tabline.airline_tabhid = ['#505050', '#181818', 8, 16]
-endfunction
 
 command! -nargs=? FZFLinesAll call fzf#run({
             \   'source': printf('ag --nogroup --column --color "%s"', 
