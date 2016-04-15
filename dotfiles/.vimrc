@@ -152,6 +152,7 @@ Plug 'tpope/vim-dispatch' " asynchronous make, key: <Leader>mk
 Plug 'osyo-manga/vim-over' " better substitute, key: <Leader>s
 Plug 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
 Plug 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
+Plug 'bronson/vim-trailing-whitespace'
 Plug 'junegunn/fzf' " key: <Leader>p
 Plug 'tpope/vim-fugitive' " git
 Plug 'junegunn/gv.vim' " commit browser
@@ -254,6 +255,7 @@ let python_highlight_all = 1
 
 let g:rainbow_active = 1 
 let g:rainbow_conf = {
+            \    'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
             \    'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/'],
             \    'separately': {
             \         'sh': {
