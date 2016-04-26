@@ -1,47 +1,52 @@
-filetype plugin indent on
-syntax on
+if !has('nvim')
+    filetype plugin indent on
+    syntax on
 
-set shell=/bin/bash
-set nocompatible
+    set nocompatible
+
+    set autoindent
+    set autoread
+    set backspace=indent,eol,start
+    set display+=lastline
+    set encoding=utf-8
+    set history=1000
+    set hlsearch
+    set incsearch
+    set laststatus=2
+    set mouse=a
+    set nobomb
+    set omnifunc=syntaxcomplete#Complete
+    set sessionoptions-=options
+    set smarttab
+    set wildmenu
+endif
+
 set background=dark
-set wildmenu
-set backspace=indent,eol,start
-set gdefault
-set encoding=utf-8 nobomb
-set exrc
-set hlsearch incsearch
-set ignorecase smartcase
-set diffopt+=iwhite
-set shortmess+=s
-set hidden
-set pastetoggle=<F10>
-set mouse=a
-set timeoutlen=500
 set clipboard=unnamed
-set noshowmode
+set diffopt+=iwhite
+set exrc
+set gdefault
+set hidden
+set ignorecase
 set modelines=10
+set noerrorbells
+set nofoldenable
+set noshowmode
+set pastetoggle=<F10>
+set scrolloff=1
+set shell=/bin/bash
+set shortmess+=s
 set showmatch
-set display+=lastline
+set smartcase
+set smartindent
+set tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
+set timeoutlen=500
 set title
 set titleold=
-set autoread
-set history=1000
-set scrolloff=1
-set autoindent smartindent smarttab
-set tabstop=4 shiftwidth=4 softtabstop=4 expandtab shiftround
-set wrap linebreak nolist
+set undodir=$HOME/.vim/undo
 set undofile
-set undodir=$HOME/.vim/undo 
-set nofoldenable
-set laststatus=2
-set noerrorbells visualbell t_vb=
-set omnifunc=syntaxcomplete#Complete
-set sessionoptions-=options
-
-if !empty($TMUX)
-    set t_ts=Ptmux;]2;
-    set t_fs=\
-endif
+set visualbell
+set wrap linebreak nolist
 
 let mapleader = " "
 let maplocalleader = " "
@@ -71,7 +76,11 @@ nnoremap <Leader>gt :FZFTags<CR>
 nnoremap <Leader>T :call<Space>MakeTags()<CR>
 nnoremap <Leader>s :OverCommandLine<CR>%s/
 vnoremap <Leader>s :OverCommandLine<CR>s/
-nnoremap <Leader>mk :Make<CR>
+if has('nvim')
+    nnoremap <Leader>mk :Neomake!<CR>
+else
+    nnoremap <Leader>mk :Make<CR>
+endif
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
 nnoremap <Leader>go :Goyo<CR>
@@ -89,25 +98,13 @@ autocmd FileType markdown setlocal tw=80 spell ci pi sts=0 sw=4 ts=4
 autocmd FileType tex setlocal tw=80 ts=2 sw=2 sts=2 spell
 autocmd FileType yaml setlocal ts=2 sw=2 sts=2
 autocmd BufRead,BufNewFile *.pyx set filetype=cython
+autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
 " restore position in a buffer
-autocmd BufReadPost *
-            \ if line("'\"") > 1 && line("'\"") <= line("$") |
-            \     exe ":normal! g`\"" |
-            \ endif
-
-function! ToggleFold()
-    if &foldmethod == "manual"
-        setlocal foldmethod=syntax
-        echo "syntax"
-    elseif &foldmethod == "syntax"
-        setlocal foldmethod=manual
-        echo "manual"
-    endif
-endfunction
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe ":normal! g`\"" | endif
 
 function! FindProjectName()
-    let s:name = fnamemodify(getcwd(), ":t") . "." . 
+    let s:name = fnamemodify(getcwd(), ":t") . "." .
                 \ md5#md5(getcwd()) . ".vim"
     return s:name
 endfunction
@@ -117,8 +114,13 @@ function! RestoreSession(name)
         return
     endif
     echo exists("g:my_is_stdin")
-    if filereadable($HOME . "/.vim/sessions/" . a:name)
-        execute 'source ' . $HOME . "/.vim/sessions/" . a:name
+    if has('nvim')
+        if filereadable($HOME . "/.local/share/nvim/sessions/" . a:name)
+            execute 'source ' . $HOME . "/.local/share/nvim/sessions/" . a:name
+    else
+        if filereadable($HOME . "/.vim/sessions/" . a:name)
+            execute 'source ' . $HOME . "/.vim/sessions/" . a:name
+    end if
     end
 endfunction
 
@@ -126,7 +128,11 @@ function! SaveSession(name)
     if exists("g:my_is_stdin")
         return
     endif
-    execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
+    if has('nvim')
+        execute 'mksession! ' . $HOME . '/.local/share/nvim/sessions/' . a:name
+    else
+        execute 'mksession! ' . $HOME . '/.vim/sessions/' . a:name
+    endif
 endfunction
 
 autocmd StdinReadPre * let g:my_is_stdin = 1
@@ -136,63 +142,68 @@ if argc() == 0 && v:version > 703
     autocmd VimEnter * nested call RestoreSession(FindProjectName())
 end
 
+let g:loaded_python_provider = 1
+let g:python3_host_skip_check = 1
+
 filetype off
 
-call plug#begin('~/.vim/plugged')
+if has('nvim')
+    call plug#begin('~/.local/share/nvim/plugged')
+else
+    call plug#begin('~/.vim/plugged')
+endif
 
 " new functionality
-Plug 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
-Plug 'tpope/vim-surround' " key: cs, ds, ys
-Plug 'junegunn/vim-easy-align'
-Plug 'terryma/vim-expand-region' " key: <Tab>
-Plug 'tomtom/tcomment_vim' " automatic comments, key: gc
-Plug 'tyru/open-browser.vim' " key: gx
-Plug 'justinmk/vim-sneak' " 2-letter f, key: s S f t
-Plug 'tpope/vim-dispatch' " asynchronous make, key: <Leader>mk
-Plug 'osyo-manga/vim-over' " better substitute, key: <Leader>s
-Plug 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
 Plug 'AndrewRadev/linediff.vim' " diffing ranges, key: <Leader>ldf
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'junegunn/fzf' " key: <Leader>p
-Plug 'tpope/vim-fugitive' " git
-Plug 'junegunn/gv.vim' " commit browser
 Plug 'christoomey/vim-tmux-navigator' " tmux
-Plug 'krisajenkins/vim-pipe'
+Plug 'junegunn/fzf' " key: <Leader>p
+Plug 'junegunn/goyo.vim' " distraction-free vim, key: <Leader>go
+Plug 'junegunn/gv.vim' " commit browser
+Plug 'junegunn/vim-easy-align'
+Plug 'justinmk/vim-sneak' " 2-letter f, key: s S f t
+Plug 'osyo-manga/vim-over' " better substitute, key: <Leader>s
+Plug 'terryma/vim-expand-region' " key: <Tab>
+Plug 'terryma/vim-multiple-cursors' "key: <C-N> <C-X> <C-P>
+Plug 'tomtom/tcomment_vim' " automatic comments, key: gc
+Plug 'tpope/vim-fugitive' " git
+Plug 'tpope/vim-surround' " key: cs, ds, ys
 " automatic functionality
-Plug 'chriskempson/base16-vim' " base16 for gvim
-Plug 'vim-airline/vim-airline' " status and buffer line
-Plug 'vim-airline/vim-airline-themes' " status and buffer line
-Plug 'scrooloose/syntastic' " linters in vim
-Plug 'reedes/vim-pencil' " vim for prose
+Plug 'JuliaLang/julia-vim'
 Plug 'Raimondi/delimitMate' " automatic closing of paired delimiters
-Plug 'luochen1990/rainbow' " rainbow parentheses
-Plug 'tshirtman/vim-cython'
-Plug 'airblade/vim-gitgutter'
-" Plug 'mhinz/vim-signify'
+" Plug 'airblade/vim-gitgutter'
+Plug 'chriskempson/base16-vim' " base16 for gvim
 Plug 'dag/vim-fish'
-Plug 'klen/python-mode'
-Plug 'keith/swift.vim'
 Plug 'hdima/python-syntax'
-" Plug 'tpope/vim-markdown'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'jcfaria/Vim-R-plugin'
-Plug 'davidoc/taskpaper.vim'
+Plug 'keith/swift.vim'
+Plug 'klen/python-mode'
+Plug 'lervag/vimtex'
+Plug 'luochen1990/rainbow' " rainbow parentheses
 Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
-Plug 'mattn/gist-vim'
-Plug 'lervag/vimtex'
-Plug 'JuliaLang/julia-vim'
-if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
-    Plug 'Valloric/YouCompleteMe', {'for': ['fortran', 'python', 'tex'], 'do': './install.py'} " fast code completion
-    autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
-endif
+Plug 'reedes/vim-pencil' " vim for prose
+Plug 'scrooloose/syntastic' " linters in vim
+Plug 'vim-airline/vim-airline' " status and buffer line
+Plug 'vim-airline/vim-airline-themes' " status and buffer line
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 " helper plugins
 Plug 'Shougo/vimproc', {'do': 'make'} " makes some plugins faster
 Plug 'tpope/vim-repeat' " makes . accessible for plugins
 Plug 'moll/vim-bbye' " layout stays as is on buffer close
 Plug 'mattn/webapi-vim'
-Plug 'mhinz/vim-hugefile'
+if has('nvim') " asynchronous make, key: <Leader>mk
+    Plug 'benekastah/neomake'
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'kassio/neoterm'
+else
+    Plug 'tpope/vim-dispatch'
+    if $VIM_NO_YCM != '1' && (v:version > 703 || v:version == 703 && has('patch584'))
+        Plug 'Valloric/YouCompleteMe', {'for': ['fortran', 'python', 'tex'], 'do': './install.py'} " fast code completion
+        autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
+    endif
+endif
 
 call plug#end()
 
@@ -202,11 +213,19 @@ colorscheme base16-default
 
 " global variables
 
+if has('nvim')
+    let g:deoplete#enable_at_startup = 1
+    inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+else
+    let g:ycm_autoclose_preview_window_after_insertion = 1
+    let g:ycm_register_as_syntastic_checker = 0
+    let g:ycm_semantic_triggers = {
+                \  'tex'  : ['{', 're!\\cite\{.*,'],
+                \ }
+endif
+
 let g:goyo_width = 81
 let g:goyo_height = '100%'
-
-let g:vimpipe_invoke_map = '<Leader>r'
-let g:vimpipe_close_map = '<Leader>x'
 
 function! s:goyo_enter()
     silent !tmux set status off
@@ -235,10 +254,10 @@ augroup pencil
   autocmd FileType tex call pencil#init()
   autocmd FileType rst call pencil#init()
 augroup END
- 
+
 let g:tex_flavor = "latex"
 
-let g:gitgutter_max_signs = 10000
+let g:gitgutter_max_signs = 100000
 
 let g:multi_cursor_exit_from_insert_mode = 0
 
@@ -253,9 +272,9 @@ let g:pymode_syntax = 0
 
 let python_highlight_all = 1
 
-let g:rainbow_active = 1 
+let g:rainbow_active = 1
 let g:rainbow_conf = {
-            \    'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+            \    'ctermfgs': [160, 226, 46, 51, 164, 57, 28, 27, 'Grey', 'Grey', 'Grey', 'Grey', 'Grey', 'Grey'],
             \    'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/'],
             \    'separately': {
             \         'sh': {
@@ -267,12 +286,6 @@ let g:rainbow_conf = {
             \                              'start=/{{/ end=/}}/']
             \         }
             \     }
-            \ }
-
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_register_as_syntastic_checker = 0
-let g:ycm_semantic_triggers = {
-            \  'tex'  : ['{', 're!\\cite\{.*,'],
             \ }
 
 let g:pandoc#completion#bib#mode = 'citeproc'
@@ -297,27 +310,23 @@ let g:syntastic_fortran_compiler_options = '-ffree-line-length-none -fcoarray=si
             \ . ' -fall-intrinsics'
 let g:syntastic_fortran_gfortran_quiet_messages = {
             \ "regex": [
-            \    "unused dummy argument 'dummy",
+            \    "unused dummy argument 'dummy"
             \ ]}
+let g:syntastic_cpp_checkers = ['gcc']
 command FortranGNU let b:syntastic_fortran_cflags = "-std=gnu"
+command FortranLegacy let b:syntastic_fortran_cflags = "-std=legacy"
 command FortranNormal let b:syntastic_fortran_cflags = "-std=f95"
-command FortranPedant let b:syntastic_fortran_cflags = 
-            \ '-std=f95 -Wall -pedantic -Waliasing -Wcharacter-truncation' 
+command FortranPedant let b:syntastic_fortran_cflags =
+            \ '-std=f95 -Wall -pedantic -Waliasing -Wcharacter-truncation'
             \ . ' -Wextra -Wimplicit-procedure -Wintrinsics-std -Wsurprising'
 command Fortran08 let b:syntastic_fortran_cflags = "-std=f2008"
-command Fortran08Pedant let b:syntastic_fortran_cflags = 
-            \ '-Wall -pedantic -Waliasing -Wcharacter-truncation' 
+command Fortran08Pedant let b:syntastic_fortran_cflags =
+            \ '-Wall -pedantic -Waliasing -Wcharacter-truncation'
             \ . ' -Wextra -Wimplicit-procedure -Wintrinsics-std -Wsurprising -std=f2008'
 " let g:syntastic_html_checkers = ['w3']
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_tex_checkers = ['chktex']
 let g:syntastic_tex_chktex_args = ['--nowarn', '29']
-
-let g:task_paper_styles = { 
-            \    'flagged': 'ctermfg=Red guifg=Red',
-            \    'due': 'ctermfg=Yellow guifg=Yellow',
-            \    'waiting': 'ctermfg=Green guifg=Green',
-            \ }
 
 let g:vimtex_fold_enabled = 0
 let g:vimtex_quickfix_ignored_warnings = [
@@ -333,12 +342,13 @@ let g:vimtex_quickfix_ignored_warnings = [
             \ ]
 
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#branch#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#fnametruncate = 17
 
 command! -nargs=? FZFLinesAll call fzf#run({
-            \   'source': printf('ag --nogroup --column --color "%s"', 
+            \   'source': printf('ag --nogroup --column --color "%s"',
             \         escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-')),
             \   'sink*': function('s:line_handler'),
             \   'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" ' .
@@ -347,8 +357,8 @@ command! -nargs=? FZFLinesAll call fzf#run({
 
 function! s:ag_to_qf(line)
     let parts = split(a:line, ':')
-    return {'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0], 
-                \ 'lnum': parts[1], 
+    return {'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0],
+                \ 'lnum': parts[1],
                 \ 'col': parts[2],
                 \ 'text': join(parts[3:], ':')}
 endfunction
@@ -368,7 +378,7 @@ function! s:line_handler(lines)
 endfunction
 
 command! -nargs=? FZFLinesBuffer call fzf#run({
-            \   'source': printf('ag --nogroup --column --color "%s" %s', 
+            \   'source': printf('ag --nogroup --column --color "%s" %s',
             \        escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-'), bufname("")),
             \   'sink*': function('s:buff_line_handler'),
             \   'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" ' .
@@ -377,7 +387,7 @@ command! -nargs=? FZFLinesBuffer call fzf#run({
 
 function! s:buff_ag_to_qf(line)
     let parts = split(a:line, ':')
-    return {'filename': bufname(""), 
+    return {'filename': bufname(""),
                 \ 'lnum': parts[0], 'col': parts[1], 'text': join(parts[2:], ':')}
 endfunction
 
@@ -401,7 +411,7 @@ function! MakeTags()
 endfunction
 
 command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
-            \   'source': 'gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'' ' 
+            \   'source': 'gsed ''/^\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'' '
             \              . join(tagfiles()) . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
             \   'options': '-d "\t" -n 2 --with-nth 1..4',
             \   'sink': function('s:tags_sink'),
@@ -413,12 +423,12 @@ function! s:tags_sink(line)
 endfunction
 
 command! FZFTagsBuffer call fzf#run({
-            \   'source': printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S')) 
-            \             . ' | gsed ''/^\\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'''
+            \   'source': printf('ctags -f - --sort=no --excmd=number --language-force=%s %s', &filetype, expand('%:S'))
+            \             . ' | gsed ''/^\!/ d; s/^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'''
             \             . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
             \   'sink': function('s:buffer_tags_sink'),
             \   'options': '-d "\t" -n 2 --with-nth 1,2,4 --tiebreak=index --tac',
-            \   'down': '40%'})
+            \   'left': '20%'})
 
 function! s:buffer_tags_sink(line)
     execute join(split(a:line, "\t")[4:], "\t")
