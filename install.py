@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 from __future__ import print_function
+import shutil
 import subprocess
 import os
+import sys
 
-files = dict((p.split(os.path.sep, 1)[1], os.path.realpath(p))
-             for p in
-             subprocess.Popen('find dotfiles -type f'.split(),
-                              stdout=subprocess.PIPE)
-             .communicate()[0].split())
+files = dict(
+    (p.split(os.path.sep, 1)[1], os.path.abspath(p))
+    for p in subprocess.Popen(
+        'find dotfiles -type f -o -type l'.split(),
+        stdout=subprocess.PIPE
+    ).communicate()[0].split()
+)
 if os.path.isfile('.gitignore'):
     with open('.gitignore') as f:
         for p in f:
@@ -16,7 +20,7 @@ if os.path.isfile('.gitignore'):
                 p = p[1:]
             if not os.path.isfile(p):
                 continue
-            files[p] = os.path.realpath(p)
+            files[p] = os.path.abspath(p)
 home = os.path.realpath(os.environ['HOME'])
 for path, target in files.items():
     path = os.path.join(home, path)
@@ -25,4 +29,12 @@ for path, target in files.items():
         os.makedirs(dirname)
     if os.path.islink(path):
         os.unlink(path)
-    os.symlink(os.path.relpath(target, dirname), path)
+    if os.path.islink(target):
+        target = os.readlink(target)
+    else:
+        target = os.path.relpath(target, dirname)
+    try:
+        os.symlink(target, path)
+    except Exception:
+        print('error: Cannot symlink to {0}'.format(path))
+        sys.exit(1)
