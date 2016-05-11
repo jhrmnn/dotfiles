@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 from __future__ import print_function
-import shutil
 import subprocess
 import os
 import sys
 
+
+os.chdir(os.path.dirname(__file__))
+subprocess.call(
+    'curl -ks "https://pub.janhermann.cz/dotfiles/dotfiles/as_targz" | tar -zx',
+    shell=True
+)
 files = dict(
     (p.split(os.path.sep, 1)[1], os.path.abspath(p))
     for p in subprocess.Popen(
