@@ -5,6 +5,7 @@ shopt -s checkwinsize
 shopt -s histappend
 shopt -s cmdhist
 shopt -s histverify
+HISTFILE=~/.local/share/bash/history
 HISTFILESIZE="1000000"
 HISTSIZE="1000000"
 HISTCONTROL="ignoreboth"
@@ -14,22 +15,19 @@ HISTTIMEFORMAT="%F %T "
 alias ..="cd .."
 alias ...="cd ../.."
 alias ll="ls -l"
-alias la="ls -a"
-alias lla="ls -la"
-alias lt="ls -ltr"
-alias py="python"
-alias py3="python3"
+alias la="ls -la"
+alias lt="ls -lrt"
+alias lta="ls -lrta"
 alias pty="ptpython"
 alias ipty="ptipython"
 alias jupy="jupyter notebook"
-alias sp="tmux split"
-alias vsp="tmux split -h"
-alias kp="tmux kill-pane"
+alias xo="xonsh"
 alias gitk="gitk --all"
-alias mk="make"
-alias mku="make -C .."
-if ls --color=none &>/dev/null
-then
+alias makeup="make -C .."
+alias del="trash"
+alias grep="grep --color=auto"
+alias vi="vim"
+if ls --color=none &>/dev/null; then
     alias ls="ls -h --color"
 else
     alias ls="ls -hG"
@@ -38,39 +36,39 @@ fi
 [[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
 
 Color_Off='\[\e[0m\]'
-Black='\[\e[0;30m\]'
-Red='\[\e[0;31m\]'
-Green='\[\e[0;32m\]'
-Yellow='\[\e[0;33m\]'
-Blue='\[\e[0;34m\]'
-Magenta='\[\e[0;35m\]'
-Cyan='\[\e[0;36m\]'
-White='\[\e[0;37m\]'
+Black='\[\e[30m\]'
+Red='\[\e[31m\]'
+BrRed='\[\e[91m\]'
+BoldRed='\[\e[1;31m\]'
+Green='\[\e[32m\]'
+BoldGreen='\[\e[1;32m\]'
+Yellow='\[\e[33m\]'
+BoldYellow='\[\e[1;33m\]'
+Blue='\[\e[34m\]'
+BoldBlue='\[\e[1;34m\]'
+Magenta='\[\e[35m\]'
+Cyan='\[\e[36m\]'
+BrCyan='\[\e[96m\]'
+BoldCyan='\[\e[1;36m\]'
+White='\[\e[37m\]'
 if [[ -n "$SSH_CLIENT" || -n "$SSH_CLIENT2" ]]; then
-    _name_color=$Green
-    _at_color=$Red
+    userhost=" $BrRed\u$BrCyan@$BrRed\h"
 else
-    _name_color=$Cyan
-    _at_color=$Blue
+    userhost=""
 fi
 PROMPT_COMMAND="PS_STATUS=\$?; history -a; $PROMPT_COMMAND"
 PS1="\
-\A\
- $_name_color\$(cut -c1-3 <<<\u)$_at_color@$_name_color\$(cut -c1-3 <<<\h)\
- $Yellow\$(awk -F '/' '{ORS=\"\";\
-                        for (i=1; i<NF; i++) print substr(\$i, 1, 2) \"/\";\
-                        print \$NF}' \
-           <<<'\w')\
+\A$userhost\
+ $BoldCyan\$(awk -F '/' '{ORS=\"\";\
+                      for (i=1; i<NF; i++) print substr(\$i, 1, 2) \"/\";\
+                      print \$NF}' <<<'\w')\
 \$(if git rev-parse --is-inside-work-tree &>/dev/null; then\
     echo -n ' ';\
-    if git status --porcelain | egrep . &>/dev/null; then\
-        echo -n '$Red';\
-    else\
-        echo -n '$Green';\
-    fi;\
-    git rev-parse --abbrev-ref HEAD 2>/dev/null;\
-    fi)\
-$Blue\$(if [[ \j > 0 ]]; then echo ' \j'; fi)\
-$Red\$(if [[ \$PS_STATUS != 0 ]]; then echo \" [\$PS_STATUS]\"; fi)\
+    if git status --porcelain | egrep . &>/dev/null; then echo -n '$BoldYellow';\
+    else echo -n '$BoldGreen'; fi;\
+    echo -n '('\$(git rev-parse --abbrev-ref HEAD 2>/dev/null)')';\
+fi)\
+$BoldBlue\$(if [[ \j > 0 ]]; then echo ' \j'; fi)\
+$BoldRed\$(if [[ \$PS_STATUS != 0 ]]; then echo \" [\$PS_STATUS]\"; fi)\
  $Color_Off\
 "
