@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-cd $(dirname $0)
-if [ -L $0 ]; then
-    cd $(dirname $(readlink $0))
-fi
-cd ../..
-curl -s "https://pub.janhermann.cz/dotfiles/as_targz" | tar -zx
-./install.py
