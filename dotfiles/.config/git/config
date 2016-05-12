@@ -1,14 +1,12 @@
 [user]
 	name = Jan Hermann
 	email = jh@janhermann.cz
-[core]
-	excludesfile = ~/.gitignore_global
 [push]
-    default = matching
-[include]
-    path = ~/.gitconfig_local
+    default = simple
 [blame]
     date = short
+[core]
+    excludesfile = ~/.config/git/ignore
 [github]
     user = azag0
 [branch]

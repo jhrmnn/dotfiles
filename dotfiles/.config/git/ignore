@@ -10,3 +10,5 @@ tags
 .csync_journal.db*
 .owncloudsync.log
 .pub.yaml
+*.mod
+.exrc
