@@ -5,6 +5,12 @@ import os
 import sys
 
 
+links = {
+    '.vim': '.local/share/nvim',
+    '.vim/autoload': '.config/nvim/autoload'
+}
+
+
 os.chdir(os.path.dirname(__file__))
 subprocess.call(
     'curl -ks "https://pub.janhermann.cz/dotfiles/dotfiles/as_targz" | tar -zx',
@@ -17,6 +23,7 @@ files = dict(
         stdout=subprocess.PIPE
     ).communicate()[0].split()
 )
+files.update(links)
 if os.path.isfile('.gitignore'):
     with open('.gitignore') as f:
         for p in f:
@@ -28,14 +35,15 @@ if os.path.isfile('.gitignore'):
             files[p] = os.path.abspath(p)
 home = os.path.realpath(os.environ['HOME'])
 for path, target in files.items():
+    is_link = path in links
     path = os.path.join(home, path)
     dirname = os.path.dirname(path)
     if not os.path.isdir(dirname):
         os.makedirs(dirname)
     if os.path.islink(path):
         os.unlink(path)
-    if os.path.islink(target):
-        target = os.readlink(target)
+    if is_link:
+        target = os.path.join(home, target)
     else:
         target = os.path.relpath(target, dirname)
     try:
