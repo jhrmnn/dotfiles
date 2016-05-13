@@ -96,7 +96,7 @@ nnoremap <Leader>go :Goyo<CR>
 """
 
 function! FindProjectName()
-    return substitute(strpart(getcwd(), 1), '/', '%', '')
+    return substitute(getcwd(), '/', '%', 'g')
 endfunction
 
 function! RestoreSession(name)
@@ -111,7 +111,7 @@ function! SaveSession(name)
     execute 'mksession! ~/.local/share/nvim/sessions/' . fnameescape(a:name)
 endfunction
 
-if argc() == 0 && v:version > 703
+if argc() == 0 && v:version >= 704
     augroup session_handler
         autocmd!
         autocmd StdinReadPre * let g:my_vim_from_stdin = 1
@@ -119,6 +119,8 @@ if argc() == 0 && v:version > 703
         autocmd VimEnter * nested call RestoreSession(FindProjectName())
     augroup END
 end
+
+let g:test = FindProjectName()
 
 """
 """ plugins
@@ -140,9 +142,7 @@ Plug 'chriskempson/base16-vim' " base16 for gvim
 " :'<,'>sort /^[^\/]*\/\(vim-\)\=/
 Plug 'Konfekt/FastFold'                " more sensible fdm=syntax
 Plug 'moll/vim-bbye'                   " layout stays as is on buffer close
-Plug 'bling/vim-bufferline'            " open buffers in command line
 Plug 'Raimondi/delimitMate'            " automatic closing of paired delimiters
-Plug 'Shougo/deoplete.nvim'            " async autocompletion
 Plug 'junegunn/vim-easy-align'         " tables in vim
 Plug 'terryma/vim-expand-region'       " expand selection key: +/_
 Plug 'junegunn/fzf'                    " key: <Leader>p/t/gt/f/gf
@@ -162,11 +162,15 @@ Plug 'Shougo/vimproc', {'do': 'make'}  " makes some plugins faster
 """ filetype-specific
 Plug 'dag/vim-fish'
 " Plug 'zchee/deoplete-jedi'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'lervag/vimtex'
 Plug 'hynek/vim-python-pep8-indent'    " PEP8 indentation
 Plug 'hdima/python-syntax'             " better highlighting
+if v:version >= 704
+    Plug 'Shougo/deoplete.nvim'            " async autocompletion
+    Plug 'vim-pandoc/vim-pandoc'
+    Plug 'vim-pandoc/vim-pandoc-syntax'
+    Plug 'bling/vim-bufferline'            " open buffers in command line
+endif
 
 " Plug 'JuliaLang/julia-vim'
 " Plug 'jcfaria/Vim-R-plugin'

@@ -28,6 +28,10 @@ def install():
             print('error: Cannot symlink to {0}'.format(path))
             sys.exit(1)
     call(['fish', '-c', 'source ~/.config/fish/init.fish'])
+    call(
+        'mkdir -p ~/.vim && ln -fns ../.config/nvim/autoload ~/.vim/autoload',
+        shell=True
+    )
 
 
 if __name__ == '__main__':
