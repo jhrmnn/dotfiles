@@ -34,6 +34,7 @@ set nolist
 let g:loaded_python_provider = 1
 let g:python3_host_skip_check = 1
 let python_highlight_all = 1
+let g:pyindent_open_paren = '&sw'
 let g:tex_flavor = "latex"
 
 augroup restore_cursor
@@ -95,19 +96,19 @@ nnoremap <Leader>go :Goyo<CR>
 """
 
 function! FindProjectName()
-    return fnamemodify(getcwd(), ":t") . "." . md5#md5(getcwd()) . ".vim"
+    return substitute(strpart(getcwd(), 1), '/', '%', '')
 endfunction
 
 function! RestoreSession(name)
     if exists("g:my_vim_from_stdin") | return | endif
     if filereadable($HOME . "/.local/share/nvim/sessions/" . a:name)
-        execute 'source ' . "~/.local/share/nvim/sessions/" . a:name
+        execute 'source ~/.local/share/nvim/sessions/' . fnameescape(a:name)
     endif
 endfunction
 
 function! SaveSession(name)
     if exists("g:my_vim_from_stdin") | return | endif
-    execute 'mksession! ' . "~/.local/share/nvim/sessions/" . a:name
+    execute 'mksession! ~/.local/share/nvim/sessions/' . fnameescape(a:name)
 endfunction
 
 if argc() == 0 && v:version > 703
@@ -122,6 +123,12 @@ end
 """
 """ plugins
 """
+
+" download vim-plug automatically if missing
+if !filereadable($HOME . "/.config/nvim/autoload/plug.vim")
+    call system("curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs "
+                \ . "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
+endif
 
 filetype off
 
@@ -158,6 +165,8 @@ Plug 'dag/vim-fish'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'lervag/vimtex'
+Plug 'hynek/vim-python-pep8-indent'    " PEP8 indentation
+Plug 'hdima/python-syntax'             " better highlighting
 
 " Plug 'JuliaLang/julia-vim'
 " Plug 'jcfaria/Vim-R-plugin'
@@ -176,7 +185,7 @@ filetype plugin indent on
 augroup file_formats
     autocmd!
     autocmd FileType fortran setl cc=80,133 tw=80 com=:!>,:! fo=croq nu
-    autocmd FileType python setl cc=80 tw=80 fo=croq nu cino+="(0"
+    autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
     autocmd FileType javascript setl cc=80 nu
     autocmd FileType cpp setl cc=80 tw=80 fo=croqw  cinoc+="(0"
     autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
