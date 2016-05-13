@@ -6,7 +6,6 @@ import sys
 
 
 links = {
-    '.vim': '.local/share/nvim',
     '.vim/autoload': '.config/nvim/autoload'
 }
 
@@ -21,7 +20,7 @@ files = dict(
     for p in subprocess.Popen(
         'find dotfiles -type f -o -type l'.split(),
         stdout=subprocess.PIPE
-    ).communicate()[0].split()
+    ).communicate()[0].decode().split()
 )
 files.update(links)
 if os.path.isfile('.gitignore'):
@@ -51,3 +50,4 @@ for path, target in files.items():
     except Exception:
         print('error: Cannot symlink to {0}'.format(path))
         sys.exit(1)
+subprocess.call(['fish', '-c', 'source ~/.config/fish/init.fish'])
