@@ -10,7 +10,7 @@ def install():
     files = Popen(
         'find dotfiles -type f'.split(), stdout=PIPE
     ).communicate()[0].decode().split()
-    home = os.path.expanduser('~')
+    home = os.path.realpath(os.path.expanduser('~'))
     for path in files:
         target = os.path.abspath(path)
         path = os.path.join(home, path.split(os.path.sep, 1)[1])
