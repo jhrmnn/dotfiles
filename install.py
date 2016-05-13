@@ -8,14 +8,13 @@ import stat
 
 def install():
     files = Popen(
-        'find . -name .git -prune -o -type f ! -name install.*py* -print'.split(),
-        stdout=PIPE
+        'find dotfiles -type f'.split(), stdout=PIPE
     ).communicate()[0].decode().split()
     home = os.path.expanduser('~')
     for path in files:
-        print(path)
         target = os.path.abspath(path)
-        path = os.path.join(home, path)
+        path = os.path.join(home, path.split(os.path.sep, 1)[1])
+        print(path)
         dirname = os.path.dirname(path)
         target = os.path.relpath(target, dirname)
         if not os.path.isdir(dirname):
@@ -39,7 +38,7 @@ if __name__ == '__main__':
     if path:
         os.chdir(path)
     call(
-        'curl -ks "https://pub.janhermann.cz/dotfiles/as_targz" | tar -zx --strip-components 1',
+        'curl -ks "https://pub.janhermann.cz/dotfiles/dotfiles/as_targz" | tar -zx',
         shell=True
     )
     import install as self
