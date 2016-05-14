@@ -24,12 +24,14 @@ set shiftround
 set timeoutlen=500
 set title
 set titleold=
-set undodir=$HOME/.local/share/nvim/undo
-set undofile
 set visualbell
 set wrap
 set linebreak
 set nolist
+:if has('persistent_undo')
+    set undodir=$HOME/.local/share/nvim/undo
+    set undofile
+endif
 
 let g:loaded_python_provider = 1
 let g:python3_host_skip_check = 1
@@ -49,10 +51,10 @@ augroup END
 let mapleader = ' '
 let maplocalleader = ' '
 
-""" vanilla neovim
+""" vanilla vim
 nnoremap S :w<CR>
+nnoremap ZW :Bdelete<CR>
 nnoremap ZA :xa<CR>
-nnoremap <Leader>1 :belowright 15split<CR>:terminal<CR>
 nnoremap <Leader>n :nohlsearch<CR>
 nnoremap <Leader>` :cclose<CR>:lclose<CR>
 nnoremap <Leader>, <F10>
@@ -64,6 +66,7 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim')
+    nnoremap <Leader>1 :belowright 15split<CR>:terminal<CR>
     tnoremap <C-x> <C-\><C-n>
     tnoremap <C-H> <C-\><C-n><C-W>h
     tnoremap <C-J> <C-\><C-n><C-W>j
@@ -72,7 +75,6 @@ if has('nvim')
 endif
 
 """ plugin-related
-nnoremap ZW :Bdelete<CR>
 nnoremap <Leader>mk :Neomake!<CR>
 nnoremap <Leader>T :NeomakeSh ctags -R<CR>
 xmap ga <Plug>(EasyAlign)
@@ -107,7 +109,7 @@ function! RestoreSession(name)
 endfunction
 
 function! SaveSession(name)
-    if exists("g:my_vim_from_stdin") | return | endif
+    if exists("g:my_vim_from_stdin") || getcwd() == $HOME | return | endif
     execute 'mksession! ~/.local/share/nvim/sessions/' . fnameescape(a:name)
 endfunction
 
@@ -128,48 +130,51 @@ let g:test = FindProjectName()
 
 " download vim-plug automatically if missing
 if !filereadable($HOME . "/.config/nvim/autoload/plug.vim")
-    call system("curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs "
+    call system("curl -fkLo ~/.config/nvim/autoload/plug.vim --create-dirs "
                 \ . "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
 endif
 
 filetype off
 
 call plug#begin('~/.local/share/nvim/plugged')
+" sort with :'<,'>sort /^[^\/]*\/\(vim-\)\=/
 
 """ colors
 Plug 'chriskempson/base16-vim' " base16 for gvim
-""" general plugins
-" :'<,'>sort /^[^\/]*\/\(vim-\)\=/
-Plug 'Konfekt/FastFold'                " more sensible fdm=syntax
-Plug 'moll/vim-bbye'                   " layout stays as is on buffer close
-Plug 'Raimondi/delimitMate'            " automatic closing of paired delimiters
-Plug 'junegunn/vim-easy-align'         " tables in vim
-Plug 'terryma/vim-expand-region'       " expand selection key: +/_
-Plug 'junegunn/fzf'                    " key: <Leader>p/t/gt/f/gf
-Plug 'airblade/vim-gitgutter'          " git changes
-Plug 'junegunn/goyo.vim'               " distraction-free vim, key: <Leader>go
-Plug 'itchyny/lightline.vim'           " fast status line
-Plug 'AndrewRadev/linediff.vim'        " diffing ranges, key: <Leader>ldf
-Plug 'terryma/vim-multiple-cursors'    " key: <C-N> <C-X> <C-P>
-Plug 'neomake/neomake'                 " async make/linters
-Plug 'osyo-manga/vim-over'             " better substitute, key: <Leader>s
-Plug 'reedes/vim-pencil'               " vim for prose
-Plug 'tpope/vim-repeat'                " makes . accessible to plugins
-Plug 'tpope/vim-surround'              " key: cs, ds, ys
-Plug 'tomtom/tcomment_vim'             " automatic comments, key: gc
-Plug 'bronson/vim-trailing-whitespace' " trailing whitespace
-Plug 'Shougo/vimproc', {'do': 'make'}  " makes some plugins faster
-""" filetype-specific
-Plug 'dag/vim-fish'
-" Plug 'zchee/deoplete-jedi'
-Plug 'lervag/vimtex'
-Plug 'hynek/vim-python-pep8-indent'    " PEP8 indentation
-Plug 'hdima/python-syntax'             " better highlighting
+""" vanilla vim enhancements
+Plug 'Konfekt/FastFold'                 " more sensible fdm=syntax
+Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
+Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
+Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
+""" new functionality
+Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
+Plug 'junegunn/vim-easy-align'          " tables in vim
+Plug 'terryma/vim-expand-region'        " expand selection key: +/_
+Plug 'junegunn/fzf'                     " key: <Leader>p/t/gt/f/gf
+Plug 'airblade/vim-gitgutter'           " git changes
+Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
+Plug 'itchyny/lightline.vim'            " fast status line
+Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
+Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
+Plug 'neomake/neomake'                  " async make/linters
+Plug 'osyo-manga/vim-over'              " better substitute, key: <Leader>s
+Plug 'reedes/vim-pencil'                " vim for prose
+Plug 'tpope/vim-surround'               " key: cs, ds, ys
+Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
+Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 if v:version >= 704
-    Plug 'Shougo/deoplete.nvim'            " async autocompletion
-    Plug 'vim-pandoc/vim-pandoc'
+    Plug 'bling/vim-bufferline'         " open buffers in command line
+    Plug 'Shougo/deoplete.nvim'         " async autocompletion
+endif
+""" filetype-specific
+Plug 'zchee/deoplete-jedi'              " jedi for deoplete
+Plug 'dag/vim-fish'                     " fish syntax
+Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
+Plug 'hdima/python-syntax'              " better highlighting
+Plug 'lervag/vimtex'                    " latex support (heavy plugin)
+if v:version >= 704
+    Plug 'vim-pandoc/vim-pandoc'        " pandoc support (heavy plugin)
     Plug 'vim-pandoc/vim-pandoc-syntax'
-    Plug 'bling/vim-bufferline'            " open buffers in command line
 endif
 
 " Plug 'JuliaLang/julia-vim'
