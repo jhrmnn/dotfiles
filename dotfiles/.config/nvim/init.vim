@@ -403,11 +403,11 @@ endfunction
 command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
             \     'source': 'gsed ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
-            \               . '\4\t|..|\1\t|..|\2\t|..|\5/'
+            \               . '\4\t|..|\1\t|..|\2\t|..|\5|..|\3/'
             \               . '; /^l/ d'' '
             \               . join(tagfiles())
             \               . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
-            \     'options': '-d "\t" -n 2',
+            \     'options': '-d "\t" -n 2 --with-nth 1..4',
             \     'sink': function('s:tags_sink'),
             \ }) | else | call Neomake#Sh('ctags -R') | FZFTags | endif
 
@@ -421,10 +421,10 @@ command! FZFTagsBuffer call fzf#run({
             \                      &filetype, expand('%:S'))
             \               . ' | gsed ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
-            \               . '\4\t|..|\1/; /^l/ d'''
+            \               . '\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'''
             \               . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
             \     'sink': function('s:buffer_tags_sink'),
-            \     'options': '-d "\t" -n 2 --tiebreak=index --tac',
+            \     'options': '-d "\t" -n 2 --with-nth 1,2 --tiebreak=index --tac',
             \     'left': '40'
             \ })
 
