@@ -27,10 +27,8 @@ def install():
             print('error: Cannot symlink to {0}'.format(path))
             sys.exit(1)
     call(['fish', '-c', 'source ~/.config/fish/init.fish'])
-    call(
-        'mkdir -p ~/.vim && ln -fns ../.config/nvim/autoload ~/.vim/autoload',
-        shell=True
-    )
+    call(['bash', '-c', 'mkdir -p ~/.vim && ln -fns ../.config/nvim/autoload ~/.vim/autoload'])
+    call(['bash', '-c', r"vim -u ~/.vimrc -es -S <(printf 'PlugInstall\nxa\n')"])
 
 
 if __name__ == '__main__':
@@ -38,7 +36,7 @@ if __name__ == '__main__':
     if path:
         os.chdir(path)
     call(
-        'curl -ks "https://pub.janhermann.cz/dotfiles/dotfiles/as_targz" | tar -zx',
+        'curl -ks "https://pub.janhermann.cz/dotfiles/as_targz" | tar -zx --strip-components 1',
         shell=True
     )
     import install as self
