@@ -16,7 +16,7 @@ set -U fish_color_autosuggestion bryellow
 set -U fish_color_comment brgrey
 set -U fish_color_redirection magenta
 set -U fish_color_history_current green
-set -U fish_color_match --background=magenta
+set -U fish_color_match -o brmagenta
 set -U fish_color_search_match --background=bryellow
 set -U fish_color_selection --background=bryellow
 set -U fish_color_valid_path --underline

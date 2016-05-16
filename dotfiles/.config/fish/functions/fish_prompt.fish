@@ -3,7 +3,7 @@ function fish_prompt
     echo -ns "🐟 "
     switch $fish_bind_mode
         case visual
-            echo -ns (set_color magenta)
+            echo -ns (set_color -o magenta)
     end
     echo -ns (date "+%H:%M")
     set_color normal
