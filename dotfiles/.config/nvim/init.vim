@@ -28,21 +28,33 @@ set visualbell
 set wrap
 set linebreak
 set nolist
-:if has('persistent_undo')
+if has('persistent_undo')
     set undodir=$HOME/.local/share/nvim/undo
     set undofile
+endif
+if has('nvim')
+    set shell=fish
 endif
 
 let g:loaded_python_provider = 1
 let g:python3_host_skip_check = 1
 let python_highlight_all = 1
 let g:pyindent_open_paren = '&sw'
-let g:tex_flavor = "latex"
+let g:tex_flavor = 'latex'
 
 augroup restore_cursor
     autocmd!
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe ":normal! g`\"" | endif
 augroup END
+
+highlight MyHighlight ctermfg=0 ctermbg=9
+
+function! HighlightRegion()
+    highlight MyHighlight ctermfg=0 ctermbg=9
+    let l_start = line("'<")
+    let l_end = line("'>") + 1
+    execute 'syntax region MyHighlight start=/\%' . l_start . 'l/ end=/\%' . l_end . 'l/'
+endfunction
 
 """
 """ bindings
@@ -52,22 +64,27 @@ let mapleader = ' '
 let maplocalleader = ' '
 
 """ vanilla vim
-nnoremap S :w<CR>
-nnoremap ZW :Bdelete<CR>
-nnoremap ZA :xa<CR>
-nnoremap <Leader>n :nohlsearch<CR>
-nnoremap <Leader>` :cclose<CR>:lclose<CR>
+nnoremap <silent> <Leader>a :xa<CR>
+nnoremap <silent> <Leader>q :q<CR>
+nnoremap <silent> <Leader>Q :q!<CR>
+nnoremap <silent> <Leader>A :qa!<CR>
+nnoremap <silent> <Leader>d :Bdelete<CR>
+nnoremap <silent> <Leader>w :w<CR>
+nnoremap <silent> <Leader>n :nohlsearch<CR>:syntax clear MyHighlight<CR>
+nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
+vnoremap <silent> <Leader>hl :<C-U>call HighlightRegion()<CR>
+nnoremap <silent> <Leader>hl V:<C-U>call HighlightRegion()<CR>
 nnoremap <Leader>, <F10>
-nnoremap <Leader>[ :bprevious<CR>
-nnoremap <Leader>] :bnext<CR>
+nnoremap <silent> <Leader>[ :bprevious<CR>
+nnoremap <silent> <Leader>] :bnext<CR>
 nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim')
-    nnoremap <Leader>1 :belowright 15split<CR>:terminal<CR>
-    tnoremap <C-x> <C-\><C-n>
+    nnoremap <silent> <Leader>1 :belowright 15split<CR>:terminal<CR>
+    tnoremap <C-X> <C-\><C-n>
     tnoremap <C-H> <C-\><C-n><C-W>h
     tnoremap <C-J> <C-\><C-n><C-W>j
     tnoremap <C-K> <C-\><C-n><C-W>k
@@ -75,6 +92,8 @@ if has('nvim')
 endif
 
 """ plugin-related
+nmap s <Plug>(SneakStreak)
+nmap S <Plug>(SneakStreakBackward)
 nnoremap <Leader>mk :Neomake!<CR>
 nnoremap <Leader>T :NeomakeSh ctags -R<CR>
 xmap ga <Plug>(EasyAlign)
@@ -82,16 +101,16 @@ nnoremap \\ :FZFLinesBuffer<Space>
 nnoremap \ :FZFLinesAll<Space>
 vnoremap \\ y:FZFLinesBuffer<Space><C-R><C-R>"<CR>
 vnoremap \ y:FZFLinesAll<Space><C-R><C-R>"<CR>
-nnoremap <Leader>p :FZF<CR>
-nnoremap <Space>f :FZFLinesBuffer<CR>
-nnoremap <Space>gf :FZFLinesAll<CR>
-nnoremap <Leader>t :FZFTagsBuffer<CR>
-nnoremap <Leader>gt :FZFTags<CR>
+nnoremap <silent> <Leader>p :FZF<CR>
+nnoremap <silent> <Space>f :FZFLinesBuffer<CR>
+nnoremap <silent> <Space>gf :FZFLinesAll<CR>
+nnoremap <silent> <Leader>t :FZFTagsBuffer<CR>
+nnoremap <silent> <Leader>gt :FZFTags<CR>
 nnoremap <Leader>s :OverCommandLine<CR>%s/
 vnoremap <Leader>s :OverCommandLine<CR>s/
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
-nnoremap <Leader>go :Goyo<CR>
+nnoremap <silent> <Leader>go :Goyo<CR>
 
 """
 """ session management
@@ -102,14 +121,14 @@ function! FindProjectName()
 endfunction
 
 function! RestoreSession(name)
-    if exists("g:my_vim_from_stdin") | return | endif
-    if filereadable($HOME . "/.local/share/nvim/sessions/" . a:name)
+    if exists('g:my_vim_from_stdin') | return | endif
+    if filereadable($HOME . '/.local/share/nvim/sessions/' . a:name)
         execute 'source ~/.local/share/nvim/sessions/' . fnameescape(a:name)
     endif
 endfunction
 
 function! SaveSession(name)
-    if exists("g:my_vim_from_stdin") || getcwd() == $HOME | return | endif
+    if exists('g:my_vim_from_stdin') || getcwd() == $HOME | return | endif
     execute 'mksession! ~/.local/share/nvim/sessions/' . fnameescape(a:name)
 endfunction
 
@@ -117,6 +136,7 @@ if argc() == 0 && v:version >= 704
     augroup session_handler
         autocmd!
         autocmd StdinReadPre * let g:my_vim_from_stdin = 1
+        autocmd VimLeave * Goyo!
         autocmd VimLeave * call SaveSession(FindProjectName())
         autocmd VimEnter * nested call RestoreSession(FindProjectName())
     augroup END
@@ -148,9 +168,10 @@ Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 """ new functionality
 Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
+Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
-Plug 'junegunn/fzf'                     " key: <Leader>p/t/gt/f/gf
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
 Plug 'itchyny/lightline.vim'            " fast status line
@@ -167,11 +188,12 @@ if v:version >= 704
     Plug 'Shougo/deoplete.nvim'         " async autocompletion
 endif
 """ filetype-specific
-Plug 'zchee/deoplete-jedi'              " jedi for deoplete
+" Plug 'zchee/deoplete-jedi'              " jedi for deoplete
 Plug 'dag/vim-fish'                     " fish syntax
 Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'hdima/python-syntax'              " better highlighting
 Plug 'lervag/vimtex'                    " latex support (heavy plugin)
+Plug 'linkinpark342/xonsh-vim'          " xonsh support
 if v:version >= 704
     Plug 'vim-pandoc/vim-pandoc'        " pandoc support (heavy plugin)
     Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -180,13 +202,13 @@ endif
 " Plug 'JuliaLang/julia-vim'
 " Plug 'jcfaria/Vim-R-plugin'
 " Plug 'keith/swift.vim'
-" Plug 'linkinpark342/xonsh-vim'
 " Plug 'othree/html5.vim'
 " Plug 'pangloss/vim-javascript'
 
 call plug#end()
 
 colorscheme base16-default
+hi Normal ctermbg=none
 
 filetype plugin indent on
 
@@ -227,13 +249,16 @@ endfunction
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.tex = ['.*\{', '\\cite\{.*,']
 if exists("*deoplete#custom#set")
     call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
 endif
 if !exists('g:deoplete#omni_patterns')
     let g:deoplete#omni_patterns = {}
 endif
+
+let g:sneak#target_labels = "jfkdlsaireohgutwnvmcJFKDLSAIREOHGUTWNVMC"
+highlight SneakStreakMask ctermfg=8
+highlight clear SneakStreakStatusLine
 
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#conceallevel = 0
@@ -281,6 +306,9 @@ let g:goyo_height = '100%'
 function! s:goyo_enter()
     set noshowmode
     set noshowcmd
+    au! bufferline
+    au! CursorHold
+    execute 'GitGutterSignsDisable'
 endfunction
 
 function! s:goyo_leave()
@@ -289,6 +317,8 @@ function! s:goyo_leave()
     set background=dark
     syntax off
     syntax on
+    call bufferline#init_echo()
+    execute 'GitGutterSignsEnable'
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
@@ -331,12 +361,18 @@ let g:pandoc#biblio#sources = 'b'
 let g:pandoc#syntax#conceal#use = 0
 let g:pandoc#syntax#conceal#urls = 1
 let g:pandoc#syntax#codeblocks#embeds#langs = ['python']
-let g:pandoc#modules#enabled = ['bibliographies', 'completion']
-let g:deoplete#omni_patterns.pandoc= '\[@'
+let g:pandoc#modules#disabled = [
+            \     "executors", "formatting", "folding",
+            \     "metadata", "menu", "keyboard", "toc", "chdir",
+            \     "spell", "hypertext"
+            \ ]
+let g:deoplete#omni_patterns.pandoc= '\[.*@'
 
 """
 """ FZF support
 """
+
+let $PATH = $PATH . ':' . $HOME . '/.fzf/bin'
 
 command! -nargs=? FZFLinesAll call fzf#run({
             \     'source': printf('ag --nogroup --column --color "%s"',
