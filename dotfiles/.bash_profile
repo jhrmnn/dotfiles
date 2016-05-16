@@ -1,9 +1,14 @@
-maybe_source_bashrc () { [[ "$-" =~ "i" ]] && [[ -s ~/.bashrc ]] && . ~/.bashrc; }
+maybe_source_bashrc () {
+    if [[ "$-" =~ "i" ]]; then
+        [ -s ~/.bashrc ] && . ~/.bashrc;
+    fi
+}
 
-[[ -n "$PROFILE_SOURCED" ]] && { maybe_source_bashrc; return; }
+if [ -n "$PROFILE_SOURCED" ]; then
+    maybe_source_bashrc
+    return
+fi
 
-[[ -s ~/.profile ]] && . ~/.profile
-[[ -s ~/.fzf.bash ]] && . ~/.fzf.bash
-[[ -s ~/.bash_profile.local ]] && . ~/.bash_profile.local
-
+[ -s ~/.profile ] && . ~/.profile
+[ -s ~/.fzf.bash ] && source ~/.fzf.bash
 maybe_source_bashrc

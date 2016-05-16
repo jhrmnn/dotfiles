@@ -1,4 +1,7 @@
-[[ -z "$PROFILE_SOURCED" ]] && { [[ -s ~/.bash_profile ]] && . ~/.bash_profile; return; }
+if [ -z "$PROFILE_SOURCED" ]; then
+    [ -s ~/.bash_profile ] && source ~/.bash_profile
+    return
+fi
 
 set -o vi
 shopt -s checkwinsize
@@ -33,7 +36,8 @@ else
     alias ls="ls -hG"
 fi
 
-[[ -s ~/.bashrc.local ]] && . ~/.bashrc.local
+[ -s ~/.fzf.bash ] && source ~/.fzf.bash
+[ -s ~/.bashrc.local ] && source ~/.bashrc.local
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[30m\]'

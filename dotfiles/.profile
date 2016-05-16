@@ -1,4 +1,6 @@
-[ -n "$PROFILE_SOURCED" ] && return
+if [ -n "$PROFILE_SOURCED" ]; then
+    return
+fi
 export PROFILE_SOURCED=1
 
 export LANGUAGE="en_US.UTF-8"
@@ -18,4 +20,6 @@ export LESSHISTFILE=~/.cache/lesshst
 export TERMINFO_DIRS=~/.local/share/terminfo:/usr/share/terminfo
 export INPUTRC=~/.config/readline/inputrc
 
-if [ -r ~/.profile.local ]; then source ~/.profile.local; fi
+if [ -r ~/.profile.local ]; then
+    source ~/.profile.local;
+fi
