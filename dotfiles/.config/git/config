@@ -1,26 +1,24 @@
 [user]
 	name = Jan Hermann
 	email = jh@janhermann.cz
+[pull]
+    rebase = true
 [push]
     default = simple
 [blame]
     date = short
 [core]
     excludesfile = ~/.config/git/ignore
-[github]
-    user = azag0
-[branch]
-    autosetuprebase = always
 [alias]
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
 [http]
     postBuffer = 524288000
 [diff]
     algorithm = minimal
+    compactionHeuristic = true
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 	required = true
-[gui]
-	fontdiff = -family Hack -size 12 -weight normal -slant roman -underline 0 -overstrike 0
-	editor = gvim
+[credential]
+	helper = osxkeychain
