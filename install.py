@@ -28,7 +28,7 @@ def install():
             sys.exit(1)
     call(['fish', '-c', 'source ~/.config/fish/init.fish'])
     call(['bash', '-c', 'mkdir -p ~/.vim && ln -fns ../.config/nvim/autoload ~/.vim/autoload'])
-    call(['bash', '-c', r"vim -u ~/.vimrc -es -S <(printf 'PlugInstall\nxa\n')"])
+    call(['bash', '-c', r"vim -u ~/.vimrc -es -S <(printf 'PlugInstall\nPlugUpdate\nxa\n')"])
 
 
 if __name__ == '__main__':

@@ -95,6 +95,7 @@ endif
 nmap s <Plug>(SneakStreak)
 nmap S <Plug>(SneakStreakBackward)
 nnoremap <Leader>mk :Neomake!<CR>
+nnoremap <Leader>lmk :Neomake latexmk<CR>
 nnoremap <Leader>T :NeomakeSh ctags -R<CR>
 xmap ga <Plug>(EasyAlign)
 nnoremap \\ :FZFLinesBuffer<Space>
@@ -169,6 +170,9 @@ Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 """ new functionality
 Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
 Plug 'justinmk/vim-sneak'               " additional movements
+Plug 'tpope/vim-fugitive'
+" Plug 'diffchar.vim'
+Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -192,7 +196,7 @@ endif
 Plug 'dag/vim-fish'                     " fish syntax
 Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'hdima/python-syntax'              " better highlighting
-Plug 'lervag/vimtex'                    " latex support (heavy plugin)
+" Plug 'lervag/vimtex'                    " latex support (heavy plugin)
 Plug 'linkinpark342/xonsh-vim'          " xonsh support
 if v:version >= 704
     Plug 'vim-pandoc/vim-pandoc'        " pandoc support (heavy plugin)
@@ -207,7 +211,10 @@ endif
 
 call plug#end()
 
-colorscheme base16-default
+try
+    colorscheme base16-default-dark
+catch /^Vim\%((\a\+)\)\=:E185/
+endtry
 hi Normal ctermbg=none
 
 filetype plugin indent on
@@ -218,7 +225,7 @@ augroup file_formats
     autocmd FileType fortran setl cc=80,133 tw=80 com=:!>,:! fo=croq nu
     autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
     autocmd FileType javascript setl cc=80 nu
-    autocmd FileType cpp setl cc=80 tw=80 fo=croqw  cinoc+="(0"
+    autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
     autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
     autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
     autocmd FileType yaml setl ts=2 sw=2 sts=2
@@ -237,14 +244,18 @@ let g:lightline = {
             \       'lineinfo': ' %3l:%-2v',
             \     },
             \     'component_function': {
-            \       'readonly': 'LightLineReadonly',
+            \       'modified': 'LightLineModified',
             \     },
             \     'separator': { 'left': '', 'right': '' },
             \     'subseparator': { 'left': '', 'right': '' }
             \ }
 
-function! LightLineReadonly()
-    return &readonly ? '' : ''
+" function! LightLineReadonly()
+"     return &readonly ? '' : ''
+" endfunction
+"
+function! LightLineModified()
+    return &modified ? '❌ ' : &modifiable ? '✅ ' : '🔒 '
 endfunction
 
 let g:deoplete#enable_at_startup = 1
@@ -267,6 +278,7 @@ augroup pencil
     autocmd FileType markdown call pencil#init()
     autocmd FileType tex call pencil#init()
     autocmd FileType rst call pencil#init()
+    autocmd FileType text call pencil#init()
 augroup END
 
 let g:multi_cursor_exit_from_insert_mode = 0
@@ -300,6 +312,21 @@ call extend(g:neomake_fortran_f03_maker.args, ['-std=f2003'])
 let g:neomake_fortran_f08_maker = deepcopy(s:gfortran_pedant_maker)
 call extend(g:neomake_fortran_f08_maker.args, ['-std=f2008'])
 
+let s:latex_ignore_mapexpr = '(' .
+            \ 'v:val =~ ''Underfull \\hbox'' || ' .
+            \ 'v:val =~ ''Overfull \\hbox'' || ' .
+            \ 'v:val =~ "Package hyperref Warning: Token not allowed" || ' .
+            \ 'v:val =~ "Package newunicodechar Warning: Redefining Unicode" || ' .
+            \ 'v:val =~ "Package biblatex Warning: The following entry could not be found" || ' .
+            \ '0) ? "" : v:val'
+
+let g:neomake_tex_latexmk_maker = {
+            \     'exe': 'make',
+            \     'append_file': 0,
+            \     'mapexpr': s:latex_ignore_mapexpr,
+            \     'errorformat': '%-P**%f,%-P**"%f",%E! LaTeX %trror: %m,%E%f:%l: %m,%E! %m,%Z<argument> %m,%Cl.%l %m,%+WLaTeX %.%#Warning: %.%#line %l%.%#,%+W%.%# at lines %l--%*\d,%+WLaTeX %.%#Warning: %m,%+WPackage natbib Warning: %m on input line %l%.,%+W%.%#%.%#Warning: %m,%-C(biblatex)%.%#in t%.%#,%-C(biblatex)%.%#Please v%.%#,%-C(biblatex)%.%#LaTeX a%.%#,%-Z(biblatex)%m,%-Z(babel)%.%#input line %l.,%-C(babel)%m,%-C(hyperref)%.%#on input line %l.,%-G%.%#'
+            \ }
+
 let g:goyo_width = 81
 let g:goyo_height = '100%'
 
@@ -329,11 +356,12 @@ let g:bufferline_active_buffer_left = '📝 '
 let g:bufferline_active_buffer_right = ''
 let g:bufferline_rotate = 1
 
-let g:vimtex_complete_close_braces = 1
 let g:vimtex_toc_enabled = 0
 let g:vimtex_latexmk_enabled = 0
+let g:vimtex_text_obj_enabled = 0
 let g:vimtex_view_enabled = 0
 let g:vimtex_motion_enabled = 0
+let g:vimtex_motion_matchparen = 0
 let g:deoplete#omni_patterns.tex = '\v\\%('
             \ . '\a*cite\a*%(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
             \ . '|\a*ref%(\s*\{[^}]*|range\s*\{[^,}]*%(}\{)?)'
@@ -344,17 +372,6 @@ let g:deoplete#omni_patterns.tex = '\v\\%('
             \ . '|includepdf%(\s*\[[^]]*\])?\s*\{[^}]*'
             \ . '|includestandalone%(\s*\[[^]]*\])?\s*\{[^}]*'
             \ . ')\m'
-let g:vimtex_quickfix_ignored_warnings = [
-            \     'Underfull', 'Overfull', 'specifier changed to',
-            \     "'babel/polyglossia' detected",
-            \     'Token not allowed in a PDF string',
-            \     'unicode-math warning',
-            \     'Marginpar',
-            \     'Package hyperref Warning: Rerun to get /PageLabels entry.',
-            \     'biblatex Warning: The following entry could not be found',
-            \     "WARN - I didn't find a database entry",
-            \     'Suppressing link with empty target',
-            \ ]
 
 let g:pandoc#completion#bib#mode = 'citeproc'
 let g:pandoc#biblio#sources = 'b'
@@ -367,6 +384,8 @@ let g:pandoc#modules#disabled = [
             \     "spell", "hypertext"
             \ ]
 let g:deoplete#omni_patterns.pandoc= '\[.*@'
+let g:pandoc#syntax#conceal#use = 0
+let g:pandoc#filetypes#pandoc_markdown = 0
 
 """
 """ FZF support
@@ -375,7 +394,8 @@ let g:deoplete#omni_patterns.pandoc= '\[.*@'
 let $PATH = $PATH . ':' . $HOME . '/.fzf/bin'
 
 command! -nargs=? FZFLinesAll call fzf#run({
-            \     'source': printf('ag --nogroup --column --color "%s"',
+            \     'source': printf('ag --nogroup --column --color ' .
+            \                      '--ignore "*.nb" --ignore "*.ipynb" --ignore "*.vesta" "%s"',
             \           escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-')),
             \     'sink*': function('s:line_handler'),
             \     'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" '
