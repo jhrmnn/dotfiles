@@ -171,7 +171,6 @@ Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-fugitive'
-" Plug 'diffchar.vim'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
@@ -462,7 +461,7 @@ command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
             \               . '\4\t|..|\1\t|..|\2\t|..|\5|..|\3/'
             \               . '; /^l/ d'' '
             \               . join(tagfiles())
-            \               . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
+            \               . ' | column -t -s "	" | gsed ''s/|..|/\t/g''',
             \     'options': '-d "\t" -n 2 --with-nth 1..4',
             \     'sink': function('s:tags_sink'),
             \ }) | else | call Neomake#Sh('ctags -R') | FZFTags | endif
@@ -478,7 +477,7 @@ command! FZFTagsBuffer call fzf#run({
             \               . ' | gsed ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
             \               . '\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'''
-            \               . ' | column -t -s $''\t'' | gsed ''s/|..|/\t/g''',
+            \               . ' | column -t -s "	" | gsed ''s/|..|/\t/g''',
             \     'sink': function('s:buffer_tags_sink'),
             \     'options': '-d "\t" -n 2 --with-nth 1,2 --tiebreak=index --tac',
             \     'left': '40'

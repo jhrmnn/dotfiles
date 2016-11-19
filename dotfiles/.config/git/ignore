@@ -12,3 +12,5 @@ tags
 .pub.yaml
 *.mod
 .exrc
+.texpadtmp
+*.tpbuild

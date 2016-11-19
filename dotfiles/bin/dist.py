@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 """Usage: dist.py [-C DIR] [-c FILE.json] [-p PROFILE] [-h HOST] [CMD]
 
 Options:
