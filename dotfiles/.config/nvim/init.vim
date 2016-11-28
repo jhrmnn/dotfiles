@@ -34,6 +34,7 @@ if has('persistent_undo')
 endif
 if has('nvim')
     set shell=fish
+    set inccommand=split
 endif
 
 let g:loaded_python_provider = 1
@@ -107,8 +108,8 @@ nnoremap <silent> <Space>f :FZFLinesBuffer<CR>
 nnoremap <silent> <Space>gf :FZFLinesAll<CR>
 nnoremap <silent> <Leader>t :FZFTagsBuffer<CR>
 nnoremap <silent> <Leader>gt :FZFTags<CR>
-nnoremap <Leader>s :OverCommandLine<CR>%s/
-vnoremap <Leader>s :OverCommandLine<CR>s/
+nnoremap <Leader>s :%s/
+vnoremap <Leader>s :s/
 vnoremap <Leader>ldf :Linediff<CR>
 nnoremap <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :Goyo<CR>
@@ -169,11 +170,9 @@ Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 """ new functionality
 Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
-Plug 'justinmk/vim-sneak'               " additional movements
-Plug 'tpope/vim-fugitive'
-Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
+Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
@@ -181,39 +180,28 @@ Plug 'itchyny/lightline.vim'            " fast status line
 Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
 Plug 'neomake/neomake'                  " async make/linters
-Plug 'osyo-manga/vim-over'              " better substitute, key: <Leader>s
-Plug 'reedes/vim-pencil'                " vim for prose
+Plug 'reedes/vim-pencil'                " handle single-line paragraphs
+Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 if v:version >= 704
-    Plug 'bling/vim-bufferline'         " open buffers in command line
+    Plug 'bling/vim-bufferline'         " show open buffers in command line
     Plug 'Shougo/deoplete.nvim'         " async autocompletion
 endif
 """ filetype-specific
-" Plug 'zchee/deoplete-jedi'              " jedi for deoplete
 Plug 'dag/vim-fish'                     " fish syntax
+Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'hdima/python-syntax'              " better highlighting
-" Plug 'lervag/vimtex'                    " latex support (heavy plugin)
-Plug 'linkinpark342/xonsh-vim'          " xonsh support
-if v:version >= 704
-    Plug 'vim-pandoc/vim-pandoc'        " pandoc support (heavy plugin)
-    Plug 'vim-pandoc/vim-pandoc-syntax'
-endif
-
-" Plug 'JuliaLang/julia-vim'
-" Plug 'jcfaria/Vim-R-plugin'
-" Plug 'keith/swift.vim'
-" Plug 'othree/html5.vim'
-" Plug 'pangloss/vim-javascript'
 
 call plug#end()
 
 try
     colorscheme base16-default-dark
-catch /^Vim\%((\a\+)\)\=:E185/
+catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
 endtry
+" use terminanal background, not theme backround
 hi Normal ctermbg=none
 
 filetype plugin indent on
@@ -238,6 +226,13 @@ augroup END
 """
 
 let g:lightline = {
+		    \     'active': {
+		    \     'left': [ [ 'mode', 'paste' ],
+		    \               [ 'filename', 'modified' ] ],
+		    \     'right': [ [ 'lineinfo' ],
+		    \                [ 'percent' ],
+		    \                [ 'fileformat', 'fileencoding', 'filetype' ] ]
+            \     },
             \     'colorscheme': 'jellybeans',
             \     'component': {
             \       'lineinfo': ' %3l:%-2v',
@@ -249,13 +244,14 @@ let g:lightline = {
             \     'subseparator': { 'left': '', 'right': '' }
             \ }
 
-" function! LightLineReadonly()
-"     return &readonly ? '' : ''
-" endfunction
-"
 function! LightLineModified()
-    return &modified ? '❌ ' : &modifiable ? '✅ ' : '🔒 '
+    return &modified ? '❌' : &readonly ? '🔒' : '✅'
 endfunction
+
+let g:bufferline_modified = '❌ '
+let g:bufferline_active_buffer_left = '📝 '
+let g:bufferline_active_buffer_right = ''
+let g:bufferline_rotate = 1
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni#input_patterns = {}
@@ -311,21 +307,6 @@ call extend(g:neomake_fortran_f03_maker.args, ['-std=f2003'])
 let g:neomake_fortran_f08_maker = deepcopy(s:gfortran_pedant_maker)
 call extend(g:neomake_fortran_f08_maker.args, ['-std=f2008'])
 
-let s:latex_ignore_mapexpr = '(' .
-            \ 'v:val =~ ''Underfull \\hbox'' || ' .
-            \ 'v:val =~ ''Overfull \\hbox'' || ' .
-            \ 'v:val =~ "Package hyperref Warning: Token not allowed" || ' .
-            \ 'v:val =~ "Package newunicodechar Warning: Redefining Unicode" || ' .
-            \ 'v:val =~ "Package biblatex Warning: The following entry could not be found" || ' .
-            \ '0) ? "" : v:val'
-
-let g:neomake_tex_latexmk_maker = {
-            \     'exe': 'make',
-            \     'append_file': 0,
-            \     'mapexpr': s:latex_ignore_mapexpr,
-            \     'errorformat': '%-P**%f,%-P**"%f",%E! LaTeX %trror: %m,%E%f:%l: %m,%E! %m,%Z<argument> %m,%Cl.%l %m,%+WLaTeX %.%#Warning: %.%#line %l%.%#,%+W%.%# at lines %l--%*\d,%+WLaTeX %.%#Warning: %m,%+WPackage natbib Warning: %m on input line %l%.,%+W%.%#%.%#Warning: %m,%-C(biblatex)%.%#in t%.%#,%-C(biblatex)%.%#Please v%.%#,%-C(biblatex)%.%#LaTeX a%.%#,%-Z(biblatex)%m,%-Z(babel)%.%#input line %l.,%-C(babel)%m,%-C(hyperref)%.%#on input line %l.,%-G%.%#'
-            \ }
-
 let g:goyo_width = 81
 let g:goyo_height = '100%'
 
@@ -349,42 +330,6 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-let g:bufferline_modified = '❌ '
-let g:bufferline_active_buffer_left = '📝 '
-let g:bufferline_active_buffer_right = ''
-let g:bufferline_rotate = 1
-
-let g:vimtex_toc_enabled = 0
-let g:vimtex_latexmk_enabled = 0
-let g:vimtex_text_obj_enabled = 0
-let g:vimtex_view_enabled = 0
-let g:vimtex_motion_enabled = 0
-let g:vimtex_motion_matchparen = 0
-let g:deoplete#omni_patterns.tex = '\v\\%('
-            \ . '\a*cite\a*%(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-            \ . '|\a*ref%(\s*\{[^}]*|range\s*\{[^,}]*%(}\{)?)'
-            \ . '|hyperref\s*\[[^]]*'
-            \ . '|includegraphics\*?%(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-            \ . '|%(include%(only)?|input)\s*\{[^}]*'
-            \ . '|\a*(gls|Gls|GLS)(pl)?\a*%(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
-            \ . '|includepdf%(\s*\[[^]]*\])?\s*\{[^}]*'
-            \ . '|includestandalone%(\s*\[[^]]*\])?\s*\{[^}]*'
-            \ . ')\m'
-
-let g:pandoc#completion#bib#mode = 'citeproc'
-let g:pandoc#biblio#sources = 'b'
-let g:pandoc#syntax#conceal#use = 0
-let g:pandoc#syntax#conceal#urls = 1
-let g:pandoc#syntax#codeblocks#embeds#langs = ['python']
-let g:pandoc#modules#disabled = [
-            \     "executors", "formatting", "folding",
-            \     "metadata", "menu", "keyboard", "toc", "chdir",
-            \     "spell", "hypertext"
-            \ ]
-let g:deoplete#omni_patterns.pandoc= '\[.*@'
-let g:pandoc#syntax#conceal#use = 0
-let g:pandoc#filetypes#pandoc_markdown = 0
 
 """
 """ FZF support
@@ -464,7 +409,7 @@ command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
             \               . ' | column -t -s "	" | gsed ''s/|..|/\t/g''',
             \     'options': '-d "\t" -n 2 --with-nth 1..4',
             \     'sink': function('s:tags_sink'),
-            \ }) | else | call Neomake#Sh('ctags -R') | FZFTags | endif
+            \ }) | else | call neomake#Sh('ctags -R') | FZFTags | endif
 
 function! s:tags_sink(line)
     execute "edit" split(a:line, "\t")[2]
