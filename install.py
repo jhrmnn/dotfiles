@@ -35,10 +35,4 @@ if __name__ == '__main__':
     path = os.path.dirname(__file__)
     if path:
         os.chdir(path)
-    call(
-        'curl -ks "https://pub.janhermann.cz/dotfiles/as_targz" | tar -zx --strip-components 1',
-        shell=True
-    )
-    import install as self
-    self.install()
-    os.chmod('install.py', os.stat('install.py').st_mode | stat.S_IEXEC)
+    install()
