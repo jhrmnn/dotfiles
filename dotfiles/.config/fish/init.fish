@@ -39,6 +39,7 @@ abbr xo xonsh
 abbr gitk gitk --all
 abbr makeup make -C ..
 abbr del trash
+abbr venv python3 -m venv
 
 if [ -f ~/.config/fish/local.init.fish ]
     source ~/.config/fish/local.init.fish

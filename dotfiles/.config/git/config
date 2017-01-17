@@ -1,6 +1,6 @@
 [user]
 	name = Jan Hermann
-	email = jh@janhermann.cz
+	email = dev@hermann.in
 [pull]
     rebase = true
 [push]

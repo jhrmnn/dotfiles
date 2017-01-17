@@ -1,13 +1,13 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 """Usage: dist.py [-C DIR] [-c FILE.json] [-p PROFILE] [-h HOST] [CMD]
 
 Options:
     -C DIR
-    -h, --host HOST
+    -h, --host HOST [default: local]
     -c, --conf FILE.json
     -p, --profile PROFILE
 """
-from sh import bash, rsync, git, ssh, tar, rm
+from sh import bash, rsync, git, ssh
 import sh
 from pathlib import Path
 Path.path = property(lambda self: str(self))
@@ -18,6 +18,8 @@ sys.path.append('.')
 import json
 import subprocess
 import os
+import tarfile
+from tempfile import NamedTemporaryFile
 from contextlib import contextmanager
 
 
@@ -39,11 +41,12 @@ def pushd(path):
 
 
 def save_diff(sha, diff):
-    archive = '{}.{}.diff.tar.gz'.format(conf.name, sha)
-    with open('diff', 'w') as f:
+    with NamedTemporaryFile('w') as f:
         f.write(diff)
-    tar('-zcf', diffs/archive, 'diff')
-    rm('diff')
+        f.flush()
+        archive = '{}.{}.diff.tar.gz'.format(conf.name, sha)
+        with tarfile.open(str(diffs/archive), 'w|gz') as archfile:
+            archfile.add(f.name, 'diff')
     print('Saved diff to {}.'.format(archive))
 
 
@@ -127,7 +130,7 @@ def dist(host=None, cmd=None, profile=None):
         print('On mainline {} (master).'.format(mainline))
     save_diff(sha, diff)
     prefix = get_prefix(branch)
-    if host:
+    if host and host != 'local':
         subprocess.call(['ssh', host, ':'])
         print('Syncing {} to {}...'.format(branch, host))
         if hasattr(conf, 'presync'):

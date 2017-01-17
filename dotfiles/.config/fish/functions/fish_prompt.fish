@@ -1,9 +1,10 @@
 function fish_prompt
     set -l _status $status
-    echo -ns "🐟 "
     switch $fish_bind_mode
         case visual
-            echo -ns (set_color -o magenta)
+            echo -ns "🐠 "
+        case '*'
+            echo -ns "🐟 "
     end
     echo -ns (date "+%H:%M")
     set_color normal
@@ -15,9 +16,14 @@ function fish_prompt
         (set_color brcyan) "@" (set_color brred) $__fish_prompt_hostname
     end
     echo -ns " " (set_color -o cyan) (prompt_pwd)
-    if git rev-parse --is-inside-work-tree >/dev/null ^&1
-        set_color -o (if git status --porcelain | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
-        __fish_git_prompt
+    if [ $PROMPT_PREFIX ]
+        echo -ns (set_color -o magenta) " {$PROMPT_PREFIX}"
+    end
+    if [ -z "$SSH_CLIENT" -a -z "$SSH_CLIENT2" ]
+        if git rev-parse --is-inside-work-tree >/dev/null ^&1
+            set_color -o (if git status --porcelain | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
+            __fish_git_prompt
+        end
     end
     set -l njobs (jobs | wc -l | string trim)
     if [ $njobs -gt 0 ]

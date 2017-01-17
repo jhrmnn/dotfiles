@@ -12,8 +12,8 @@ $PROMPT = (
     '{CYAN}{short_cwd}{branch_color}{curr_branch} '
     '{NO_COLOR}'
 )
-$FORMATTER_DICT['time'] = lambda: strftime('%H:%M', localtime())
-$FORMATTER_DICT['short_user'] = $USER[:3]
+$PROMPT_FIELDS['time'] = lambda: strftime('%H:%M', localtime())
+$PROMPT_FIELDS['short_user'] = $USER[:3]
 $XONSH_COLOR_STYLE = 'vim'
 $SUGGEST_COMMANDS = False
 $BASH_COMPLETIONS = []

@@ -34,7 +34,7 @@ if has('persistent_undo')
 endif
 if has('nvim')
     set shell=fish
-    set inccommand=split
+    set inccommand=
 endif
 
 let g:loaded_python_provider = 1
@@ -194,6 +194,7 @@ Plug 'dag/vim-fish'                     " fish syntax
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'hdima/python-syntax'              " better highlighting
+Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
@@ -248,6 +249,8 @@ function! LightLineModified()
     return &modified ? '❌' : &readonly ? '🔒' : '✅'
 endfunction
 
+au FileType rust let b:delimitMate_quotes = "\""
+
 let g:bufferline_modified = '❌ '
 let g:bufferline_active_buffer_left = '📝 '
 let g:bufferline_active_buffer_right = ''
@@ -280,6 +283,7 @@ let g:multi_cursor_exit_from_insert_mode = 0
 
 autocmd! BufWritePost * Neomake
 let g:neomake_fortran_enabled_makers = ['gnu']
+let g:neomake_rust_enabled_makers = []
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402']
 let g:neomake_tex_enabled_makers = ['chktex']
@@ -293,13 +297,16 @@ let s:gfortran_maker = {
             \           . '%Z%\m%\%%(Fatal %\)%\?%trror: %m,' . '%Z%tarning: %m,'
             \           . '%-G%.%#'
             \ }
+let g:neomake_fortran_gnu_maker = deepcopy(s:gfortran_maker)
+call extend(g:neomake_fortran_gnu_maker.args, [
+            \     '-Wall', '-Waliasing', '-Wcharacter-truncation',
+            \     '-Wextra', '-Wintrinsics-std', '-Wsurprising',
+            \     '-std=gnu', '-ffree-line-length-none'])
 let s:gfortran_pedant_maker = deepcopy(s:gfortran_maker)
 call extend(s:gfortran_pedant_maker.args, [
             \     '-Wall', '-pedantic', '-Waliasing', '-Wcharacter-truncation',
             \     '-Wextra', '-Wimplicit-procedure', '-Wintrinsics-std', '-Wsurprising'
             \ ])
-let g:neomake_fortran_gnu_maker = deepcopy(s:gfortran_maker)
-call extend(g:neomake_fortran_gnu_maker.args, ['-std=gnu', '-ffree-line-length-none'])
 let g:neomake_fortran_f95_maker = deepcopy(s:gfortran_pedant_maker)
 call extend(g:neomake_fortran_f95_maker.args, ['-std=f95'])
 let g:neomake_fortran_f03_maker = deepcopy(s:gfortran_pedant_maker)
