@@ -164,7 +164,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 """ colors
 Plug 'chriskempson/base16-vim' " base16 for gvim
 """ vanilla vim enhancements
-Plug 'Konfekt/FastFold'                 " more sensible fdm=syntax
+" Plug 'Konfekt/FastFold'                 " more sensible fdm=syntax
 Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
 Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
