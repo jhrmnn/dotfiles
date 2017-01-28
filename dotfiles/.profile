@@ -21,6 +21,11 @@ export LESSHISTFILE=~/.cache/lesshst
 export TERMINFO_DIRS=~/.local/share/terminfo:/usr/share/terminfo
 export INPUTRC=~/.config/readline/inputrc
 
+export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
+if which ag &>/dev/null; then
+    export FZF_DEFAULT_COMMAND='ag -l -g ""'
+fi
+
 if [ -r ~/.profile.local ]; then
     source ~/.profile.local;
 fi
