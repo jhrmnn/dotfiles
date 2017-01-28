@@ -196,6 +196,7 @@ Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'hdima/python-syntax'              " better highlighting
 Plug 'rust-lang/rust.vim'
+Plug 'othree/html5.vim'
 
 call plug#end()
 
