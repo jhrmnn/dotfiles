@@ -35,7 +35,7 @@ if has('persistent_undo')
 endif
 if has('nvim')
     set shell=fish
-    set inccommand=
+    set inccommand=split
 endif
 
 let g:loaded_python_provider = 1
@@ -165,7 +165,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 """ colors
 Plug 'chriskempson/base16-vim' " base16 for gvim
 """ vanilla vim enhancements
-" Plug 'Konfekt/FastFold'                 " more sensible fdm=syntax
 Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
 Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
@@ -189,6 +188,7 @@ Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
     Plug 'Shougo/deoplete.nvim'         " async autocompletion
+    Plug 'zchee/deoplete-jedi'
 endif
 """ filetype-specific
 Plug 'dag/vim-fish'                     " fish syntax
@@ -302,8 +302,8 @@ let s:gfortran_maker = {
 let g:neomake_fortran_gnu_maker = deepcopy(s:gfortran_maker)
 call extend(g:neomake_fortran_gnu_maker.args, [
             \     '-Wall', '-Waliasing', '-Wcharacter-truncation',
-            \     '-Wextra', '-Wintrinsics-std', '-Wsurprising',
-            \     '-std=gnu', '-ffree-line-length-none'])
+            \     '-Wextra', '-Wintrinsics-std', '-Wsurprising', '-Wno-tabs',
+            \     '-std=gnu', '-ffree-line-length-none', '-Wno-unused-variable'])
 let s:gfortran_pedant_maker = deepcopy(s:gfortran_maker)
 call extend(s:gfortran_pedant_maker.args, [
             \     '-Wall', '-pedantic', '-Waliasing', '-Wcharacter-truncation',
