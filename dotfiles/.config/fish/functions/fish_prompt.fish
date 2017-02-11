@@ -10,7 +10,7 @@ function fish_prompt
     set_color normal
     if [ -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2" ]
         if not set -q __fish_prompt_hostname
-            set -g __fish_prompt_hostname (hostname)
+            set -g __fish_prompt_hostname (prompt_hostname)
         end
         echo -ns " " (set_color brred) $USER \
         (set_color brcyan) "@" (set_color brred) $__fish_prompt_hostname
