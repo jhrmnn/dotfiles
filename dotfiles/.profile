@@ -15,7 +15,6 @@ export XDG_CONFIG_HOME=~/.config
 export XDG_CACHE_HOME=~/.cache
 export XDG_DATA_HOME=~/.local/share
 
-export GNUPGHOME=~/.config/gnupg
 export JUPYTER_CONFIG_DIR=~/.config/jupyter
 export LESSHISTFILE=~/.cache/lesshst
 export TERMINFO_DIRS=~/.local/share/terminfo:/usr/share/terminfo

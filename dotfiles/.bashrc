@@ -3,6 +3,8 @@ if [ -z "$PROFILE_SOURCED" ]; then
     return
 fi
 
+[ -s ~/.bashrc.local ] && source ~/.bashrc.local
+
 set -o vi
 shopt -s checkwinsize
 shopt -s histappend
@@ -37,7 +39,6 @@ else
 fi
 
 [ -s ~/.fzf.bash ] && source ~/.fzf.bash
-[ -s ~/.bashrc.local ] && source ~/.bashrc.local
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[30m\]'

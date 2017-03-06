@@ -6,3 +6,4 @@ def configure(repl):
     repl.prompt_style = 'classic'
     repl.vi_mode = True
     repl.show_line_numbers = False
+    repl.enable_open_in_editor = False

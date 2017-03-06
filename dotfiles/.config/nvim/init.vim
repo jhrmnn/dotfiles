@@ -181,6 +181,7 @@ Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
 Plug 'neomake/neomake'                  " async make/linters
 Plug 'reedes/vim-pencil'                " handle single-line paragraphs
+Plug 'chrisbra/vim-diff-enhanced'
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
@@ -227,6 +228,8 @@ augroup END
 """
 """ plugin configuration
 """
+
+let &diffexpr='EnhancedDiff#Diff("git diff", "--histogram --compaction-heuristic")'
 
 let g:lightline = {
 		    \     'active': {

@@ -24,3 +24,5 @@
 	process = git-lfs filter-process
 [credential]
 	helper = osxkeychain
+[merge]
+	conflictstyle = diff3
