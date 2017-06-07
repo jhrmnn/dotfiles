@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Usage: dist.py [-C DIR] [-c FILE.json] [-p PROFILE] [-h HOST] [CMD]
+"""Usage: dist.py [-C DIR] [-c FILE.json] [-p PROFILE] [-h HOST] [CMD] [-n]
 
 Options:
     -C DIR
     -h, --host HOST [default: local]
     -c, --conf FILE.json
     -p, --profile PROFILE
+    -n, --dry
 """
 from sh import bash, rsync, git, ssh
 import sh
@@ -107,13 +108,17 @@ def build_remote(branch, sha, cmd, host):
         'sha': sha,
         'cmd': cmd
     }))
-    subprocess.check_call('ssh -t {} "cd {} && dist.py -c params.json"'.format(
-        host, dest
-    ), shell=True)
-    notify('Finished compiling aims.{} on {}'.format(sha, host))
+    try:
+        subprocess.check_call('ssh -t {} "cd {} && dist.py -c params.json"'.format(
+            host, dest
+        ), shell=True)
+    except subprocess.CalledProcessError as e:
+        print(e)
+    else:
+        notify('Finished compiling aims.{} on {}'.format(sha, host))
 
 
-def dist(host=None, cmd=None, profile=None):
+def dist(host=None, cmd=None, profile=None, dry=False):
     cmd = cmd or conf.cmd
     with sh.pushd(conf.top):
         branch = git('rev-parse', '--abbrev-ref', 'HEAD').strip()
@@ -138,13 +143,21 @@ def dist(host=None, cmd=None, profile=None):
             conf.presync(ctx)
         ssh(host, 'mkdir -p {}'.format(prefix))
         git_rsync(conf.top, '{}:{}'.format(host, prefix/conf.top))
+        if dry:
+            return
         build_remote(branch, sha, cmd, host)
     else:
         prefix = prefix.expanduser()
         prefix.mkdir(exist_ok=True)
         git_rsync(conf.top, prefix/conf.top)
-        build(branch, sha, cmd)
-        notify('Finished compiling aims.{}'.format(sha))
+        if dry:
+            return
+        try:
+            build(branch, sha, cmd)
+        except subprocess.CalledProcessError as e:
+            print(e)
+        else:
+            notify('Finished compiling aims.{}'.format(sha))
 
 
 if __name__ == '__main__':
@@ -166,8 +179,10 @@ if __name__ == '__main__':
         *('--filter=P ' + patt for patt in getattr(conf, 'exclude', [])),
         '--exclude=*'
     ]
+    if args['--dry']:
+        rsync_flags.append('-n')
     if args['--conf']:
         with open(args['--conf']) as f:
             build(**json.load(f))
     else:
-        dist(args['--host'], args['CMD'], profile=args['--profile'])
+        dist(args['--host'], args['CMD'], profile=args['--profile'], dry=args['--dry'])

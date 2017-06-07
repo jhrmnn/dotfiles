@@ -16,7 +16,6 @@ set shortmess+=s
 set showmatch
 set smartcase
 set smartindent
-set mouse=
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -34,7 +33,6 @@ if has('persistent_undo')
     set undofile
 endif
 if has('nvim')
-    set shell=fish
     set inccommand=split
 endif
 
@@ -71,6 +69,7 @@ nnoremap <silent> <Leader>q :q<CR>
 nnoremap <silent> <Leader>Q :q!<CR>
 nnoremap <silent> <Leader>A :qa!<CR>
 nnoremap <silent> <Leader>d :Bdelete<CR>
+nnoremap <silent> <Leader>l :call RestoreSession(FindProjectName())<CR>
 nnoremap <silent> <Leader>w :w<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>:syntax clear MyHighlight<CR>
 nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
@@ -145,8 +144,6 @@ if argc() == 0 && v:version >= 704
     augroup END
 end
 
-let g:test = FindProjectName()
-
 """
 """ plugins
 """
@@ -181,11 +178,12 @@ Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
 Plug 'neomake/neomake'                  " async make/linters
 Plug 'reedes/vim-pencil'                " handle single-line paragraphs
-Plug 'chrisbra/vim-diff-enhanced'
+" Plug 'chrisbra/vim-diff-enhanced'
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
+Plug 'embear/vim-localvimrc'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
     Plug 'Shougo/deoplete.nvim'         " async autocompletion
@@ -193,11 +191,13 @@ if v:version >= 704
 endif
 """ filetype-specific
 Plug 'dag/vim-fish'                     " fish syntax
+Plug 'pangloss/vim-javascript'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
-Plug 'hdima/python-syntax'              " better highlighting
+Plug 'vim-python/python-syntax'         " better highlighting
 Plug 'rust-lang/rust.vim'
 Plug 'othree/html5.vim'
+Plug 'keith/swift.vim'
 
 call plug#end()
 
@@ -220,6 +220,7 @@ augroup file_formats
     autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
     autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
     autocmd FileType yaml setl ts=2 sw=2 sts=2
+    autocmd FileType javascript setl ts=2 sw=2 sts=2
     autocmd BufRead,BufNewFile *.pyx setl ft=cython
     autocmd BufEnter /private/tmp/crontab.* setl bkc=yes
     autocmd BufEnter term://* startinsert
@@ -229,7 +230,10 @@ augroup END
 """ plugin configuration
 """
 
-let &diffexpr='EnhancedDiff#Diff("git diff", "--histogram --compaction-heuristic")'
+let g:localvimrc_persistent = 2
+let g:localvimrc_persistence_file = $HOME . '/.local/share/nvim/localvimrc_persistent'
+
+" let &diffexpr='EnhancedDiff#Diff("git diff", "--histogram --compaction-heuristic")'
 
 let g:lightline = {
 		    \     'active': {
@@ -288,12 +292,16 @@ let g:multi_cursor_exit_from_insert_mode = 0
 
 autocmd! BufWritePost * Neomake
 let g:neomake_fortran_enabled_makers = ['gnu']
+let g:neomake_c_enabled_makers = ['clang']
+let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
 let g:neomake_rust_enabled_makers = []
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402']
+let g:neomake_python_mypy_args = ['--strict', '--implicit-optional', '--incremental']
 let g:neomake_tex_enabled_makers = ['chktex']
 let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
 let g:neomake_open_list = 1
+let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
 
 let s:gfortran_maker = {
             \     'exe': 'mpifort',
@@ -384,7 +392,7 @@ endfunction
 
 command! -nargs=? FZFLinesBuffer call fzf#run({
             \     'source': printf('ag --nogroup --column --color "%s" %s',
-            \                      escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-'),
+            \                      escape(empty('<args>') ? '^(?=.)' : '<args>', '"\'),
             \                      bufname("")),
             \     'sink*': function('s:buff_line_handler'),
             \     'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" '
