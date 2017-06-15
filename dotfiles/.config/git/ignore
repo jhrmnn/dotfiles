@@ -16,3 +16,4 @@ tags
 *.tpbuild
 .lvimrc
 venv
+*.add.spl

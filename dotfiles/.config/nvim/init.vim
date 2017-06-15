@@ -93,8 +93,6 @@ if has('nvim')
 endif
 
 """ plugin-related
-nmap s <Plug>(SneakStreak)
-nmap S <Plug>(SneakStreakBackward)
 nnoremap <Leader>mk :Neomake!<CR>
 nnoremap <Leader>lmk :Neomake latexmk<CR>
 nnoremap <Leader>T :NeomakeSh ctags -R<CR>
@@ -130,6 +128,8 @@ function! RestoreSession(name)
 endfunction
 
 function! SaveSession(name)
+    cclose
+    lclose
     if exists('g:my_vim_from_stdin') || getcwd() == $HOME | return | endif
     execute 'mksession! ~/.local/share/nvim/sessions/' . fnameescape(a:name)
 endfunction
@@ -178,7 +178,6 @@ Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
 Plug 'neomake/neomake'                  " async make/linters
 Plug 'reedes/vim-pencil'                " handle single-line paragraphs
-" Plug 'chrisbra/vim-diff-enhanced'
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
@@ -186,8 +185,8 @@ Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'embear/vim-localvimrc'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
-    Plug 'Shougo/deoplete.nvim'         " async autocompletion
-    Plug 'zchee/deoplete-jedi'
+    " async autocompletion
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 endif
 """ filetype-specific
 Plug 'dag/vim-fish'                     " fish syntax
@@ -198,6 +197,10 @@ Plug 'vim-python/python-syntax'         " better highlighting
 Plug 'rust-lang/rust.vim'
 Plug 'othree/html5.vim'
 Plug 'keith/swift.vim'
+if v:version >= 704
+    Plug 'zchee/deoplete-jedi'
+    Plug 'Shougo/neco-vim'
+endif
 
 call plug#end()
 
@@ -205,8 +208,16 @@ try
     colorscheme base16-default-dark
 catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
 endtry
-" use terminanal background, not theme backround
-hi Normal ctermbg=none
+
+function s:fix_highlighting()
+    " use terminanal background, not theme backround
+    hi Normal ctermbg=none
+    hi clear SpellBad
+    hi clear SpellCap
+    hi SpellBad ctermbg=1
+    hi SpellCap ctermbg=1
+endfunction
+call <SID>fix_highlighting()
 
 filetype plugin indent on
 
@@ -215,6 +226,7 @@ augroup file_formats
     autocmd!
     autocmd FileType fortran setl cc=80,133 tw=80 com=:!>,:! fo=croq nu
     autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
+    autocmd BufRead,BufNewFile *.pyi set filetype=python
     autocmd FileType javascript setl cc=80 nu
     autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
     autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
@@ -274,7 +286,8 @@ if !exists('g:deoplete#omni_patterns')
     let g:deoplete#omni_patterns = {}
 endif
 
-let g:sneak#target_labels = "jfkdlsaireohgutwnvmcJFKDLSAIREOHGUTWNVMC"
+" let g:sneak#label = 1
+" let g:sneak#target_labels = "jfkdlsaireohgutwnvmcJFKDLSAIREOHGUTWNVMC"
 highlight SneakStreakMask ctermfg=8
 highlight clear SneakStreakStatusLine
 
@@ -331,21 +344,17 @@ let g:goyo_width = 81
 let g:goyo_height = '100%'
 
 function! s:goyo_enter()
-    set noshowmode
     set noshowcmd
     au! bufferline
-    au! CursorHold
-    execute 'GitGutterSignsDisable'
+    au! CursorHold * echo ''
 endfunction
 
 function! s:goyo_leave()
-    set showmode
     set showcmd
-    set background=dark
-    syntax off
-    syntax on
+    " syntax off
+    " syntax on
+    call s:fix_highlighting()
     call bufferline#init_echo()
-    execute 'GitGutterSignsEnable'
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
