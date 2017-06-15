@@ -47,15 +47,6 @@ augroup restore_cursor
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe ":normal! g`\"" | endif
 augroup END
 
-highlight MyHighlight ctermfg=0 ctermbg=9
-
-function! HighlightRegion()
-    highlight MyHighlight ctermfg=0 ctermbg=9
-    let l_start = line("'<")
-    let l_end = line("'>") + 1
-    execute 'syntax region MyHighlight start=/\%' . l_start . 'l/ end=/\%' . l_end . 'l/'
-endfunction
-
 """
 """ bindings
 """
@@ -64,24 +55,14 @@ let mapleader = ' '
 let maplocalleader = ' '
 
 """ vanilla vim
-nnoremap <silent> <Leader>a :xa<CR>
-nnoremap <silent> <Leader>q :q<CR>
-nnoremap <silent> <Leader>Q :q!<CR>
-nnoremap <silent> <Leader>A :qa!<CR>
-nnoremap <silent> <Leader>d :Bdelete<CR>
-nnoremap <silent> <Leader>l :call RestoreSession(FindProjectName())<CR>
-nnoremap <silent> <Leader>w :w<CR>
-nnoremap <silent> <Leader>n :nohlsearch<CR>:syntax clear MyHighlight<CR>
-nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
-vnoremap <silent> <Leader>hl :<C-U>call HighlightRegion()<CR>
-nnoremap <silent> <Leader>hl V:<C-U>call HighlightRegion()<CR>
-nnoremap <Leader>, <F10>
-nnoremap <silent> <Leader>[ :bprevious<CR>
-nnoremap <silent> <Leader>] :bnext<CR>
 nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
+nnoremap <silent> <Leader>d :Bdelete<CR>
+nnoremap <silent> <Leader>n :nohlsearch<CR>
+nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
+nnoremap <Leader>, <F10>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim')
     nnoremap <silent> <Leader>1 :belowright 15split<CR>:terminal<CR>
@@ -94,7 +75,6 @@ endif
 
 """ plugin-related
 nnoremap <Leader>mk :Neomake!<CR>
-nnoremap <Leader>lmk :Neomake latexmk<CR>
 nnoremap <Leader>T :NeomakeSh ctags -R<CR>
 xmap ga <Plug>(EasyAlign)
 nnoremap \\ :FZFLinesBuffer<Space>
@@ -106,10 +86,8 @@ nnoremap <silent> <Space>f :FZFLinesBuffer<CR>
 nnoremap <silent> <Space>gf :FZFLinesAll<CR>
 nnoremap <silent> <Leader>t :FZFTagsBuffer<CR>
 nnoremap <silent> <Leader>gt :FZFTags<CR>
-nnoremap <Leader>s :%s/
-vnoremap <Leader>s :s/
-vnoremap <Leader>ldf :Linediff<CR>
-nnoremap <Leader>ldf :LinediffReset<CR>
+vnoremap <silent> <Leader>ldf :Linediff<CR>
+nnoremap <silent> <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :Goyo<CR>
 
 """
@@ -242,40 +220,22 @@ augroup END
 """ plugin configuration
 """
 
+au FileType rust let b:delimitMate_quotes = "\""
+
+let g:multi_cursor_exit_from_insert_mode = 0
+
 let g:localvimrc_persistent = 2
 let g:localvimrc_persistence_file = $HOME . '/.local/share/nvim/localvimrc_persistent'
-
-" let &diffexpr='EnhancedDiff#Diff("git diff", "--histogram --compaction-heuristic")'
-
-let g:lightline = {
-		    \     'active': {
-		    \     'left': [ [ 'mode', 'paste' ],
-		    \               [ 'filename', 'modified' ] ],
-		    \     'right': [ [ 'lineinfo' ],
-		    \                [ 'percent' ],
-		    \                [ 'fileformat', 'fileencoding', 'filetype' ] ]
-            \     },
-            \     'colorscheme': 'jellybeans',
-            \     'component': {
-            \       'lineinfo': ' %3l:%-2v',
-            \     },
-            \     'component_function': {
-            \       'modified': 'LightLineModified',
-            \     },
-            \     'separator': { 'left': '', 'right': '' },
-            \     'subseparator': { 'left': '', 'right': '' }
-            \ }
-
-function! LightLineModified()
-    return &modified ? '❌' : &readonly ? '🔒' : '✅'
-endfunction
-
-au FileType rust let b:delimitMate_quotes = "\""
 
 let g:bufferline_modified = '❌ '
 let g:bufferline_active_buffer_left = '📝 '
 let g:bufferline_active_buffer_right = ''
 let g:bufferline_rotate = 1
+
+" let g:sneak#label = 1
+" let g:sneak#target_labels = "jfkdlsaireohgutwnvmcJFKDLSAIREOHGUTWNVMC"
+highlight SneakStreakMask ctermfg=8
+highlight clear SneakStreakStatusLine
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni#input_patterns = {}
@@ -285,11 +245,6 @@ endif
 if !exists('g:deoplete#omni_patterns')
     let g:deoplete#omni_patterns = {}
 endif
-
-" let g:sneak#label = 1
-" let g:sneak#target_labels = "jfkdlsaireohgutwnvmcJFKDLSAIREOHGUTWNVMC"
-highlight SneakStreakMask ctermfg=8
-highlight clear SneakStreakStatusLine
 
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#conceallevel = 0
@@ -301,44 +256,24 @@ augroup pencil
     autocmd FileType text call pencil#init()
 augroup END
 
-let g:multi_cursor_exit_from_insert_mode = 0
-
-autocmd! BufWritePost * Neomake
-let g:neomake_fortran_enabled_makers = ['gnu']
-let g:neomake_c_enabled_makers = ['clang']
-let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
-let g:neomake_rust_enabled_makers = []
-let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402']
-let g:neomake_python_mypy_args = ['--strict', '--implicit-optional', '--incremental']
-let g:neomake_tex_enabled_makers = ['chktex']
-let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
-let g:neomake_open_list = 1
-let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
-
-let s:gfortran_maker = {
-            \     'exe': 'mpifort',
-            \     'args': ['-fsyntax-only', '-fcoarray=single', '-fcheck=all', '-fall-intrinsics'],
-            \     'errorformat': '%-C %#,' . '%-C  %#%.%#,' . '%A%f:%l%[.:]%c:,'
-            \           . '%Z%\m%\%%(Fatal %\)%\?%trror: %m,' . '%Z%tarning: %m,'
-            \           . '%-G%.%#'
+let g:lightline = {
+		    \     'active': {
+		    \         'left': [[ 'mode', 'paste' ],
+		    \                  [ 'filename', 'modified' ]],
+		    \         'right': [[ 'lineinfo' ],
+		    \                   [ 'percent' ],
+		    \                   [ 'fileformat', 'fileencoding', 'filetype' ]]
+            \     },
+            \     'colorscheme': 'jellybeans',
+            \     'component': {'lineinfo': ' %3l:%-2v'},
+            \     'component_function': {'modified': 'LightLineModified'},
+            \     'separator': {'left': '', 'right': ''},
+            \     'subseparator': {'left': '', 'right': ''}
             \ }
-let g:neomake_fortran_gnu_maker = deepcopy(s:gfortran_maker)
-call extend(g:neomake_fortran_gnu_maker.args, [
-            \     '-Wall', '-Waliasing', '-Wcharacter-truncation',
-            \     '-Wextra', '-Wintrinsics-std', '-Wsurprising', '-Wno-tabs',
-            \     '-std=gnu', '-ffree-line-length-none', '-Wno-unused-variable'])
-let s:gfortran_pedant_maker = deepcopy(s:gfortran_maker)
-call extend(s:gfortran_pedant_maker.args, [
-            \     '-Wall', '-pedantic', '-Waliasing', '-Wcharacter-truncation',
-            \     '-Wextra', '-Wimplicit-procedure', '-Wintrinsics-std', '-Wsurprising'
-            \ ])
-let g:neomake_fortran_f95_maker = deepcopy(s:gfortran_pedant_maker)
-call extend(g:neomake_fortran_f95_maker.args, ['-std=f95'])
-let g:neomake_fortran_f03_maker = deepcopy(s:gfortran_pedant_maker)
-call extend(g:neomake_fortran_f03_maker.args, ['-std=f2003'])
-let g:neomake_fortran_f08_maker = deepcopy(s:gfortran_pedant_maker)
-call extend(g:neomake_fortran_f08_maker.args, ['-std=f2008'])
+
+function! LightLineModified()
+    return &modified ? '❌' : &readonly ? '🔒' : '✅'
+endfunction
 
 let g:goyo_width = 81
 let g:goyo_height = '100%'
@@ -359,6 +294,43 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+autocmd! BufWritePost * Neomake
+let g:neomake_fortran_enabled_makers = ['gnu']
+let g:neomake_c_enabled_makers = ['clang']
+let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
+let g:neomake_rust_enabled_makers = []
+let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402']
+let g:neomake_python_mypy_args = ['--strict', '--implicit-optional', '--incremental']
+let g:neomake_tex_enabled_makers = ['chktex']
+let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
+let g:neomake_open_list = 1
+let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+
+let s:gfortran_maker = {
+            \     'exe': 'mpifort',
+            \     'args': ['-fsyntax-only', '-fcoarray=single', '-fcheck=all', '-fall-intrinsics'],
+            \     'errorformat': '%-C %#,' . '%-C  %#%.%#,' . '%A%f:%l%[.:]%c:,'
+            \         . '%Z%\m%\%%(Fatal %\)%\?%trror: %m,' . '%Z%tarning: %m,'
+            \         . '%-G%.%#'
+            \ }
+let g:neomake_fortran_gnu_maker = deepcopy(s:gfortran_maker)
+call extend(g:neomake_fortran_gnu_maker.args, [
+            \     '-Wall', '-Waliasing', '-Wcharacter-truncation',
+            \     '-Wextra', '-Wintrinsics-std', '-Wsurprising', '-Wno-tabs',
+            \     '-std=gnu', '-ffree-line-length-none', '-Wno-unused-variable'])
+let s:gfortran_pedant_maker = deepcopy(s:gfortran_maker)
+call extend(s:gfortran_pedant_maker.args, [
+            \     '-Wall', '-pedantic', '-Waliasing', '-Wcharacter-truncation',
+            \     '-Wextra', '-Wimplicit-procedure', '-Wintrinsics-std', '-Wsurprising'
+            \ ])
+let g:neomake_fortran_f95_maker = deepcopy(s:gfortran_pedant_maker)
+call extend(g:neomake_fortran_f95_maker.args, ['-std=f95'])
+let g:neomake_fortran_f03_maker = deepcopy(s:gfortran_pedant_maker)
+call extend(g:neomake_fortran_f03_maker.args, ['-std=f2003'])
+let g:neomake_fortran_f08_maker = deepcopy(s:gfortran_pedant_maker)
+call extend(g:neomake_fortran_f08_maker.args, ['-std=f2008'])
 
 """
 """ FZF support
