@@ -14,6 +14,7 @@ set pastetoggle=<F10>
 set scrolloff=1
 set shortmess+=s
 set showmatch
+set conceallevel=2
 set smartcase
 set smartindent
 set tabstop=4
@@ -22,12 +23,14 @@ set softtabstop=4
 set expandtab
 set shiftround
 set timeoutlen=500
+set completeopt-=preview
 set title
 set titleold=
 set visualbell
 set wrap
 set linebreak
 set nolist
+set updatetime=1000
 if has('persistent_undo')
     set undodir=$HOME/.local/share/nvim/undo
     set undofile
@@ -60,6 +63,8 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <silent> <Leader>d :Bdelete<CR>
+nnoremap <silent> <Leader>q :bprevious<CR>
+nnoremap <silent> <Leader>w :bnext<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>
 nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
 nnoremap <Leader>, <F10>
@@ -75,7 +80,7 @@ endif
 
 """ plugin-related
 nnoremap <Leader>mk :Neomake!<CR>
-nnoremap <Leader>T :NeomakeSh ctags -R<CR>
+nnoremap <Leader>T :NeomakeSh ag -l \| ctags --fortran-kinds=-l -L -<CR>
 xmap ga <Plug>(EasyAlign)
 nnoremap \\ :FZFLinesBuffer<Space>
 nnoremap \ :FZFLinesAll<Space>
@@ -144,7 +149,7 @@ Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
 Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 """ new functionality
-Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
+" Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
@@ -163,6 +168,8 @@ Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'embear/vim-localvimrc'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
+endif
+if has('nvim')
     " async autocompletion
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 endif
@@ -170,12 +177,13 @@ endif
 Plug 'dag/vim-fish'                     " fish syntax
 Plug 'pangloss/vim-javascript'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
-Plug 'hynek/vim-python-pep8-indent'     " PEP8 indentation
+Plug 'Vimjas/vim-python-pep8-indent'     " PEP8 indentation
+Plug 'igordejanovic/textx.vim'
 Plug 'vim-python/python-syntax'         " better highlighting
 Plug 'rust-lang/rust.vim'
 Plug 'othree/html5.vim'
 Plug 'keith/swift.vim'
-if v:version >= 704
+if has('nvim')
     Plug 'zchee/deoplete-jedi'
     Plug 'Shougo/neco-vim'
 endif
@@ -192,8 +200,10 @@ function s:fix_highlighting()
     hi Normal ctermbg=none
     hi clear SpellBad
     hi clear SpellCap
+    hi clear SpellLocal
     hi SpellBad ctermbg=1
     hi SpellCap ctermbg=1
+    hi SpellLocal ctermbg=1
 endfunction
 call <SID>fix_highlighting()
 
@@ -216,6 +226,8 @@ augroup file_formats
     autocmd BufEnter term://* startinsert
 augroup END
 
+let g:markdown_fenced_languages = ['python']
+
 """
 """ plugin configuration
 """
@@ -237,15 +249,6 @@ let g:bufferline_rotate = 1
 highlight SneakStreakMask ctermfg=8
 highlight clear SneakStreakStatusLine
 
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#omni#input_patterns = {}
-if exists("*deoplete#custom#set")
-    call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
-endif
-if !exists('g:deoplete#omni_patterns')
-    let g:deoplete#omni_patterns = {}
-endif
-
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#conceallevel = 0
 augroup pencil
@@ -255,6 +258,28 @@ augroup pencil
     autocmd FileType rst call pencil#init()
     autocmd FileType text call pencil#init()
 augroup END
+
+function! s:deoplete_lazy_enable()
+    autocmd! deoplete_lazy_enable
+    augroup! deoplete_lazy_enable
+    call deoplete#enable()
+endfunction
+
+if has('nvim')
+    augroup deoplete_lazy_enable
+        autocmd!
+        autocmd CursorHold * call s:deoplete_lazy_enable()
+        autocmd InsertEnter * call s:deoplete_lazy_enable()
+                    \ | silent! doautocmd <nomodeline> deoplete InsertEnter
+    augroup END
+endif
+let g:deoplete#omni#input_patterns = {}
+if exists("*deoplete#custom#set")
+    call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
+endif
+if !exists('g:deoplete#omni_patterns')
+    let g:deoplete#omni_patterns = {}
+endif
 
 let g:lightline = {
 		    \     'active': {
@@ -307,6 +332,16 @@ let g:neomake_tex_enabled_makers = ['chktex']
 let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
 let g:neomake_open_list = 1
 let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+
+autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
+            \      '--ignore=E501,E226,E402,F401'
+            \ ]
+autocmd BufRead,BufNewFile *.pyi let b:neomake_python_flake8_args = [
+            \      '--ignore=E501,E226,E402,E704,E301,E701,E302'
+            \ ]
+autocmd BufRead,BufNewFile __init__.pyi let b:neomake_python_flake8_args = [
+            \      '--ignore=E501,E226,E402,F401,E704,E301,E701,E302'
+            \ ]
 
 let s:gfortran_maker = {
             \     'exe': 'mpifort',
@@ -404,13 +439,12 @@ endfunction
 command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
             \     'source': 'gsed ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
-            \               . '\4\t|..|\1\t|..|\2\t|..|\5|..|\3/'
-            \               . '; /^l/ d'' '
+            \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
             \               . join(tagfiles())
-            \               . ' | column -t -s "	" | gsed ''s/|..|/\t/g''',
+            \               . ' | column -t -s ',
             \     'options': '-d "\t" -n 2 --with-nth 1..4',
             \     'sink': function('s:tags_sink'),
-            \ }) | else | call neomake#Sh('ctags -R') | FZFTags | endif
+            \ }) | else | call neomake#Sh('ag -l | ctags --fortran-kinds=-l -L -') | FZFTags | endif
 
 function! s:tags_sink(line)
     execute "edit" split(a:line, "\t")[2]
@@ -418,12 +452,12 @@ function! s:tags_sink(line)
 endfunction
 
 command! FZFTagsBuffer call fzf#run({
-            \     'source': printf('ctags -f - --sort=no --excmd=number --language-force=%s %s',
+            \     'source': printf('ctags --fortran-kinds=-l -f - --sort=no --excmd=number --language-force=%s %s',
             \                      &filetype, expand('%:S'))
             \               . ' | gsed ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
-            \               . '\4\t|..|\1\t|..|\2\t|..|\5|..|\3/; /^l/ d'''
-            \               . ' | column -t -s "	" | gsed ''s/|..|/\t/g''',
+            \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
+            \               . ' | column -t -s ',
             \     'sink': function('s:buffer_tags_sink'),
             \     'options': '-d "\t" -n 2 --with-nth 1,2 --tiebreak=index --tac',
             \     'left': '40'

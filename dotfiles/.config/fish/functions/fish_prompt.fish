@@ -1,11 +1,11 @@
 function fish_prompt
     set -l _status $status
-    switch $fish_bind_mode
-        case visual
-            echo -ns "🐠 "
-        case '*'
-            echo -ns "🐟 "
-    end
+    # switch $fish_bind_mode
+    #     case visual
+    #         echo -ns "🐠"
+    #     case '*'
+    #         echo -ns "🐟"
+    # end
     echo -ns (date "+%H:%M")
     set_color normal
     if [ -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2" ]
