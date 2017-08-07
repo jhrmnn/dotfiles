@@ -30,6 +30,7 @@ abbr vi vim
 abbr pty ptpython
 abbr ipty ptipython
 abbr jupy jupyter notebook
+abbr gs git status
 abbr xo xonsh
 abbr gitk gitk --all
 abbr makeup make -C ..
@@ -39,8 +40,10 @@ if type -q exa
     abbr ls exa
     abbr ll exa -l
     abbr la exa -la
-    abbr lt exa -lrs modified
-    abbr lta exa -lras modified
+    abbr lg exa -la --git
+    abbr ltr exa -lT
+    abbr lt exa -ls modified
+    abbr lta exa -las modified
     abbr lzf exa -lT --color=always \| fzf --ansi
     abbr lss exa -lT --color=always \| less -R
 else
