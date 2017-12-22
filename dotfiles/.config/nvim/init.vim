@@ -80,7 +80,7 @@ endif
 
 """ plugin-related
 nnoremap <Leader>mk :Neomake!<CR>
-nnoremap <Leader>T :NeomakeSh ag -l \| ctags --fortran-kinds=-l -L -<CR>
+nnoremap <Leader>T :NeomakeSh rg -l "" \| ctags --fortran-kinds=-l -L -<CR>
 xmap ga <Plug>(EasyAlign)
 nnoremap \\ :FZFLinesBuffer<Space>
 nnoremap \ :FZFLinesAll<Space>
@@ -374,15 +374,15 @@ call extend(g:neomake_fortran_f08_maker.args, ['-std=f2008'])
 let $PATH = $PATH . ':' . $HOME . '/.fzf/bin'
 
 command! -nargs=? FZFLinesAll call fzf#run({
-            \     'source': printf('ag --nogroup --column --color ' .
-            \                      '--ignore "*.nb" --ignore "*.ipynb" --ignore "*.vesta" "%s"',
+            \     'source': printf('rg -i --no-heading --column --color ansi ' .
+            \                      '-g "!*.nb" -g "!*.ipynb" -g "!*.vesta" "%s"',
             \           escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-')),
             \     'sink*': function('s:line_handler'),
-            \     'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" '
+            \     'options': '--multi --ansi --delimiter :  --tac --prompt "rg>" '
             \           . '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,4.. --color'
             \ })
 
-function! s:ag_to_qf(line)
+function! s:rg_to_qf(line)
     let parts = split(a:line, ':')
     return {
                 \     'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0],
@@ -396,7 +396,7 @@ function! s:line_handler(lines)
     if len(a:lines) == 0
         return
     endif
-    let list = map(a:lines, 's:ag_to_qf(v:val)')
+    let list = map(a:lines, 's:rg_to_qf(v:val)')
     exec 'edit' list[0].filename
     exec list[0].lnum
     exec 'normal!' list[0].col . '|zz'
@@ -407,15 +407,15 @@ function! s:line_handler(lines)
 endfunction
 
 command! -nargs=? FZFLinesBuffer call fzf#run({
-            \     'source': printf('ag --nogroup --column --color "%s" %s',
+            \     'source': printf('rg --no-heading --column --color ansi "%s" %s',
             \                      escape(empty('<args>') ? '^(?=.)' : '<args>', '"\'),
             \                      bufname("")),
             \     'sink*': function('s:buff_line_handler'),
-            \     'options': '--multi --ansi --delimiter :  --tac --prompt "Ag>" '
+            \     'options': '--multi --ansi --delimiter :  --tac --prompt "rg>" '
             \           . '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,3.. --color'
             \ })
 
-function! s:buff_ag_to_qf(line)
+function! s:buff_rg_to_qf(line)
     let parts = split(a:line, ':')
     return {
                 \     'filename': bufname(""),
@@ -427,7 +427,7 @@ function! s:buff_line_handler(lines)
     if len(a:lines) == 0
         return
     endif
-    let list = map(a:lines, 's:buff_ag_to_qf(v:val)')
+    let list = map(a:lines, 's:buff_rg_to_qf(v:val)')
     exec list[0].lnum
     exec 'normal!' list[0].col . '|zz'
     if len(a:lines) > 1
@@ -444,7 +444,7 @@ command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
             \               . ' | column -t -s ',
             \     'options': '-d "\t" -n 2 --with-nth 1..4',
             \     'sink': function('s:tags_sink'),
-            \ }) | else | call neomake#Sh('ag -l | ctags --fortran-kinds=-l -L -') | FZFTags | endif
+            \ }) | else | call neomake#Sh('rg -l "" | ctags --fortran-kinds=-l -L -') | FZFTags | endif
 
 function! s:tags_sink(line)
     execute "edit" split(a:line, "\t")[2]
