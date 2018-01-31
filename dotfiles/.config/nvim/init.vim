@@ -14,7 +14,7 @@ set pastetoggle=<F10>
 set scrolloff=1
 set shortmess+=s
 set showmatch
-set conceallevel=2
+set conceallevel=0
 set smartcase
 set smartindent
 set tabstop=4
@@ -37,6 +37,12 @@ if has('persistent_undo')
 endif
 if has('nvim')
     set inccommand=split
+endif
+
+if !has('nvim') && has('macunix')
+    command! -nargs=1 Py py3 <args>
+    set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.6/Python
+    set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/3.6
 endif
 
 let g:loaded_python_provider = 1
@@ -69,13 +75,17 @@ nnoremap <silent> <Leader>n :nohlsearch<CR>
 nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
 nnoremap <Leader>, <F10>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-if has('nvim')
-    nnoremap <silent> <Leader>1 :belowright 15split<CR>:terminal<CR>
+if has('nvim') || has('terminal')
     tnoremap <C-X> <C-\><C-n>
     tnoremap <C-H> <C-\><C-n><C-W>h
     tnoremap <C-J> <C-\><C-n><C-W>j
     tnoremap <C-K> <C-\><C-n><C-W>k
     tnoremap <C-L> <C-\><C-n><C-W>l
+endif
+if has('nvim')
+    nnoremap <silent> <Leader>1 :belowright 15split<CR>:terminal<CR>
+elseif has('terminal')
+    nnoremap <silent> <Leader>1 :terminal<CR>
 endif
 
 """ plugin-related
@@ -90,10 +100,12 @@ nnoremap <silent> <Leader>p :FZF<CR>
 nnoremap <silent> <Space>f :FZFLinesBuffer<CR>
 nnoremap <silent> <Space>gf :FZFLinesAll<CR>
 nnoremap <silent> <Leader>t :FZFTagsBuffer<CR>
+nnoremap <silent> <Leader>b :call fzf#run({'source': map(range(1, bufnr('$')), 'bufname(v:val)'), 'sink': 'e', 'down': '30%'})<CR>
 nnoremap <silent> <Leader>gt :FZFTags<CR>
 vnoremap <silent> <Leader>ldf :Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :Goyo<CR>
+nnoremap <leader>? :Dash<Space>
 
 """
 """ session management
@@ -166,27 +178,31 @@ Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'embear/vim-localvimrc'
+Plug 'rizzatti/dash.vim'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
 if has('nvim')
-    " async autocompletion
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+elseif v:version >= 800 && has("python3")
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
 """ filetype-specific
 Plug 'dag/vim-fish'                     " fish syntax
 Plug 'pangloss/vim-javascript'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
+Plug 'zah/nim.vim'
+Plug 'chrisbra/csv.vim'
 Plug 'Vimjas/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'igordejanovic/textx.vim'
 Plug 'vim-python/python-syntax'         " better highlighting
 Plug 'rust-lang/rust.vim'
 Plug 'othree/html5.vim'
 Plug 'keith/swift.vim'
-if has('nvim')
-    Plug 'zchee/deoplete-jedi'
-    Plug 'Shougo/neco-vim'
-endif
+Plug 'zchee/deoplete-jedi'
+Plug 'Shougo/neco-vim'
 
 call plug#end()
 
@@ -218,6 +234,7 @@ augroup file_formats
     autocmd FileType javascript setl cc=80 nu
     autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
     autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
+    autocmd FileType mediawiki setl tw=80 spell ci pi sts=0 sw=4 ts=4
     autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
     autocmd FileType yaml setl ts=2 sw=2 sts=2
     autocmd FileType javascript setl ts=2 sw=2 sts=2
@@ -254,6 +271,7 @@ let g:pencil#conceallevel = 0
 augroup pencil
     autocmd!
     autocmd FileType markdown call pencil#init()
+    autocmd FileType mediawiki call pencil#init()
     autocmd FileType tex call pencil#init()
     autocmd FileType rst call pencil#init()
     autocmd FileType text call pencil#init()
@@ -265,14 +283,12 @@ function! s:deoplete_lazy_enable()
     call deoplete#enable()
 endfunction
 
-if has('nvim')
-    augroup deoplete_lazy_enable
-        autocmd!
-        autocmd CursorHold * call s:deoplete_lazy_enable()
-        autocmd InsertEnter * call s:deoplete_lazy_enable()
-                    \ | silent! doautocmd <nomodeline> deoplete InsertEnter
-    augroup END
-endif
+augroup deoplete_lazy_enable
+    autocmd!
+    autocmd CursorHold * call s:deoplete_lazy_enable()
+    autocmd InsertEnter * call s:deoplete_lazy_enable()
+                \ | silent! doautocmd <nomodeline> deoplete InsertEnter
+augroup END
 let g:deoplete#omni#input_patterns = {}
 if exists("*deoplete#custom#set")
     call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
@@ -280,6 +296,12 @@ endif
 if !exists('g:deoplete#omni_patterns')
     let g:deoplete#omni_patterns = {}
 endif
+function g:Multiple_cursors_before()
+    let g:deoplete#disable_auto_complete = 1
+endfunction
+function g:Multiple_cursors_after()
+    let g:deoplete#disable_auto_complete = 0
+endfunction
 
 let g:lightline = {
 		    \     'active': {
@@ -299,6 +321,11 @@ let g:lightline = {
 function! LightLineModified()
     return &modified ? '❌' : &readonly ? '🔒' : '✅'
 endfunction
+
+let g:gitgutter_sign_added = '∙'
+let g:gitgutter_sign_modified = '∙'
+" let g:gitgutter_sign_removed = '∙'
+" let g:gitgutter_sign_modified_removed = '∙'
 
 let g:goyo_width = 81
 let g:goyo_height = '100%'
@@ -321,17 +348,24 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 autocmd! BufWritePost * Neomake
-let g:neomake_fortran_enabled_makers = ['gnu']
+let g:neomake_list_height = 10
 let g:neomake_c_enabled_makers = ['clang']
 let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
 let g:neomake_rust_enabled_makers = []
+let g:neomake_haskell_enabled_makers = []
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402']
+let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402,E704,E301,E306,E741']
 let g:neomake_python_mypy_args = ['--strict', '--implicit-optional', '--incremental']
 let g:neomake_tex_enabled_makers = ['chktex']
 let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
 let g:neomake_open_list = 1
 let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+let g:neomake_fortran_gfortran_args = [
+            \ '-fsyntax-only', '-fcheck=all',
+            \ '-Wall', '-Wargument-mismatch', '-Wcharacter-truncation',
+            \ '-Wextra', '-Wno-tabs', '-Wno-unused-variable',
+            \ '-std=gnu'
+            \ ]
 
 autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
             \      '--ignore=E501,E226,E402,F401'
@@ -343,29 +377,6 @@ autocmd BufRead,BufNewFile __init__.pyi let b:neomake_python_flake8_args = [
             \      '--ignore=E501,E226,E402,F401,E704,E301,E701,E302'
             \ ]
 
-let s:gfortran_maker = {
-            \     'exe': 'mpifort',
-            \     'args': ['-fsyntax-only', '-fcoarray=single', '-fcheck=all', '-fall-intrinsics'],
-            \     'errorformat': '%-C %#,' . '%-C  %#%.%#,' . '%A%f:%l%[.:]%c:,'
-            \         . '%Z%\m%\%%(Fatal %\)%\?%trror: %m,' . '%Z%tarning: %m,'
-            \         . '%-G%.%#'
-            \ }
-let g:neomake_fortran_gnu_maker = deepcopy(s:gfortran_maker)
-call extend(g:neomake_fortran_gnu_maker.args, [
-            \     '-Wall', '-Waliasing', '-Wcharacter-truncation',
-            \     '-Wextra', '-Wintrinsics-std', '-Wsurprising', '-Wno-tabs',
-            \     '-std=gnu', '-ffree-line-length-none', '-Wno-unused-variable'])
-let s:gfortran_pedant_maker = deepcopy(s:gfortran_maker)
-call extend(s:gfortran_pedant_maker.args, [
-            \     '-Wall', '-pedantic', '-Waliasing', '-Wcharacter-truncation',
-            \     '-Wextra', '-Wimplicit-procedure', '-Wintrinsics-std', '-Wsurprising'
-            \ ])
-let g:neomake_fortran_f95_maker = deepcopy(s:gfortran_pedant_maker)
-call extend(g:neomake_fortran_f95_maker.args, ['-std=f95'])
-let g:neomake_fortran_f03_maker = deepcopy(s:gfortran_pedant_maker)
-call extend(g:neomake_fortran_f03_maker.args, ['-std=f2003'])
-let g:neomake_fortran_f08_maker = deepcopy(s:gfortran_pedant_maker)
-call extend(g:neomake_fortran_f08_maker.args, ['-std=f2008'])
 
 """
 """ FZF support
@@ -459,7 +470,7 @@ command! FZFTagsBuffer call fzf#run({
             \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
             \               . ' | column -t -s ',
             \     'sink': function('s:buffer_tags_sink'),
-            \     'options': '-d "\t" -n 2 --with-nth 1,2 --tiebreak=index --tac',
+            \     'options': '-d "\t" -n 2 --with-nth 1,2 --tiebreak=index +s',
             \     'left': '40'
             \ })
 

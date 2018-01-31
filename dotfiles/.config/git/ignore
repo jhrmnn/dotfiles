@@ -9,11 +9,12 @@ tags
 *.latexmain
 .csync_journal.db*
 .owncloudsync.log
-.pub.yaml
-*.mod
 .exrc
 .texpadtmp
 *.tpbuild
 .lvimrc
 venv
+venv2
 *.add.spl
+._*
+.ignore

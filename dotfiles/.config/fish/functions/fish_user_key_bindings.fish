@@ -35,6 +35,3 @@ bind -M insert \ej history-token-search-forward
 bind -M insert \ek history-token-search-backward
 bind -M insert \el nextd-or-forward-word
 bind -M insert \eh prevd-or-backward-word
-
-bind \ce "fzf-history-widget 50000"
-bind -M insert \ce "fzf-history-widget 50000"

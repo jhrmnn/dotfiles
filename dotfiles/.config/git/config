@@ -1,6 +1,6 @@
 [user]
 	name = Jan Hermann
-	email = dev@hermann.in
+	email = dev@janhermann.cz
 [pull]
     rebase = true
 [push]
@@ -8,7 +8,7 @@
 [blame]
     date = short
 [core]
-    excludesfile = ~/.config/git/ignore
+	excludesfile = /Users/hermann/.dotfiles/dotfiles/.config/git/ignore
 [alias]
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
 [http]

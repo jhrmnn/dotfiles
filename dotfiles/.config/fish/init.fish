@@ -36,6 +36,11 @@ abbr gitk gitk --all
 abbr makeup make -C ..
 abbr del trash
 abbr venv python3 -m venv
+abbr vpython venv/bin/python
+abbr vpip venv/bin/pip
+abbr vjupy venv/bin/jupyter notebook
+abbr vpty venv/bin/ptpython
+abbr vipty venv/bin/ptipython
 if type -q exa
     abbr ls exa
     abbr ll exa -l

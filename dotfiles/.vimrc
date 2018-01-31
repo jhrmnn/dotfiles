@@ -20,6 +20,8 @@ set tags=.tags;,tags
 set ttyfast
 set viminfo+=!
 set wildmenu
-set guifont=Hack:h12
+
+set guifont=Hack:h13
+set linespace=2
 
 source ~/.config/nvim/init.vim
