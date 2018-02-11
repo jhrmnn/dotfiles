@@ -8,7 +8,7 @@
 [blame]
     date = short
 [core]
-	excludesfile = /Users/hermann/.dotfiles/dotfiles/.config/git/ignore
+	excludesfile = ~/.config/git/ignore
 [alias]
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
 [http]
