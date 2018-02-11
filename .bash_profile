@@ -10,5 +10,4 @@ if [ -n "$PROFILE_SOURCED" ]; then
 fi
 
 [ -s ~/.profile ] && . ~/.profile
-[ -s ~/.fzf.bash ] && source ~/.fzf.bash
 maybe_source_bashrc

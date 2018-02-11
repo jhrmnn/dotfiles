@@ -30,6 +30,7 @@ abbr vi vim
 abbr pty ptpython
 abbr ipty ptipython
 abbr jupy jupyter notebook
+abbr jlab jupyter lab
 abbr gs git status
 abbr xo xonsh
 abbr gitk gitk --all

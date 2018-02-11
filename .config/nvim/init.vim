@@ -151,6 +151,7 @@ endif
 
 filetype off
 
+set rtp+=/usr/local/opt/fzf
 call plug#begin('~/.local/share/nvim/plugged')
 " sort with :'<,'>sort /^[^\/]*\/\(vim-\)\=/
 
@@ -165,7 +166,6 @@ Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
 Plug 'itchyny/lightline.vim'            " fast status line

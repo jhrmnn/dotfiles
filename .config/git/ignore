@@ -18,3 +18,4 @@ venv2
 *.add.spl
 ._*
 .ignore
+.~lock.*

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/hermann/bin/venv/bin/python3
 """Usage: dist.py [-C DIR] [-c FILE.json] [-p PROFILE] [-h HOST] [CMD] [-n]
 
 Options:
@@ -45,7 +45,7 @@ def save_diff(sha, diff):
     with NamedTemporaryFile('w') as f:
         f.write(diff)
         f.flush()
-        archive = '{}.{}.diff.tar.gz'.format(conf.name, sha)
+        archive = '{}-{}.diff.tar.gz'.format(conf.name, sha)
         with tarfile.open(str(diffs/archive), 'w|gz') as archfile:
             archfile.add(f.name, 'diff')
     print('Saved diff to {}.'.format(archive))
@@ -157,7 +157,7 @@ def dist(host=None, cmd=None, profile=None, dry=False):
         except subprocess.CalledProcessError as e:
             print(e)
         else:
-            notify('Finished compiling aims.{}'.format(sha))
+            notify('Finished compiling aims-{}'.format(sha))
 
 
 if __name__ == '__main__':
