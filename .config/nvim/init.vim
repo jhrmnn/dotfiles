@@ -317,15 +317,12 @@ let g:lightline = {
             \     'separator': {'left': '', 'right': ''},
             \     'subseparator': {'left': '', 'right': ''}
             \ }
-
 function! LightLineModified()
     return &modified ? '❌' : &readonly ? '🔒' : '✅'
 endfunction
 
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
-" let g:gitgutter_sign_removed = '∙'
-" let g:gitgutter_sign_modified_removed = '∙'
 
 let g:goyo_width = 81
 let g:goyo_height = '100%'
@@ -338,8 +335,6 @@ endfunction
 
 function! s:goyo_leave()
     set showcmd
-    " syntax off
-    " syntax on
     call s:fix_highlighting()
     call bufferline#init_echo()
 endfunction
@@ -366,7 +361,6 @@ let g:neomake_fortran_gfortran_args = [
             \ '-Wextra', '-Wno-tabs', '-Wno-unused-variable',
             \ '-std=gnu'
             \ ]
-
 autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
             \      '--ignore=E501,E226,E402,F401'
             \ ]
@@ -381,8 +375,6 @@ autocmd BufRead,BufNewFile __init__.pyi let b:neomake_python_flake8_args = [
 """
 """ FZF support
 """
-
-let $PATH = $PATH . ':' . $HOME . '/.fzf/bin'
 
 command! -nargs=? FZFLinesAll call fzf#run({
             \     'source': printf('rg -i --no-heading --column --color ansi ' .
