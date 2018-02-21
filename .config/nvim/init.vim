@@ -106,6 +106,7 @@ vnoremap <silent> <Leader>ldf :Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :Goyo<CR>
 nnoremap <leader>? :Dash<Space>
+vnoremap <leader>? y:Dash<Space><C-R><C-R>"<CR>
 
 """
 """ session management
@@ -194,6 +195,7 @@ Plug 'dag/vim-fish'                     " fish syntax
 Plug 'pangloss/vim-javascript'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'zah/nim.vim'
+Plug 'cespare/vim-toml'
 Plug 'chrisbra/csv.vim'
 Plug 'Vimjas/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'igordejanovic/textx.vim'
@@ -343,6 +345,7 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 autocmd! BufWritePost * Neomake
+
 let g:neomake_list_height = 10
 let g:neomake_c_enabled_makers = ['clang']
 let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
@@ -350,7 +353,7 @@ let g:neomake_rust_enabled_makers = []
 let g:neomake_haskell_enabled_makers = []
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402,E704,E301,E306,E741']
-let g:neomake_python_mypy_args = ['--strict', '--implicit-optional', '--incremental']
+let g:neomake_python_mypy_args = ['--strict', '--implicit-optional']
 let g:neomake_tex_enabled_makers = ['chktex']
 let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
 let g:neomake_open_list = 1
