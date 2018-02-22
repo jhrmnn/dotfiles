@@ -1,0 +1,5 @@
+#!/bin/bash
+
+fish -c 'source ~/.config/fish/init.fish'
+mkdir -p ~/.vim && ln -fns ../.config/nvim/autoload ~/.vim/autoload
+vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'

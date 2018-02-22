@@ -148,6 +148,7 @@ end
 if !filereadable($HOME . "/.config/nvim/autoload/plug.vim")
     call system("curl -fkLo ~/.config/nvim/autoload/plug.vim --create-dirs "
                 \ . "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
+    autocmd VimEnter * silent! PlugInstall
 endif
 
 filetype off
@@ -352,7 +353,7 @@ let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
 let g:neomake_rust_enabled_makers = []
 let g:neomake_haskell_enabled_makers = []
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--ignore=E501,E226,E402,E704,E301,E306,E741']
+let g:neomake_python_flake8_args = ['--ignore=E501,E402']
 let g:neomake_python_mypy_args = ['--strict', '--implicit-optional']
 let g:neomake_tex_enabled_makers = ['chktex']
 let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
