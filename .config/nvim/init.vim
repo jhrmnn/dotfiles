@@ -179,6 +179,7 @@ Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'embear/vim-localvimrc'
 Plug 'rizzatti/dash.vim'
 if v:version >= 704
