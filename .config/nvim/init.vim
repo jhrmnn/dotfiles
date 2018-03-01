@@ -287,12 +287,15 @@ function! s:deoplete_lazy_enable()
     call deoplete#enable()
 endfunction
 
-augroup deoplete_lazy_enable
-    autocmd!
-    autocmd CursorHold * call s:deoplete_lazy_enable()
-    autocmd InsertEnter * call s:deoplete_lazy_enable()
-                \ | silent! doautocmd <nomodeline> deoplete InsertEnter
-augroup END
+
+if has('nvim') || v:version >= 800 && has("python3")
+    augroup deoplete_lazy_enable
+        autocmd!
+        autocmd CursorHold * call s:deoplete_lazy_enable()
+        autocmd InsertEnter * call s:deoplete_lazy_enable()
+                    \ | silent! doautocmd <nomodeline> deoplete InsertEnter
+    augroup END
+endif
 let g:deoplete#omni#input_patterns = {}
 if exists("*deoplete#custom#set")
     call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
