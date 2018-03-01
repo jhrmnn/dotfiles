@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ -n "$PROFILE_SOURCED" ]; then
+    exec fish "$@"
+fi
+exec bash -lc 'exec -l fish'
