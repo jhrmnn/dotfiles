@@ -40,6 +40,7 @@ if has('nvim')
 endif
 
 if !has('nvim') && has('macunix')
+    let g:python3_host_prog = '/usr/local/bin/python3'
     command! -nargs=1 Py py3 <args>
     set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.6/Python
     set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/3.6
@@ -168,6 +169,8 @@ Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
+Plug 'jreybert/vimagit'
+Plug 'rickhowe/diffchar.vim'
 Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
 Plug 'itchyny/lightline.vim'            " fast status line
@@ -182,6 +185,7 @@ Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'embear/vim-localvimrc'
 Plug 'rizzatti/dash.vim'
+Plug 'tpope/vim-db'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
@@ -281,21 +285,7 @@ augroup pencil
     autocmd FileType text call pencil#init()
 augroup END
 
-function! s:deoplete_lazy_enable()
-    autocmd! deoplete_lazy_enable
-    augroup! deoplete_lazy_enable
-    call deoplete#enable()
-endfunction
-
-
-if has('nvim') || v:version >= 800 && has("python3")
-    augroup deoplete_lazy_enable
-        autocmd!
-        autocmd CursorHold * call s:deoplete_lazy_enable()
-        autocmd InsertEnter * call s:deoplete_lazy_enable()
-                    \ | silent! doautocmd <nomodeline> deoplete InsertEnter
-    augroup END
-endif
+let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni#input_patterns = {}
 if exists("*deoplete#custom#set")
     call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
@@ -367,7 +357,7 @@ let g:neomake_fortran_gfortran_args = [
             \ '-fsyntax-only', '-fcheck=all',
             \ '-Wall', '-Wargument-mismatch', '-Wcharacter-truncation',
             \ '-Wextra', '-Wno-tabs', '-Wno-unused-variable',
-            \ '-std=gnu'
+            \ '-std=gnu', '-ffree-line-length-none'
             \ ]
 autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
             \      '--ignore=E501,E226,E402,F401'
