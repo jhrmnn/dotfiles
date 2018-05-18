@@ -39,8 +39,10 @@ if has('nvim')
     set inccommand=split
 endif
 
-if !has('nvim') && has('macunix')
+if has('macunix')
     let g:python3_host_prog = '/usr/local/bin/python3'
+endif
+if !has('nvim') && has('macunix')
     command! -nargs=1 Py py3 <args>
     set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.6/Python
     set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/3.6
