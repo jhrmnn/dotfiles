@@ -3,4 +3,5 @@
 fish -c 'source ~/.config/fish/init.fish'
 mkdir -p ~/.vim && ln -fns ../.config/nvim/autoload ~/.vim/autoload
 mkdir -p ~/.local/share/bash
+mkdir -p ~/.local/share/nvim/sessions
 vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
