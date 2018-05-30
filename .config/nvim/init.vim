@@ -156,7 +156,6 @@ endif
 
 filetype off
 
-set rtp+=/usr/local/opt/fzf
 call plug#begin('~/.local/share/nvim/plugged')
 " sort with :'<,'>sort /^[^\/]*\/\(vim-\)\=/
 
@@ -168,6 +167,11 @@ Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 """ new functionality
 " Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
+if isdirectory('/usr/local/opt/fzf')
+    Plug '/usr/local/opt/fzf'
+else
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+endif
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
