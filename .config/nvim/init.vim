@@ -443,8 +443,10 @@ function! s:buff_line_handler(lines)
     endif
 endfunction
 
+let s:sed = has('macunix') ? 'gsed' : 'sed'
+
 command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
-            \     'source': 'gsed ''/^\!/ d; s/'
+            \     'source': s:sed . ' ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
             \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
             \               . join(tagfiles())
@@ -461,7 +463,7 @@ endfunction
 command! FZFTagsBuffer call fzf#run({
             \     'source': printf('ctags --fortran-kinds=-l -f - --sort=no --excmd=number --language-force=%s %s',
             \                      &filetype, expand('%:S'))
-            \               . ' | gsed ''/^\!/ d; s/'
+            \               . ' | ' . s:sed . ' ''/^\!/ d; s/'
             \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
             \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
             \               . ' | column -t -s ',
