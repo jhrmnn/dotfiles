@@ -41,11 +41,11 @@ endif
 
 if has('macunix')
     let g:python3_host_prog = '/usr/local/bin/python3'
-endif
-if !has('nvim') && has('macunix')
-    command! -nargs=1 Py py3 <args>
-    set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.6/Python
-    set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/3.6
+    if !has('nvim')
+        command! -nargs=1 Py py3 <args>
+        set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.7/Python
+        set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/3.7
+    endif
 endif
 
 let g:loaded_python_provider = 1
@@ -76,6 +76,7 @@ nnoremap <silent> <Leader>q :bprevious<CR>
 nnoremap <silent> <Leader>w :bnext<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>
 nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
+nnoremap <silent> <Leader>a :QFix<CR>
 nnoremap <Leader>, <F10>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim') || has('terminal')
@@ -90,6 +91,17 @@ if has('nvim')
 elseif has('terminal')
     nnoremap <silent> <Leader>1 :terminal<CR>
 endif
+
+command -bang -nargs=? QFix call QFixToggle(<bang>0)
+function! QFixToggle(forced)
+  if exists("g:qfix_win") && a:forced == 0
+    cclose
+    unlet g:qfix_win
+  else
+    copen 10
+    let g:qfix_win = bufnr("$")
+  endif
+endfunction
 
 """ plugin-related
 nnoremap <Leader>mk :Neomake!<CR>
@@ -174,8 +186,8 @@ else
 endif
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
+Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
-Plug 'jreybert/vimagit'
 Plug 'rickhowe/diffchar.vim'
 Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
@@ -190,8 +202,6 @@ Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'embear/vim-localvimrc'
-Plug 'rizzatti/dash.vim'
-Plug 'tpope/vim-db'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
@@ -203,20 +213,11 @@ elseif v:version >= 800 && has("python3")
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 """ filetype-specific
-Plug 'dag/vim-fish'                     " fish syntax
-Plug 'pangloss/vim-javascript'
+Plug 'sheerun/vim-polyglot'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
-Plug 'zah/nim.vim'
-Plug 'cespare/vim-toml'
 Plug 'chrisbra/csv.vim'
-Plug 'Vimjas/vim-python-pep8-indent'     " PEP8 indentation
 Plug 'igordejanovic/textx.vim'
-Plug 'vim-python/python-syntax'         " better highlighting
-Plug 'rust-lang/rust.vim'
-Plug 'othree/html5.vim'
-Plug 'keith/swift.vim'
 Plug 'zchee/deoplete-jedi'
-Plug 'Shougo/neco-vim'
 
 call plug#end()
 
@@ -306,6 +307,13 @@ function g:Multiple_cursors_after()
     let g:deoplete#disable_auto_complete = 0
 endfunction
 
+" let g:ale_lint_delay = 200
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_linters = {
+            \   'python': ['flake8']
+            \ }
+
 let g:lightline = {
 		    \     'active': {
 		    \         'left': [[ 'mode', 'paste' ],
@@ -345,36 +353,43 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-autocmd! BufWritePost * Neomake
+" autocmd! BufWritePost * Neomake
+"
+" let g:neomake_list_height = 10
+" let g:neomake_c_enabled_makers = ['clang']
+" let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
+" let g:neomake_rust_enabled_makers = []
+" let g:neomake_haskell_enabled_makers = []
+" let g:neomake_python_enabled_makers = ['flake8']
+" let g:neomake_python_flake8_args = ['--ignore=E501,E402']
+" let g:neomake_python_mypy_args = ['--strict', '--implicit-optional']
+" let g:neomake_tex_enabled_makers = ['chktex']
+" let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
+" let g:neomake_open_list = 1
+" let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+" let g:neomake_fortran_gfortran_args = [
+"             \ '-fsyntax-only', '-fcheck=all',
+"             \ '-Wall', '-Wargument-mismatch', '-Wcharacter-truncation',
+"             \ '-Wextra', '-Wno-tabs', '-Wno-unused-variable',
+"             \ '-std=gnu', '-ffree-line-length-none'
+"             \ ]
+" autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
+"             \      '--ignore=E501,E226,E402,F401'
+"             \ ]
+" autocmd BufRead,BufNewFile *.pyi let b:neomake_python_flake8_args = [
+"             \      '--ignore=E501,E226,E402,E704,E301,E701,E302'
+"             \ ]
+" autocmd BufRead,BufNewFile __init__.pyi let b:neomake_python_flake8_args = [
+"             \      '--ignore=E501,E226,E402,F401,E704,E301,E701,E302'
+"             \ ]
 
-let g:neomake_list_height = 10
-let g:neomake_c_enabled_makers = ['clang']
-let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
-let g:neomake_rust_enabled_makers = []
-let g:neomake_haskell_enabled_makers = []
-let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--ignore=E501,E402']
-let g:neomake_python_mypy_args = ['--strict', '--implicit-optional']
-let g:neomake_tex_enabled_makers = ['chktex']
-let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
-let g:neomake_open_list = 1
-let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
-let g:neomake_fortran_gfortran_args = [
-            \ '-fsyntax-only', '-fcheck=all',
-            \ '-Wall', '-Wargument-mismatch', '-Wcharacter-truncation',
-            \ '-Wextra', '-Wno-tabs', '-Wno-unused-variable',
-            \ '-std=gnu', '-ffree-line-length-none'
-            \ ]
-autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
-            \      '--ignore=E501,E226,E402,F401'
-            \ ]
-autocmd BufRead,BufNewFile *.pyi let b:neomake_python_flake8_args = [
-            \      '--ignore=E501,E226,E402,E704,E301,E701,E302'
-            \ ]
-autocmd BufRead,BufNewFile __init__.pyi let b:neomake_python_flake8_args = [
-            \      '--ignore=E501,E226,E402,F401,E704,E301,E701,E302'
-            \ ]
-
+" let g:ale_open_list = 1
+" let g:ale_set_loclist = 1
+let g:ale_set_quickfix = 1
+let g:ale_fortran_gcc_executable = 'gfortran'
+let g:ale_fortran_gcc_options = '-Wall -Wargument-mismatch -Wcharacter-truncation ' .
+            \ '-Wextra -Wno-tabs -Wno-unused-variable -std=gnu ' .
+            \ '-ffree-line-length-none -cpp'
 
 """
 """ FZF support
