@@ -9,7 +9,6 @@ export LC_ALL="en_US.UTF-8"
 
 export PATH=~/bin:"$PATH"
 export PATH="$PATH":~/.local/bin
-export PATH="$PATH":~/bin/venv/bin
 
 export XDG_CONFIG_HOME=~/.config
 export XDG_CACHE_HOME=~/.cache
