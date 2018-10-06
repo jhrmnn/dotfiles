@@ -42,6 +42,7 @@ abbr vpip venv/bin/pip
 abbr vjupy venv/bin/jupyter notebook
 abbr vpty venv/bin/ptpython
 abbr vipty venv/bin/ptipython
+abbr knitr r CMD Sweave
 if type -q exa
     abbr ls exa
     abbr ll exa -l

@@ -9,7 +9,6 @@ tags
 *.latexmain
 .csync_journal.db*
 .owncloudsync.log
-.exrc
 .texpadtmp
 *.tpbuild
 .lvimrc
@@ -19,3 +18,6 @@ venv2
 ._*
 .ignore
 .~lock.*
+.python-version
+.dmypy.json
+.mypy_cache/

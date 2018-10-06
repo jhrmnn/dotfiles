@@ -7,17 +7,10 @@ export LANGUAGE="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
-export PATH=~/bin:"$PATH"
-export PATH="$PATH":~/.local/bin
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
 
-export XDG_CONFIG_HOME=~/.config
-export XDG_CACHE_HOME=~/.cache
-export XDG_DATA_HOME=~/.local/share
-
-export JUPYTER_CONFIG_DIR=~/.config/jupyter
-export LESSHISTFILE=~/.cache/lesshst
-export TERMINFO_DIRS=~/.local/share/terminfo:/usr/share/terminfo
-export INPUTRC=~/.config/readline/inputrc
 
 export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
 if which rg &>/dev/null; then
@@ -27,3 +20,12 @@ fi
 if [ -r ~/.profile.local ]; then
     source ~/.profile.local;
 fi
+
+export PATH="$HOME/bin:$PATH"
+
+export TERMINFO_DIRS="/usr/share/terminfo"
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+export LESSHISTFILE="$XDG_DATA_HOME/lesshst"
+export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+export BUNDLE_USER_CACHE="$XDG_CACHE_HOME/bundle"
+export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle"

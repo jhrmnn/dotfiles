@@ -32,7 +32,6 @@ set linebreak
 set nolist
 set updatetime=1000
 if has('persistent_undo')
-    set undodir=$HOME/.local/share/nvim/undo
     set undofile
 endif
 if has('nvim')
@@ -40,7 +39,7 @@ if has('nvim')
 endif
 
 if has('macunix')
-    let g:python3_host_prog = '/usr/local/bin/python3'
+    let g:python3_host_prog = "/opt/neovim-python/bin/python"
     if !has('nvim')
         command! -nargs=1 Py py3 <args>
         set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.7/Python
@@ -76,7 +75,7 @@ nnoremap <silent> <Leader>q :bprevious<CR>
 nnoremap <silent> <Leader>w :bnext<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>
 nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
-nnoremap <silent> <Leader>a :QFix<CR>
+nnoremap <silent> <Leader>a :Loc<CR>
 nnoremap <Leader>, <F10>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim') || has('terminal')
@@ -92,14 +91,14 @@ elseif has('terminal')
     nnoremap <silent> <Leader>1 :terminal<CR>
 endif
 
-command -bang -nargs=? QFix call QFixToggle(<bang>0)
-function! QFixToggle(forced)
-  if exists("g:qfix_win") && a:forced == 0
+command -bang -nargs=? Loc call LocToggle(<bang>0)
+function! LocToggle(forced)
+  if exists("g:loc_win") && a:forced == 0
     cclose
-    unlet g:qfix_win
+    unlet g:loc_win
   else
-    copen 10
-    let g:qfix_win = bufnr("$")
+    lopen 10
+    let g:loc_win = bufnr("$")
   endif
 endfunction
 
@@ -133,8 +132,8 @@ endfunction
 
 function! RestoreSession(name)
     if exists('g:my_vim_from_stdin') | return | endif
-    if filereadable($HOME . '/.local/share/nvim/sessions/' . a:name)
-        execute 'source ~/.local/share/nvim/sessions/' . fnameescape(a:name)
+    if filereadable($XDG_DATA_HOME . '/nvim/sessions/' . a:name)
+        execute 'source ' . $XDG_DATA_HOME . '/nvim/sessions/' . fnameescape(a:name)
     endif
 endfunction
 
@@ -142,7 +141,7 @@ function! SaveSession(name)
     cclose
     lclose
     if exists('g:my_vim_from_stdin') || getcwd() == $HOME | return | endif
-    execute 'mksession! ~/.local/share/nvim/sessions/' . fnameescape(a:name)
+    execute 'mksession! ' . $XDG_DATA_HOME . '/nvim/sessions/' . fnameescape(a:name)
 endfunction
 
 if argc() == 0 && v:version >= 704
@@ -160,15 +159,16 @@ end
 """
 
 " download vim-plug automatically if missing
-if !filereadable($HOME . "/.config/nvim/autoload/plug.vim")
-    call system("curl -fkLo ~/.config/nvim/autoload/plug.vim --create-dirs "
+if !filereadable($XDG_DATA_HOME . "/nvim/site/autoload/plug.vim")
+    call system("curl -fkLo " . $XDG_DATA_HOME
+                \ . "/nvim/site/autoload/plug.vim --create-dirs "
                 \ . "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim")
     autocmd VimEnter * silent! PlugInstall
 endif
 
 filetype off
 
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin($XDG_DATA_HOME . '/nvim/plugged')
 " sort with :'<,'>sort /^[^\/]*\/\(vim-\)\=/
 
 """ colors
@@ -201,7 +201,7 @@ Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'embear/vim-localvimrc'
+" Plug 'embear/vim-localvimrc'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
@@ -214,6 +214,7 @@ elseif v:version >= 800 && has("python3")
 endif
 """ filetype-specific
 Plug 'sheerun/vim-polyglot'
+Plug 'plasticboy/vim-markdown'
 Plug 'chikamichi/mediawiki.vim'         " wiki file format
 Plug 'chrisbra/csv.vim'
 Plug 'igordejanovic/textx.vim'
@@ -259,6 +260,22 @@ augroup file_formats
 augroup END
 
 let g:markdown_fenced_languages = ['python']
+let g:vim_markdown_fenced_languages = ['python=python']
+
+if has('macunix')
+    let g:clipboard = {
+                \   'name': 'macos-clipboard',
+                \   'copy': {
+                \      '+': 'pbcopy',
+                \      '*': 'pbcopy',
+                \    },
+                \   'paste': {
+                \      '+': 'pbpaste',
+                \      '*': 'pbpaste',
+                \   },
+                \   'cache_enabled': 0,
+                \ }
+endif
 
 """
 """ plugin configuration
@@ -267,9 +284,6 @@ let g:markdown_fenced_languages = ['python']
 au FileType rust let b:delimitMate_quotes = "\""
 
 let g:multi_cursor_exit_from_insert_mode = 0
-
-let g:localvimrc_persistent = 2
-let g:localvimrc_persistence_file = $HOME . '/.local/share/nvim/localvimrc_persistent'
 
 let g:bufferline_modified = '❌ '
 let g:bufferline_active_buffer_left = '📝 '
@@ -292,7 +306,8 @@ augroup pencil
     autocmd FileType text call pencil#init()
 augroup END
 
-let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 0
+autocmd InsertEnter * call deoplete#enable()
 let g:deoplete#omni#input_patterns = {}
 if exists("*deoplete#custom#set")
     call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
@@ -308,6 +323,7 @@ function g:Multiple_cursors_after()
 endfunction
 
 " let g:ale_lint_delay = 200
+" let g:ale_set_quickfix = 1
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
@@ -383,9 +399,6 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 "             \      '--ignore=E501,E226,E402,F401,E704,E301,E701,E302'
 "             \ ]
 
-" let g:ale_open_list = 1
-" let g:ale_set_loclist = 1
-let g:ale_set_quickfix = 1
 let g:ale_fortran_gcc_executable = 'gfortran'
 let g:ale_fortran_gcc_options = '-Wall -Wargument-mismatch -Wcharacter-truncation ' .
             \ '-Wextra -Wno-tabs -Wno-unused-variable -std=gnu ' .
@@ -490,3 +503,5 @@ command! FZFTagsBuffer call fzf#run({
 function! s:buffer_tags_sink(line)
     execute join(split(a:line, "\t")[4:], "\t")
 endfunction
+
+set exrc

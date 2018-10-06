@@ -1,5 +1,5 @@
 if status --is-login
-    set -x SHELL (which fish)
+    set -x SHELL fish
 end
 
 if [ -f ~/.config/fish/local.config.fish ]
