@@ -8,10 +8,3 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-[commit]
-	template = /Users/hermann/.stCommitMsg
-[user]
-	name = Jan Hermann
-	email = dev@janhermann.cz
-[core]
-	excludesfile = /Users/hermann/.config/git/ignore

@@ -94,7 +94,7 @@ endif
 command -bang -nargs=? Loc call LocToggle(<bang>0)
 function! LocToggle(forced)
   if exists("g:loc_win") && a:forced == 0
-    cclose
+    lclose
     unlet g:loc_win
   else
     lopen 10
@@ -104,23 +104,18 @@ endfunction
 
 """ plugin-related
 nnoremap <Leader>mk :Neomake!<CR>
-nnoremap <Leader>T :NeomakeSh rg -l "" \| ctags --fortran-kinds=-l -L -<CR>
 xmap ga <Plug>(EasyAlign)
-nnoremap \\ :FZFLinesBuffer<Space>
-nnoremap \ :FZFLinesAll<Space>
-vnoremap \\ y:FZFLinesBuffer<Space><C-R><C-R>"<CR>
-vnoremap \ y:FZFLinesAll<Space><C-R><C-R>"<CR>
-nnoremap <silent> <Leader>p :FZF<CR>
-nnoremap <silent> <Space>f :FZFLinesBuffer<CR>
-nnoremap <silent> <Space>gf :FZFLinesAll<CR>
-nnoremap <silent> <Leader>t :FZFTagsBuffer<CR>
-nnoremap <silent> <Leader>b :call fzf#run({'source': map(range(1, bufnr('$')), 'bufname(v:val)'), 'sink': 'e', 'down': '30%'})<CR>
-nnoremap <silent> <Leader>gt :FZFTags<CR>
+nnoremap \\ :BLines<Space>
+nnoremap \ :Rg<Space>
+nnoremap <silent> <Leader>p :Files<CR>
+nnoremap <silent> <Space>f :BLines<CR>
+nnoremap <silent> <Space>F :Rg<CR>
+nnoremap <silent> <Leader>t :BTags<CR>
+nnoremap <silent> <Leader>T :Tags<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
 vnoremap <silent> <Leader>ldf :Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :Goyo<CR>
-nnoremap <leader>? :Dash<Space>
-vnoremap <leader>? y:Dash<Space><C-R><C-R>"<CR>
 
 """
 """ session management
@@ -184,6 +179,7 @@ if isdirectory('/usr/local/opt/fzf')
 else
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 endif
+Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'w0rp/ale'
@@ -281,6 +277,8 @@ endif
 """ plugin configuration
 """
 
+let g:polyglot_disabled = ['latex']
+
 au FileType rust let b:delimitMate_quotes = "\""
 
 let g:multi_cursor_exit_from_insert_mode = 0
@@ -290,8 +288,10 @@ let g:bufferline_active_buffer_left = '📝 '
 let g:bufferline_active_buffer_right = ''
 let g:bufferline_rotate = 1
 
-" let g:sneak#label = 1
-" let g:sneak#target_labels = "jfkdlsaireohgutwnvmcJFKDLSAIREOHGUTWNVMC"
+let g:sneak#label = 1
+let g:sneak#s_next = 1
+let g:sneak#use_ic_scs = 1
+
 highlight SneakStreakMask ctermfg=8
 highlight clear SneakStreakStatusLine
 
@@ -306,7 +306,6 @@ augroup pencil
     autocmd FileType text call pencil#init()
 augroup END
 
-let g:deoplete#enable_at_startup = 0
 autocmd InsertEnter * call deoplete#enable()
 let g:deoplete#omni#input_patterns = {}
 if exists("*deoplete#custom#set")
@@ -322,13 +321,8 @@ function g:Multiple_cursors_after()
     let g:deoplete#disable_auto_complete = 0
 endfunction
 
-" let g:ale_lint_delay = 200
-" let g:ale_set_quickfix = 1
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = {
-            \   'python': ['flake8']
-            \ }
 
 let g:lightline = {
 		    \     'active': {
@@ -344,6 +338,7 @@ let g:lightline = {
             \     'separator': {'left': '', 'right': ''},
             \     'subseparator': {'left': '', 'right': ''}
             \ }
+
 function! LightLineModified()
     return &modified ? '❌' : &readonly ? '🔒' : '✅'
 endfunction
@@ -369,139 +364,6 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-" autocmd! BufWritePost * Neomake
-"
-" let g:neomake_list_height = 10
-" let g:neomake_c_enabled_makers = ['clang']
-" let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-pedantic']
-" let g:neomake_rust_enabled_makers = []
-" let g:neomake_haskell_enabled_makers = []
-" let g:neomake_python_enabled_makers = ['flake8']
-" let g:neomake_python_flake8_args = ['--ignore=E501,E402']
-" let g:neomake_python_mypy_args = ['--strict', '--implicit-optional']
-" let g:neomake_tex_enabled_makers = ['chktex']
-" let g:neomake_tex_chktex_args = ['--nowarn', '29', '--nowarn', '3']
-" let g:neomake_open_list = 1
-" let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
-" let g:neomake_fortran_gfortran_args = [
-"             \ '-fsyntax-only', '-fcheck=all',
-"             \ '-Wall', '-Wargument-mismatch', '-Wcharacter-truncation',
-"             \ '-Wextra', '-Wno-tabs', '-Wno-unused-variable',
-"             \ '-std=gnu', '-ffree-line-length-none'
-"             \ ]
-" autocmd BufRead,BufNewFile __init__.py* let b:neomake_python_flake8_args = [
-"             \      '--ignore=E501,E226,E402,F401'
-"             \ ]
-" autocmd BufRead,BufNewFile *.pyi let b:neomake_python_flake8_args = [
-"             \      '--ignore=E501,E226,E402,E704,E301,E701,E302'
-"             \ ]
-" autocmd BufRead,BufNewFile __init__.pyi let b:neomake_python_flake8_args = [
-"             \      '--ignore=E501,E226,E402,F401,E704,E301,E701,E302'
-"             \ ]
-
-let g:ale_fortran_gcc_executable = 'gfortran'
-let g:ale_fortran_gcc_options = '-Wall -Wargument-mismatch -Wcharacter-truncation ' .
-            \ '-Wextra -Wno-tabs -Wno-unused-variable -std=gnu ' .
-            \ '-ffree-line-length-none -cpp'
-
-"""
-""" FZF support
-"""
-
-command! -nargs=? FZFLinesAll call fzf#run({
-            \     'source': printf('rg -i --no-heading --column --color ansi ' .
-            \                      '-g "!*.nb" -g "!*.ipynb" -g "!*.vesta" "%s"',
-            \           escape(empty('<args>') ? '^(?=.)' : '<args>', '"\-')),
-            \     'sink*': function('s:line_handler'),
-            \     'options': '--multi --ansi --delimiter :  --tac --prompt "rg>" '
-            \           . '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,4.. --color'
-            \ })
-
-function! s:rg_to_qf(line)
-    let parts = split(a:line, ':')
-    return {
-                \     'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0],
-                \     'lnum': parts[1],
-                \     'col': parts[2],
-                \     'text': join(parts[3:], ':')
-                \ }
-endfunction
-
-function! s:line_handler(lines)
-    if len(a:lines) == 0
-        return
-    endif
-    let list = map(a:lines, 's:rg_to_qf(v:val)')
-    exec 'edit' list[0].filename
-    exec list[0].lnum
-    exec 'normal!' list[0].col . '|zz'
-    if len(a:lines) > 1
-        call setqflist(reverse(list))
-        botright copen
-    endif
-endfunction
-
-command! -nargs=? FZFLinesBuffer call fzf#run({
-            \     'source': printf('rg --no-heading --column --color ansi "%s" %s',
-            \                      escape(empty('<args>') ? '^(?=.)' : '<args>', '"\'),
-            \                      bufname("")),
-            \     'sink*': function('s:buff_line_handler'),
-            \     'options': '--multi --ansi --delimiter :  --tac --prompt "rg>" '
-            \           . '--bind ctrl-a:select-all,ctrl-d:deselect-all -n 1,3.. --color'
-            \ })
-
-function! s:buff_rg_to_qf(line)
-    let parts = split(a:line, ':')
-    return {
-                \     'filename': bufname(""),
-                \     'lnum': parts[0], 'col': parts[1], 'text': join(parts[2:], ':')
-                \ }
-endfunction
-
-function! s:buff_line_handler(lines)
-    if len(a:lines) == 0
-        return
-    endif
-    let list = map(a:lines, 's:buff_rg_to_qf(v:val)')
-    exec list[0].lnum
-    exec 'normal!' list[0].col . '|zz'
-    if len(a:lines) > 1
-        call setqflist(reverse(list))
-        botright copen
-    endif
-endfunction
-
-let s:sed = has('macunix') ? 'gsed' : 'sed'
-
-command! -bar FZFTags if !empty(tagfiles()) | call fzf#run({
-            \     'source': s:sed . ' ''/^\!/ d; s/'
-            \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
-            \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
-            \               . join(tagfiles())
-            \               . ' | column -t -s ',
-            \     'options': '-d "\t" -n 2 --with-nth 1..4',
-            \     'sink': function('s:tags_sink'),
-            \ }) | else | call neomake#Sh('rg -l "" | ctags --fortran-kinds=-l -L -') | FZFTags | endif
-
-function! s:tags_sink(line)
-    execute "edit" split(a:line, "\t")[2]
-    execute join(split(a:line, "\t")[4:], "\t")
-endfunction
-
-command! FZFTagsBuffer call fzf#run({
-            \     'source': printf('ctags --fortran-kinds=-l -f - --sort=no --excmd=number --language-force=%s %s',
-            \                      &filetype, expand('%:S'))
-            \               . ' | ' . s:sed . ' ''/^\!/ d; s/'
-            \               . '^\([^\t]*\)\t\([^\t]*\)\t\(.*;"\)\t\(\w\)\t\?\([^\t]*\)\?/'
-            \               . '\4\t\1\x1e\t\2\x1e\t\5\t\3/'' '
-            \               . ' | column -t -s ',
-            \     'sink': function('s:buffer_tags_sink'),
-            \     'options': '-d "\t" -n 2 --with-nth 1,2 --tiebreak=index +s',
-            \     'left': '40'
-            \ })
-
-function! s:buffer_tags_sink(line)
-    execute join(split(a:line, "\t")[4:], "\t")
-endfunction
+let g:fzf_tags_command = 'rg -l "" \| ctags --fortran-kinds=-l -L -<CR>'
 
 set exrc
