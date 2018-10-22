@@ -1,4 +1,3 @@
-set background=dark
 set clipboard=unnamed
 set diffopt+=iwhite
 set exrc
@@ -6,15 +5,11 @@ set secure
 set gdefault
 set hidden
 set ignorecase
-set modelines=10
 set noerrorbells
-set nofoldenable
 set noshowmode
-set pastetoggle=<F10>
-set scrolloff=1
+set scrolloff=20
 set shortmess+=s
 set showmatch
-set conceallevel=0
 set smartcase
 set smartindent
 set tabstop=4
@@ -23,14 +18,10 @@ set softtabstop=4
 set expandtab
 set shiftround
 set timeoutlen=500
-set completeopt-=preview
 set title
-set titleold=
 set visualbell
 set wrap
 set linebreak
-set nolist
-set updatetime=1000
 if has('persistent_undo')
     set undofile
 endif
@@ -38,6 +29,8 @@ if has('nvim')
     set inccommand=split
 endif
 
+let g:loaded_python_provider = 1
+let g:python3_host_skip_check = 1
 if has('macunix')
     let g:python3_host_prog = "/opt/neovim-python/bin/python"
     if !has('nvim')
@@ -47,16 +40,29 @@ if has('macunix')
     endif
 endif
 
-let g:loaded_python_provider = 1
-let g:python3_host_skip_check = 1
-let python_highlight_all = 1
-let g:pyindent_open_paren = '&sw'
-let g:tex_flavor = 'latex'
-
 augroup restore_cursor
     autocmd!
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe ":normal! g`\"" | endif
 augroup END
+
+let python_highlight_all = 1
+let g:pyindent_open_paren = '&sw'
+let g:tex_flavor = 'latex'
+
+if has('macunix')
+    let g:clipboard = {
+                \   'name': 'macos-clipboard',
+                \   'copy': {
+                \      '+': 'pbcopy',
+                \      '*': 'pbcopy',
+                \    },
+                \   'paste': {
+                \      '+': 'pbpaste',
+                \      '*': 'pbpaste',
+                \   },
+                \   'cache_enabled': 0,
+                \ }
+endif
 
 """
 """ bindings
@@ -107,6 +113,7 @@ nnoremap <Leader>mk :Neomake!<CR>
 xmap ga <Plug>(EasyAlign)
 nnoremap \\ :BLines<Space>
 nnoremap \ :Rg<Space>
+nnoremap <silent> <Leader>h :Helptags<CR>
 nnoremap <silent> <Leader>p :Files<CR>
 nnoremap <silent> <Space>f :BLines<CR>
 nnoremap <silent> <Space>F :Rg<CR>
@@ -164,7 +171,6 @@ endif
 filetype off
 
 call plug#begin($XDG_DATA_HOME . '/nvim/plugged')
-" sort with :'<,'>sort /^[^\/]*\/\(vim-\)\=/
 
 """ colors
 Plug 'chriskempson/base16-vim' " base16 for gvim
@@ -172,6 +178,7 @@ Plug 'chriskempson/base16-vim' " base16 for gvim
 Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
 Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
+Plug 'rickhowe/diffchar.vim'
 """ new functionality
 " Plug 'Raimondi/delimitMate'             " automatic closing of paired delimiters
 if isdirectory('/usr/local/opt/fzf')
@@ -184,7 +191,6 @@ Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
-Plug 'rickhowe/diffchar.vim'
 Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
 Plug 'itchyny/lightline.vim'            " fast status line
@@ -196,8 +202,6 @@ Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
-Plug 'christoomey/vim-tmux-navigator'
-" Plug 'embear/vim-localvimrc'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
@@ -223,18 +227,6 @@ try
 catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
 endtry
 
-function s:fix_highlighting()
-    " use terminanal background, not theme backround
-    hi Normal ctermbg=none
-    hi clear SpellBad
-    hi clear SpellCap
-    hi clear SpellLocal
-    hi SpellBad ctermbg=1
-    hi SpellCap ctermbg=1
-    hi SpellLocal ctermbg=1
-endfunction
-call <SID>fix_highlighting()
-
 filetype plugin indent on
 
 """ filetype autocommands
@@ -255,29 +247,13 @@ augroup file_formats
     autocmd BufEnter term://* startinsert
 augroup END
 
-let g:markdown_fenced_languages = ['python']
-let g:vim_markdown_fenced_languages = ['python=python']
-
-if has('macunix')
-    let g:clipboard = {
-                \   'name': 'macos-clipboard',
-                \   'copy': {
-                \      '+': 'pbcopy',
-                \      '*': 'pbcopy',
-                \    },
-                \   'paste': {
-                \      '+': 'pbpaste',
-                \      '*': 'pbpaste',
-                \   },
-                \   'cache_enabled': 0,
-                \ }
-endif
-
 """
 """ plugin configuration
 """
 
 let g:polyglot_disabled = ['latex']
+
+let g:vim_markdown_fenced_languages = ['python=python']
 
 au FileType rust let b:delimitMate_quotes = "\""
 
@@ -346,6 +322,18 @@ endfunction
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
 
+function s:fix_highlighting()
+    " use terminanal background, not theme backround
+    hi Normal ctermbg=none
+    hi clear SpellBad
+    hi clear SpellCap
+    hi clear SpellLocal
+    hi SpellBad ctermbg=1
+    hi SpellCap ctermbg=1
+    hi SpellLocal ctermbg=1
+endfunction
+call <SID>fix_highlighting()
+
 let g:goyo_width = 81
 let g:goyo_height = '100%'
 
@@ -365,5 +353,3 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 let g:fzf_tags_command = 'rg -l "" \| ctags --fortran-kinds=-l -L -<CR>'
-
-set exrc
