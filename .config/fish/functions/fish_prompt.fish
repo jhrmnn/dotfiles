@@ -1,4 +1,7 @@
 function fish_prompt
+    if [ -n "$POETRY_ACTIVE" ]
+        echo -ns "(" (basename $VIRTUAL_ENV) ") "
+    end
     set -l _status $status
     # switch $fish_bind_mode
     #     case visual
