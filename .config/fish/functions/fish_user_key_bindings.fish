@@ -26,7 +26,7 @@ function fzf_dir_history
         end
         commandline -f repaint
     end
-end function
+end
 
 bind -M insert \cc cancel_commandline
 bind -m insert \cc cancel_commandline
