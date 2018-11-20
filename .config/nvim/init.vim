@@ -4,29 +4,30 @@
 " ===========
 
 set clipboard=unnamed
+set completeopt-=preview
 set diffopt+=iwhite
+set expandtab
 set exrc
-set secure
+set foldlevelstart=99
 set gdefault
 set hidden
 set ignorecase
+set linebreak
 set noerrorbells
 set noshowmode
+set secure
+set shiftround
+set shiftwidth=4
 set shortmess+=s
 set showmatch
 set smartcase
 set smartindent
-set tabstop=4
-set shiftwidth=4
 set softtabstop=4
-set expandtab
-set shiftround
+set tabstop=4
 set timeoutlen=500
-set completeopt-=preview
 set title
 set visualbell
 set wrap
-set linebreak
 if has('persistent_undo')
     set undofile
 endif
@@ -53,45 +54,12 @@ augroup END
 
 if has('macunix')
     let g:clipboard = {
-                \   'name': 'macos-clipboard',
-                \   'copy': {
-                \      '+': 'pbcopy',
-                \      '*': 'pbcopy',
-                \    },
-                \   'paste': {
-                \      '+': 'pbpaste',
-                \      '*': 'pbpaste',
-                \   },
-                \   'cache_enabled': 0,
+                \ 'name': 'macos-clipboard',
+                \ 'copy': {'+': 'pbcopy', '*': 'pbcopy'},
+                \ 'paste': {'+': 'pbpaste', '*': 'pbpaste'},
+                \ 'cache_enabled': 0,
                 \ }
 endif
-
-" }}}
-
-" File-type settings {{{
-" ==================
-
-let python_highlight_all = 1
-let g:pyindent_open_paren = '&sw'
-let g:tex_flavor = 'latex'
-
-augroup file_types
-    autocmd!
-    autocmd FileType fortran setl cc=80,133 tw=80 com=:!>,:! fo=croq nu
-    autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
-    autocmd BufRead,BufNewFile *.pyi setl ft=python
-    autocmd FileType javascript setl cc=80 nu
-    autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
-    autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
-    autocmd FileType rst setl spell
-    autocmd FileType mediawiki setl tw=80 spell ci pi sts=0 sw=4 ts=4
-    autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
-    autocmd FileType yaml setl ts=2 sw=2 sts=2
-    autocmd FileType javascript setl ts=2 sw=2 sts=2
-    autocmd BufRead,BufNewFile *.pyx setl ft=cython
-    autocmd BufEnter /private/tmp/crontab.* setl bkc=yes
-    autocmd BufEnter term://* startinsert
-augroup END
 
 " }}}
 
@@ -111,9 +79,7 @@ nnoremap <silent> <Leader>d :Bdelete<CR>
 nnoremap <silent> <Leader>q :bprevious<CR>
 nnoremap <silent> <Leader>w :bnext<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>
-nnoremap <silent> <Leader>` :cclose<CR>:lclose<CR>:pclose<CR>
 nnoremap <silent> <Leader>a :Loc<CR>
-nnoremap <Leader>, <F10>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim') || has('terminal')
     tnoremap <C-X> <C-\><C-n>
@@ -129,14 +95,15 @@ elseif has('terminal')
 endif
 
 command -bang -nargs=? Loc call LocToggle(<bang>0)
+
 function! LocToggle(forced)
-  if exists("g:loc_win") && a:forced == 0
-    lclose
-    unlet g:loc_win
-  else
-    lopen 10
-    let g:loc_win = bufnr("$")
-  endif
+    if exists("g:loc_win") && a:forced == 0
+        lclose
+        unlet g:loc_win
+    else
+        lopen 10
+        let g:loc_win = bufnr("$")
+    endif
 endfunction
 " }}}
 
@@ -215,7 +182,6 @@ Plug 'chriskempson/base16-vim' " base16 for gvim
 
 " Vanilla Vim enhancements {{{
 " ------------------------
-Plug 'Shougo/vimproc', {'do': 'make'}   " subprocess api for plugins
 Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
 Plug 'rickhowe/diffchar.vim'
 Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
@@ -224,12 +190,11 @@ Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
 " New functionality {{{
 " -----------------
 Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
-" Plug 'airblade/vim-gitgutter'           " git changes
 Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
 Plug 'itchyny/lightline.vim'            " fast status line
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim'                 " useful commands using FZF
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
-Plug 'junegunn/limelight.vim'
+Plug 'junegunn/limelight.vim'           " dim surrounding paragrpahs
 Plug 'junegunn/vim-easy-align'          " tables in vim
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'mhinz/vim-signify'                " git changes
@@ -237,11 +202,11 @@ Plug 'neomake/neomake'                  " async make/linters
 Plug 'reedes/vim-pencil'                " handle single-line paragraphs
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
-Plug 'tommcdo/vim-exchange'
+Plug 'tommcdo/vim-exchange'             " exchange motion: cx
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
 Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
-Plug 'wellle/targets.vim'
+Plug 'wellle/targets.vim'               " extra motion targets
 Plug 'w0rp/ale'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
@@ -276,16 +241,37 @@ filetype plugin indent on
 
 " }}}
 
+" File-type settings {{{
+" ==================
+
+let python_highlight_all = 1
+let g:pyindent_open_paren = '&sw'
+let g:tex_flavor = 'latex'
+
+augroup file_types
+    autocmd!
+    autocmd BufEnter /private/tmp/crontab.* setl bkc=yes
+    autocmd BufEnter term://* startinsert
+    autocmd BufRead,BufNewFile *.pyi setl ft=python
+    autocmd BufRead,BufNewFile *.pyx setl ft=cython
+    autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
+    autocmd FileType fortran setl cc=80,133 tw=80 com=:!>,:! fo=croq nu
+    autocmd FileType javascript setl cc=80 nu
+    autocmd FileType javascript setl ts=2 sw=2 sts=2
+    autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
+    autocmd FileType mediawiki setl tw=80 spell ci pi sts=0 sw=4 ts=4
+    autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
+    autocmd FileType rst setl spell | syn spell toplevel
+    autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
+    autocmd FileType yaml setl ts=2 sw=2 sts=2
+augroup END
+
+" }}}
+
 " Color theme {{{
 " ===========
 
-try
-    colorscheme base16-default-dark
-catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
-endtry
-
-function s:fix_highlighting()
-    " use terminanal background, not theme backround
+function! s:patch_base16_colors()
     hi Normal ctermbg=none
     hi clear SpellBad
     hi clear SpellCap
@@ -295,7 +281,12 @@ function s:fix_highlighting()
     hi SpellLocal ctermbg=1
 endfunction
 
-call <SID>fix_highlighting()
+autocmd! ColorScheme base16-default-dark call s:patch_base16_colors()
+
+try
+    colorscheme base16-default-dark
+catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
+endtry
 
 " }}}
 
@@ -317,6 +308,11 @@ let g:vim_markdown_fenced_languages = ['python=python']
 let g:fzf_tags_command = 'rg -l "" | ctags --fortran-kinds=-l -L -'
 " }}}
 
+" Limelight {{{
+" ---------
+let g:limelight_conceal_ctermfg = 13
+" }}}
+
 " ALE {{{
 " ---
 let g:ale_lint_on_text_changed = 'normal'
@@ -329,7 +325,6 @@ let g:ale_fix_on_save = 1
 let g:signify_vcs_list = ['git', 'hg']
 let g:signify_sign_add = '∙'
 let g:signify_sign_change = '∙'
-let g:signify_realtime = 1
 " }}}
 
 " Bufferline {{{
@@ -391,22 +386,21 @@ highlight clear SneakStreakStatusLine
 " ------
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#conceallevel = 0
-augroup pencil
+augroup pencil_types
     autocmd!
     autocmd FileType markdown call pencil#init()
     autocmd FileType mediawiki call pencil#init()
     autocmd FileType tex call pencil#init()
     autocmd FileType rst call pencil#init()
-    autocmd FileType rst syn spell toplevel
     autocmd FileType text call pencil#init()
 augroup END
 " }}}
 
 " Deoplete {{{
 " --------
-autocmd InsertEnter * call deoplete#enable()
-let g:deoplete#omni#input_patterns = {}
 if exists("*deoplete#custom#set")
+    let g:deoplete#omni#input_patterns = {}
+    autocmd InsertEnter * call deoplete#enable()
     call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
 endif
 if !exists('g:deoplete#omni_patterns')
@@ -416,8 +410,7 @@ endif
 
 " Goyo {{{
 " ----
-let g:goyo_width = 81
-let g:goyo_height = '100%'
+let g:goyo_width = 75
 
 function! s:goyo_enter()
     set noshowcmd
@@ -431,17 +424,14 @@ function! s:goyo_leave()
     set showcmd
     set scrolloff=1
     Limelight!
-    call s:fix_highlighting()
     call bufferline#init_echo()
 endfunction
 
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-" }}}
-
-" Limelight {{{
-" ---------
-let g:limelight_conceal_ctermfg = 13
+augroup pencil
+    autocmd!
+    autocmd User GoyoEnter nested call <SID>goyo_enter()
+    autocmd User GoyoLeave nested call <SID>goyo_leave()
+augroup END
 " }}}
 
 " }}}
