@@ -5,7 +5,7 @@ if command ls --color=none >/dev/null ^&1
 else
     function ls --wraps=ls
         command ls -hG $argv
-    end function
+    end
 end
 
 

@@ -119,6 +119,7 @@ nnoremap <silent> <Space>f :BLines<CR>
 nnoremap <silent> <Space>F :Rg<CR>
 nnoremap <silent> <Leader>t :BTags<CR>
 nnoremap <silent> <Leader>T :Tags<CR>
+nnoremap <silent> <Leader>gt :execute 'silent !' . g:fzf_tags_command<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 vnoremap <silent> <Leader>ldf :Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
@@ -255,7 +256,7 @@ augroup file_types
     autocmd BufRead,BufNewFile *.pyi setl ft=python
     autocmd BufRead,BufNewFile *.pyx setl ft=cython
     autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
-    autocmd FileType fortran setl cc=80,133 tw=80 com=:!>,:! fo=croq nu
+    autocmd FileType fortran setl cc=80,133 tw=80 com=:!!,:!>,:! fo=croq nu
     autocmd FileType javascript setl cc=80 nu
     autocmd FileType javascript setl ts=2 sw=2 sts=2
     autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
@@ -398,14 +399,10 @@ augroup END
 
 " Deoplete {{{
 " --------
-if exists("*deoplete#custom#set")
-    let g:deoplete#omni#input_patterns = {}
-    autocmd InsertEnter * call deoplete#enable()
-    call deoplete#custom#set('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
-endif
-if !exists('g:deoplete#omni_patterns')
-    let g:deoplete#omni_patterns = {}
-endif
+let g:deoplete#omni#input_patterns = {}
+autocmd InsertEnter * call deoplete#enable()
+call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
+let g:deoplete#omni_patterns = {}
 " }}}
 
 " Goyo {{{
@@ -414,7 +411,7 @@ let g:goyo_width = 75
 
 function! s:goyo_enter()
     set noshowcmd
-    set scrolloff=999
+    set scrolloff=10
     Limelight
     au! bufferline
     au! CursorHold * echo ''

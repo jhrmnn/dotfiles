@@ -3,12 +3,6 @@ function fish_prompt
     if [ -n "$POETRY_ACTIVE" ]
         echo -ns "(" (basename $VIRTUAL_ENV) ") "
     end
-    # switch $fish_bind_mode
-    #     case visual
-    #         echo -ns "🐠"
-    #     case '*'
-    #         echo -ns "🐟"
-    # end
     echo -ns (date "+%H:%M")
     set_color normal
     if [ -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2" ]
@@ -35,5 +29,11 @@ function fish_prompt
     if [ $_status -ne 0 ]
         echo -ns (set_color -o red) " [$_status]"
     end
-    echo -ns (set_color normal) " "
+    echo -ns (set_color normal)
+    switch $fish_bind_mode
+        case visual
+            echo -ns " 🐠 "
+        case '*'
+            echo -ns " 🐟 "
+    end
 end
