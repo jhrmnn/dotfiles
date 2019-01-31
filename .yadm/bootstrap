@@ -1,7 +1,8 @@
 #!/bin/bash
 
 fish -c 'source ~/.config/fish/init.fish'
-mkdir -p ~/.vim && ln -fns ../.local/share/nvim/site/autoload ~/.vim/autoload
-mkdir -p ~/.local/share/bash
-mkdir -p ~/.local/share/nvim/sessions
+mkdir -p ~/.vim && ln -fns $XDG_CACHE_HOME/nvim/site/autoload ~/.vim/autoload
+mkdir -p $XDG_CACHE_HOME/bash
+mkdir -p $XDG_CACHE_HOME/nvim/sessions
+mkdir -p $XDG_CACHE_HOME/ssh
 vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'

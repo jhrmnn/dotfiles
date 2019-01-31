@@ -11,6 +11,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
+export FZF_DEFAULT_COMMAND='rg -l ""'
 export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
 
 if [ -r ~/.profile.local ]; then
