@@ -212,10 +212,10 @@ Plug 'w0rp/ale'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
-if isdirectory('/usr/local/opt/fzf')
-    Plug '/usr/local/opt/fzf'
-else
+if empty($FZF_HOME)
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+else
+    Plug $FZF_HOME
 endif
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
