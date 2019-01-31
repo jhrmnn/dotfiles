@@ -1,7 +1,9 @@
 [include]
     path = "~/.config/git/config##"
-[credential]
-	helper = osxkeychain
+[user]
+	name = Jan Hermann
+	email = dev@janhermann.cz
+	signingkey = 774DBDF2
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

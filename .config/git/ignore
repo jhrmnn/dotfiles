@@ -16,7 +16,6 @@ venv
 venv2
 *.add.spl
 ._*
-.ignore
 .~lock.*
 .python-version
 .dmypy.json
