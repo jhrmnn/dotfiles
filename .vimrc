@@ -24,4 +24,6 @@ set wildmenu
 set guifont=Hack:h13
 set linespace=2
 
+let &undodir = $XDG_DATA_HOME . '/nvim/undo'
+
 source ~/.config/nvim/init.vim

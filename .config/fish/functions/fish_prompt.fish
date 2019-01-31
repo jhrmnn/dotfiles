@@ -16,11 +16,9 @@ function fish_prompt
     if [ $PROMPT_PREFIX ]
         echo -ns (set_color -o magenta) " {$PROMPT_PREFIX}"
     end
-    if [ -z "$SSH_CLIENT" -a -z "$SSH_CLIENT2" ]
-        if git rev-parse --is-inside-work-tree >/dev/null ^&1
-            set_color -o (if git status --porcelain | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
-            __fish_git_prompt
-        end
+    if git rev-parse --is-inside-work-tree >/dev/null ^&1
+        set_color -o (if git status --porcelain | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
+        __fish_git_prompt
     end
     set -l njobs (jobs | wc -l | string trim)
     if [ $njobs -gt 0 ]
