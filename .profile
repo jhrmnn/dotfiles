@@ -20,7 +20,6 @@ fi
 
 export PATH="$HOME/bin:$PATH"
 
-export TERMINFO_DIRS="/usr/share/terminfo"
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export LESSHISTFILE="$XDG_DATA_HOME/lesshst"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
