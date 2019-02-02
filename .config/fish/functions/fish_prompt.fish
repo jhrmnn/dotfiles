@@ -9,7 +9,7 @@ function fish_prompt
         if not set -q __fish_prompt_hostname
             set -g __fish_prompt_hostname (prompt_hostname)
         end
-        echo -ns " " (set_color brred) $USER (set_color brcyan) "@" (set_color brred) $__fish_prompt_hostname
+        echo -ns " " "@" (set_color brred) $__fish_prompt_hostname
     end
 
     if [ -n "$PROMPT_PATH_ROOT" ]
