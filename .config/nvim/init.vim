@@ -209,6 +209,7 @@ Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'wellle/targets.vim'               " extra motion targets
 Plug 'w0rp/ale'
+Plug 'christoomey/vim-tmux-navigator'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
