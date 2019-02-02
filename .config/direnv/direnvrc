@@ -1,0 +1,6 @@
+python_project () {
+    export VIRTUAL_ENV=$1
+    export PROMPT_PATH_ROOT=$PWD
+    export PROMPT_RIGHT=$(basename $VIRTUAL_ENV)
+    PATH_add "$VIRTUAL_ENV/bin"
+}
