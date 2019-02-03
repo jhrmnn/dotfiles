@@ -17,6 +17,5 @@ venv2
 *.add.spl
 ._*
 .~lock.*
-.python-version
 .dmypy.json
 .mypy_cache/

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo -e "\033[0mNo color"
+echo -e "\033[30mBLACK\t\033[90mBRIGHT_BLACK"
+echo -e "\033[31mRED\t\033[91mBRIGHT_RED"
+echo -e "\033[32mGREEN\t\033[92mBRIGHT_GREEN"
+echo -e "\033[33mYELLOW\t\033[93mBRIGHT_YELLOW"
+echo -e "\033[34mBLUE\t\033[94mBRIGHT_BLUE"
+echo -e "\033[35mPURPLE\t\033[95mBRIGHT_PURPLE"
+echo -e "\033[36mCYAN\t\033[96mBRIGHT_CYAN"
+echo -e "\033[37mWHITE\t\033[97mBRIGHT_WHITE"
