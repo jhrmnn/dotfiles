@@ -15,7 +15,7 @@ export FZF_DEFAULT_COMMAND='rg -l ""'
 export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
 
 if [ -r ~/.profile.local ]; then
-    source ~/.profile.local;
+    . ~/.profile.local
 fi
 
 export PATH="$HOME/bin:$PATH"
