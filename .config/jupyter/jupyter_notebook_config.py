@@ -18,5 +18,5 @@ def post_save(model, os_path, contents_manager):
 c = get_config()
 c.FileContentsManager.post_save_hook = post_save
 c.NotebookApp.iopub_data_rate_limit = 10000000
-c.NotebookApp.token = ''
-c.NotebookApp.browser = 'open -a Firefox %s'
+if sys.platform == 'darwin':
+    c.NotebookApp.browser = 'open -a Firefox %s'
