@@ -4,3 +4,8 @@ python_project () {
     export PROMPT_RIGHT=$(basename $VIRTUAL_ENV)
     PATH_add "$VIRTUAL_ENV/bin"
 }
+
+conda_project () {
+    python_project $1
+    export CONDA_DEFAULT_ENV=$PROMPT_RIGHT
+}
