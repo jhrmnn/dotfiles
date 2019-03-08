@@ -1,0 +1,6 @@
+[include]
+    path = "~/.config/git/config##"
+[user]
+	name = Jan Hermann
+	email = dev@jan.hermann.name
+	signingkey = 774DBDF2
