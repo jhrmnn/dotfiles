@@ -124,6 +124,8 @@ nnoremap <silent> <Leader>b :Buffers<CR>
 vnoremap <silent> <Leader>ldf :Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :Goyo<CR>
+nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap <silent> <Leader>gw :Gwrite \| tabclose<CR>
 " }}}
 
 " }}}

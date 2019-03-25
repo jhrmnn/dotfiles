@@ -30,3 +30,5 @@ export WORKON_HOME="$XDG_CACHE_HOME/virtualenvs"
 export CONDA_ENVS_PATH="$XDG_CACHE_HOME/conda/envs"
 export CONDA_PKGS_DIRS="$XDG_CACHE_HOME/conda/pkgs"
 export CONDA_BLD_PATH="$XDG_CACHE_HOME/conda/conda-bld"
+
+export _MY_PATH=$PATH
