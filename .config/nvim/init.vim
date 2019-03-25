@@ -183,33 +183,33 @@ Plug 'chriskempson/base16-vim' " base16 for gvim
 
 " Vanilla Vim enhancements {{{
 " ------------------------
-Plug 'moll/vim-bbye'                    " layout stays as is on buffer close
-Plug 'rickhowe/diffchar.vim'
-Plug 'tpope/vim-repeat'                 " makes . accessible to plugins
+Plug 'moll/vim-bbye'                    " make layout stay as is on buffer close
+Plug 'rickhowe/diffchar.vim'            " bring word diff to vim
+Plug 'tpope/vim-repeat'                 " make . accessible to plugins
 " }}}
 
 " New functionality {{{
 " -----------------
 Plug 'AndrewRadev/linediff.vim'         " diffing ranges, key: <Leader>ldf
-Plug 'bronson/vim-trailing-whitespace'  " trailing whitespace
+Plug 'bronson/vim-trailing-whitespace'  " highlight trailing whitespace
+Plug 'christoomey/vim-tmux-navigator'   " easy switching between vim and tmux panes
 Plug 'itchyny/lightline.vim'            " fast status line
 Plug 'junegunn/fzf.vim'                 " useful commands using FZF
 Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
 Plug 'junegunn/limelight.vim'           " dim surrounding paragrpahs
-Plug 'junegunn/vim-easy-align'          " tables in vim
+Plug 'junegunn/vim-easy-align'          " easy table alignment
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'mhinz/vim-signify'                " git changes
-Plug 'neomake/neomake'                  " async make/linters
+Plug 'neomake/neomake'                  " async make
 Plug 'reedes/vim-pencil'                " handle single-line paragraphs
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
 Plug 'tommcdo/vim-exchange'             " exchange motion: cx
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
-Plug 'tpope/vim-fugitive'               " heavy plugin, provides :Gblame
+Plug 'tpope/vim-fugitive'               " git functionality
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
+Plug 'w0rp/ale'                         " linters
 Plug 'wellle/targets.vim'               " extra motion targets
-Plug 'w0rp/ale'
-Plug 'christoomey/vim-tmux-navigator'
 if v:version >= 704
     Plug 'bling/vim-bufferline'         " show open buffers in command line
 endif
@@ -229,12 +229,15 @@ endif
 
 " File-type plugins {{{
 " -----------------
-Plug 'chikamichi/mediawiki.vim'         " wiki file format
+Plug 'chikamichi/mediawiki.vim'
 Plug 'chrisbra/csv.vim'
 Plug 'igordejanovic/textx.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'sheerun/vim-polyglot'
 Plug 'zchee/deoplete-jedi'
+Plug 'chrisbra/csv.vim'
+Plug 'lervag/vimtex'
+Plug 'KeitaNakamura/tex-conceal.vim'
 " }}}
 
 call plug#end()
@@ -249,6 +252,7 @@ filetype plugin indent on
 let python_highlight_all = 1
 let g:pyindent_open_paren = '&sw'
 let g:tex_flavor = 'latex'
+let g:tex_conceal = 'abdmg'
 
 augroup file_types
     autocmd!
@@ -322,6 +326,11 @@ let g:ale_lint_on_insert_leave = 1
 let g:ale_fix_on_save = 1
 " }}}
 
+" Vimtex {{{
+" ---
+let g:vimtex_compiler_enabled = 0
+" }}}
+
 " Signify {{{
 " -------
 let g:signify_vcs_list = ['git', 'hg']
@@ -387,7 +396,7 @@ highlight clear SneakStreakStatusLine
 " Pencil {{{
 " ------
 let g:pencil#wrapModeDefault = 'soft'
-let g:pencil#conceallevel = 0
+let g:pencil#conceallevel = 2
 augroup pencil_types
     autocmd!
     autocmd FileType markdown call pencil#init()
@@ -400,11 +409,11 @@ augroup END
 
 " Deoplete {{{
 " --------
-let g:deoplete#omni#input_patterns = {}
-autocmd InsertEnter * call deoplete#enable()
+call deoplete#custom#var('omni', 'input_patterns', {
+            \ 'tex': g:vimtex#re#deoplete,
+            \ })
 call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
-let g:deoplete#omni_patterns = {}
-" }}}
+autocmd InsertEnter * call deoplete#enable()
 
 " Goyo {{{
 " ----
