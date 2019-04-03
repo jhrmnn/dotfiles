@@ -202,6 +202,7 @@ Plug 'junegunn/limelight.vim'           " dim surrounding paragrpahs
 Plug 'junegunn/vim-easy-align'          " easy table alignment
 Plug 'justinmk/vim-sneak'               " additional movements
 Plug 'mhinz/vim-signify'                " git changes
+Plug 'michaeljsmith/vim-indent-object'  " indentation-based targets
 Plug 'neomake/neomake'                  " async make
 Plug 'reedes/vim-pencil'                " handle single-line paragraphs
 Plug 'terryma/vim-expand-region'        " expand selection key: +/_

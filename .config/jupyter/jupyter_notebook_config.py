@@ -1,17 +1,26 @@
 import os
-import sys
 import subprocess
+import sys
 
 
 def post_save(model, os_path, contents_manager):
-    if model['type'] != 'notebook':
+    if model["type"] != "notebook":
         return
-    if model['name'] == 'Untitled.ipynb':
+    if model["name"] == "Untitled.ipynb":
         return
     d, filename = os.path.split(os_path)
     subprocess.check_call(
-        [sys.executable, '-m', 'jupyter', 'nbconvert', '--to', 'script', filename],
-        cwd=d
+        [
+            sys.executable,
+            "-m",
+            "jupyter",
+            "nbconvert",
+            "--to",
+            "python",
+            filename,
+            "--TemplateExporter.exclude_input_prompt=True",
+        ],
+        cwd=d,
     )
 
 
