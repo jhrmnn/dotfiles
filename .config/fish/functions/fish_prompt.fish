@@ -5,11 +5,17 @@ function fish_prompt
 
     echo -ns (date "+%H:%M")
 
+    if [ -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2" -o -z "$PROMPT_NO_USER" ]
+        echo -ns " "
+    end
+    if [ -z "$PROMPT_NO_USER" ]
+        echo -ns (set_color brred) $USER
+    end
     if [ -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2" ]
         if not set -q __fish_prompt_hostname
             set -g __fish_prompt_hostname (prompt_hostname)
         end
-        echo -ns " " (set_color brcyan) "@" (set_color brred) $__fish_prompt_hostname
+        echo (set_color brcyan) "@" (set_color brred) $__fish_prompt_hostname
     end
 
     if [ -n "$PROMPT_PATH_ROOT" ]
