@@ -201,6 +201,7 @@ Plug 'junegunn/goyo.vim'                " distraction-free vim, key: <Leader>go
 Plug 'junegunn/limelight.vim'           " dim surrounding paragrpahs
 Plug 'junegunn/vim-easy-align'          " easy table alignment
 Plug 'justinmk/vim-sneak'               " additional movements
+Plug 'ludovicchabant/vim-gutentags'     " ctags management
 Plug 'mhinz/vim-signify'                " git changes
 Plug 'michaeljsmith/vim-indent-object'  " indentation-based targets
 Plug 'neomake/neomake'                  " async make
@@ -315,6 +316,11 @@ let g:vim_markdown_fenced_languages = ['python=python']
 " FZF {{{
 " ---
 let g:fzf_tags_command = 'rg -l "" | ctags --fortran-kinds=-l -L -'
+" }}}
+
+" Gutentags {{{
+" ---
+let g:gutentags_ctags_extra_args = ['--fortran-kinds=-l']
 " }}}
 
 " Limelight {{{
