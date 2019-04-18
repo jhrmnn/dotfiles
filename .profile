@@ -32,3 +32,7 @@ export CONDA_PKGS_DIRS="$XDG_CACHE_HOME/conda/pkgs"
 export CONDA_BLD_PATH="$XDG_CACHE_HOME/conda/conda-bld"
 
 export _MY_PATH=$PATH
+
+export KR_SKIP_SSH_CONFIG=1
+
+export GPG_TTY=$(tty)

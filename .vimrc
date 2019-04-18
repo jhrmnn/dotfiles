@@ -11,7 +11,6 @@ set hlsearch
 set incsearch
 set laststatus=2
 set listchars="tab:> ,trail:-,nbsp:+"
-set nocompatible
 set nrformats="bin,hex"
 set sessionoptions-=options
 set smarttab
