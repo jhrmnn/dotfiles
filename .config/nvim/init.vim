@@ -320,6 +320,8 @@ let g:fzf_tags_command = 'rg -l "" | ctags --fortran-kinds=-l -L -'
 
 " Gutentags {{{
 " ---
+let g:gutentags_generate_on_missing = 0
+let g:gutentags_generate_on_new = 0
 let g:gutentags_ctags_extra_args = ['--fortran-kinds=-l']
 " }}}
 
@@ -405,7 +407,7 @@ highlight clear SneakStreakStatusLine
 " Pencil {{{
 " ------
 let g:pencil#wrapModeDefault = 'soft'
-let g:pencil#conceallevel = 2
+let g:pencil#conceallevel = 0
 augroup pencil_types
     autocmd!
     autocmd FileType markdown call pencil#init()
