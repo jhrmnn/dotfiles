@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import argparse
+from pathlib import Path
+import os
+from hashlib import md5
+import urllib.parse
+import sys
+import subprocess as sp
+from configparser import ConfigParser
+
+
+def share(prefix, host, sshname, path=None, lang=None, name=None, home=False):
+    if name:
+        target = name
+    else:
+        if path:
+            target = Path(path.name)
+            if lang:
+                target = target.with_suffix(target.suffix + '.md')
+        else:
+            target = Path('snippet.md') if lang else Path('note.txt')
+    stem = md5(os.urandom(128)).hexdigest()[:10]
+    stem = Path(stem[0:2])/stem[2:10]
+    link_dir = prefix/stem
+    link_path = link_dir/target
+    target_path = target if home else link_path
+    if not path:
+        stdin = sys.stdin.buffer.read()
+    sp.run(['ssh', sshname, f'mkdir -p {link_dir}'])
+    if path and not lang:
+        sp.run(['rsync', '--info=progress2', str(path), f'{sshname}:"{target_path}"'])
+    else:
+        if lang:
+            source = path.read_text() if path else stdin.decode()
+            payload = f'```{lang}\n{source}\n```'
+        else:
+            payload = stdin
+        sp.run(['ssh', sshname, f'cat >"{target_path}"'], input=payload)
+    if home:
+        sp.run(['ssh', sshname, f'ln -s ~/"{target}" "{link_path}"'])
+    url = host + str(urllib.parse.quote(str(stem/target)))
+    if target.suffix == '.ipynb':
+        url = 'http://nbviewer.jupyter.org/urls/' + url.split('//')[1]
+    return url
+
+
+def parse_cli():
+    parser = argparse.ArgumentParser()
+    arg = parser.add_argument
+    arg('path', type=Path, metavar='FILE', nargs='?', help='file to share')
+    arg('-o', '--open', dest='preview', action='store_true', help='open the shared link')
+    arg('-l', '--lang', help='language to highlight')
+    arg('-n', '--name', type=Path, help='shared name of file')
+    arg('-H', '--home', action='store_true', help='store in home dir, symlink')
+    args = parser.parse_args()
+    return args
+
+
+def main():
+    config = ConfigParser()
+    config.read([Path('~/.config/simplecloud/config.ini').expanduser()])
+    kwargs = vars(parse_cli())
+    preview = kwargs.pop('preview')
+    url = share(**config['simplecloud'], **kwargs)
+    if sys.stdout.isatty():
+        print(url)
+    else:
+        sys.stdout.write(url)
+    if preview:
+        sp.call(['open', url])
+
+
+if __name__ == '__main__':
+    main()
