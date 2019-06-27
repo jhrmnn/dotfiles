@@ -5,7 +5,7 @@
 
 set clipboard=unnamed
 set completeopt-=preview
-set diffopt+=iwhite
+set diffopt=vertical
 set expandtab
 set exrc
 set foldlevelstart=99
@@ -111,6 +111,8 @@ endfunction
 " ---------------
 nnoremap <Leader>mk :Neomake!<CR>
 xmap ga <Plug>(EasyAlign)
+nnoremap <silent> <Leader>gs :Gina status<CR>
+nnoremap <silent> <Leader>gc :Gina commit<CR>
 nnoremap \\ :BLines<Space>
 nnoremap \ :Rg<Space>
 nnoremap <silent> <Leader>h :Helptags<CR>
@@ -212,7 +214,7 @@ Plug 'terryma/vim-expand-region'        " expand selection key: +/_
 Plug 'terryma/vim-multiple-cursors'     " key: <C-N> <C-X> <C-P>
 Plug 'tommcdo/vim-exchange'             " exchange motion: cx
 Plug 'tomtom/tcomment_vim'              " automatic comments, key: gc
-Plug 'tpope/vim-fugitive'               " git functionality
+Plug 'lambdalisue/gina.vim'
 Plug 'tpope/vim-surround'               " key: cs, ds, ys
 Plug 'w0rp/ale'                         " linters
 Plug 'wellle/targets.vim'               " extra motion targets
@@ -432,6 +434,7 @@ call deoplete#custom#var('omni', 'input_patterns', {
             \ })
 call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
 autocmd InsertEnter * call deoplete#enable()
+" }}}
 
 " Goyo {{{
 " ----
@@ -459,4 +462,14 @@ augroup pencil
 augroup END
 " }}}
 
+" Gina {{{
+" ----
+call gina#custom#command#option('status', '--opener', 'split')
+call gina#custom#mapping#nmap('status', 'DD', '<Plug>(gina-diff-split)')
+call gina#custom#command#alias('log', 'plog')
+call gina#custom#command#option('plog', '--graph')
+call gina#custom#command#option('plog', '--pretty', 'format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset')
+call gina#custom#command#option('plog', '--abbrev-commit')
+call gina#custom#command#option('plog', '--stat')
 " }}}
+"
