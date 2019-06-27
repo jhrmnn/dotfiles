@@ -30,8 +30,8 @@ function fish_prompt
     set mypwd (string replace -r '^!!($|/)' (set_color -o green)"$root_symbol"(set_color -o cyan)'$1' $mypwd)
     echo -ns " " (set_color -o cyan) $mypwd
 
-    if begin [ -z "$NO_GIT_PROMPT" ]; or string match -rv "$NO_GIT_PROMPT" $PWD >/dev/null; end && git rev-parse --is-inside-work-tree >/dev/null ^&1
-        set_color -o (if git status --porcelain | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
+    if begin [ -z "$NO_GIT_PROMPT" ]; or string match -rv "$NO_GIT_PROMPT" $PWD >/dev/null; end
+        set_color -o (if git status --porcelain ^/dev/null | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
         __fish_git_prompt
     end
 
