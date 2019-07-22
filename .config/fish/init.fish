@@ -25,6 +25,9 @@ set -U fish_pager_color_description bryellow
 set -U fish_pager_color_prefix blue
 set -U fish_pager_color_progress cyan
 
+set -Ux NNN_USE_EDITOR 1
+set -Ux NNN_CONTEXT_COLORS '4231'
+
 set -eU fish_user_abbreviations
 abbr vi vim
 abbr pty ptpython

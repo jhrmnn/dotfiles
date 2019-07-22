@@ -1,0 +1,1 @@
+packadd deoplete-jedi
