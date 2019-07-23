@@ -26,11 +26,9 @@ set softtabstop=4
 set tabstop=4
 set timeoutlen=500
 set title
+set undofile
 set visualbell
 set wrap
-if has('persistent_undo')
-    set undofile
-endif
 if has('nvim')
     set inccommand=split
 endif
@@ -40,8 +38,9 @@ endif
 " Basics {{{
 " ======
 
-if filereadable($XDG_CONFIG_HOME . '/nvim/local.init.vim')
-    execute 'source ' . $XDG_CONFIG_HOME . '/nvim/local.init.vim'
+let s:local_init = expand('<sfile>:h') . '/local.init.vim'
+if filereadable(s:local_init)
+    execute 'source ' . s:local_init
 endif
 
 let g:loaded_python_provider = 1

@@ -2,14 +2,17 @@
 
 " Plugin management {{{
 " =================
+
 if !has('nvim')
   packadd nvim-yarp
   packadd vim-hug-neovim-rpc
 endif
+
 " }}}
 
 " Plugin mappings {{{
 " ---------------
+nnoremap <silent> <Leader>d :Bdelete<CR>
 nnoremap <Leader>mk :Neomake!<CR>
 xmap ga <Plug>(EasyAlign)
 nnoremap <silent> <Leader>gs :Gina status<CR>
@@ -25,15 +28,22 @@ nnoremap <silent> <Leader>t :BTags<CR>
 nnoremap <silent> <Leader>T :Tags<CR>
 nnoremap <silent> <Leader>gt :execute 'silent !' . g:fzf_tags_command<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
-vnoremap <silent> <Leader>ldf :Linediff<CR>
+vnoremap <silent> <Leader>ldf :packadd linediff.vim \| Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
-nnoremap <silent> <Leader>go :Goyo<CR>
+nnoremap <silent> <Leader>go :packadd goyo.vim \| packadd limelight.vim \| Goyo<CR>
 nnoremap <silent> <Leader>gd :Gdiff<CR>
 nnoremap <silent> <Leader>gw :Gwrite \| tabclose<CR>
 " }}}
 
 " Plugin configuration {{{
 " ====================
+
+" Minpac {{{
+" ------
+command PackUpdate call myminpac#init() | call minpac#update()
+command PackClean call myminpac#init() | call minpac#clean()
+command PackStatus call myminpac#init() | call minpac#status()
+" }}}
 
 " Polyglot {{{
 " --------
