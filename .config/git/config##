@@ -17,12 +17,18 @@
 [http]
     postBuffer = 524288000
 [diff]
-    algorithm = minimal
+    algorithm = patience
     compactionHeuristic = true
 	tool = vimdiff
+    trustExitCode = yes
 [merge]
+    tool = vimdiff
 	conflictstyle = diff3
+[mergetool]
+    prompt = false
 [gpg]
 	program = krgpg
 [tag]
 	forceSignAnnotated = true
+[advice]
+    detachedHead = false

@@ -5,7 +5,7 @@
 
 set clipboard=unnamed
 set completeopt-=preview
-set diffopt=vertical
+set diffopt+=vertical,algorithm:patience
 set expandtab
 set exrc
 set foldlevelstart=99
