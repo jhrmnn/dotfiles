@@ -1,5 +1,23 @@
 " vim: set foldmethod=marker foldlevel=0:
 
+augroup file_types
+    autocmd!
+    autocmd BufEnter /private/tmp/crontab.* setl bkc=yes
+    autocmd BufEnter term://* startinsert
+    autocmd BufRead,BufNewFile *.pyi setl ft=python
+    autocmd BufRead,BufNewFile *.pyx setl ft=cython
+    autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
+    autocmd FileType fortran setl cc=80,133 tw=80 com=:!!,:!>,:! fo=croq nu
+    autocmd FileType javascript setl cc=80 nu
+    autocmd FileType javascript setl ts=2 sw=2 sts=2
+    autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
+    autocmd FileType mediawiki setl tw=80 spell ci pi sts=0 sw=4 ts=4
+    autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
+    autocmd FileType rst setl spell | syn spell toplevel
+    autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
+    autocmd FileType yaml setl ts=2 sw=2 sts=2
+augroup END
+
 " Plugin management {{{
 " =================
 
@@ -203,6 +221,15 @@ call gina#custom#command#option('plog', '--graph')
 call gina#custom#command#option('plog', '--pretty', 'format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset')
 call gina#custom#command#option('plog', '--abbrev-commit')
 call gina#custom#command#option('plog', '--stat')
+" }}}
+
+" Vimtex {{{
+" ----
+let g:vimtex_compiler_enabled = 0
+
+call deoplete#custom#var('omni', 'input_patterns', {
+            \ 'tex': g:vimtex#re#deoplete,
+            \ })
 " }}}
 
 " }}}

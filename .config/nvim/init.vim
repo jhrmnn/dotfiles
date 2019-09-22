@@ -146,24 +146,6 @@ let g:pyindent_open_paren = '&sw'
 let g:tex_flavor = 'latex'
 let g:tex_conceal = 'abdmg'
 
-augroup file_types
-    autocmd!
-    autocmd BufEnter /private/tmp/crontab.* setl bkc=yes
-    autocmd BufEnter term://* startinsert
-    autocmd BufRead,BufNewFile *.pyi setl ft=python
-    autocmd BufRead,BufNewFile *.pyx setl ft=cython
-    autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
-    autocmd FileType fortran setl cc=80,133 tw=80 com=:!!,:!>,:! fo=croq nu
-    autocmd FileType javascript setl cc=80 nu
-    autocmd FileType javascript setl ts=2 sw=2 sts=2
-    autocmd FileType markdown setl tw=80 spell ci pi sts=0 sw=4 ts=4
-    autocmd FileType mediawiki setl tw=80 spell ci pi sts=0 sw=4 ts=4
-    autocmd FileType python setl nosi cc=80 tw=80 fo=croq nu cino+="(0"
-    autocmd FileType rst setl spell | syn spell toplevel
-    autocmd FileType tex setl tw=80 ts=2 sw=2 sts=2 spell
-    autocmd FileType yaml setl ts=2 sw=2 sts=2
-augroup END
-
 " }}}
 
 " Color theme {{{
@@ -186,11 +168,4 @@ try
 catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
 endtry
 
-" }}}
-
-" Runtime path {{{
-" ============
-if !empty($FZF_HOME)
-    set runtimepath+=$FZF_HOME
-endif
 " }}}

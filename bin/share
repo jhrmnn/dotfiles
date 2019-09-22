@@ -32,7 +32,7 @@ def share(prefix, host, sshname, path=None, lang=None, name=None, home=False):
     else:
         if lang:
             source = path.read_text() if path else stdin.decode()
-            payload = f'```{lang}\n{source}\n```'
+            payload = f'```{lang}\n{source}\n```'.encode()
         else:
             payload = stdin
         sp.run(['ssh', sshname, f'cat >"{target_path}"'], input=payload)

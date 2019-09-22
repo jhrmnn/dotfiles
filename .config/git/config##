@@ -11,9 +11,12 @@
     date = short
 [core]
 	excludesfile = ~/.config/git/ignore
+[fetch]
+    prune = yes
+    pruneTags = yes
 [alias]
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
-    plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --stat
+    plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [http]
     postBuffer = 524288000
 [diff]

@@ -53,13 +53,13 @@ call minpac#add('roxma/vim-hug-neovim-rpc', {'type': 'opt'})
 " File-type plugins {{{
 " -----------------
 call minpac#add('sheerun/vim-polyglot')
-call minpac#add('chikamichi/mediawiki.vim', {'type': 'opt'})
-call minpac#add('chrisbra/csv.vim', {'type': 'opt'})
-call minpac#add('igordejanovic/textx.vim', {'type': 'opt'})
-call minpac#add('plasticboy/vim-markdown', {'type': 'opt'})
-call minpac#add('zchee/deoplete-jedi', {'type': 'opt'})
-call minpac#add('lervag/vimtex', {'type': 'opt'})
-call minpac#add('KeitaNakamura/tex-conceal.vim', {'type': 'opt'})
+call minpac#add('lervag/vimtex')
+call minpac#add('KeitaNakamura/tex-conceal.vim')
+call minpac#add('zchee/deoplete-jedi')
+call minpac#add('plasticboy/vim-markdown')
+call minpac#add('chikamichi/mediawiki.vim')
+call minpac#add('chrisbra/csv.vim')
+call minpac#add('igordejanovic/textx.vim')
 " }}}
 
 function myminpac#init()
