@@ -26,7 +26,7 @@ call minpac#add('itchyny/lightline.vim')            " fast status line
 call minpac#add('junegunn/fzf.vim')                 " useful commands using FZF
 call minpac#add('junegunn/goyo.vim', {'type': 'opt'})  " distraction-free vim, key: <Leader>go
 call minpac#add('junegunn/limelight.vim', {'type': 'opt'})  " dim surrounding paragrpahs
-call minpac#add('junegunn/vim-easy-align', {'type': 'opt'})  " easy table alignment
+call minpac#add('junegunn/vim-easy-align')  " easy table alignment
 call minpac#add('justinmk/vim-sneak', {'type': 'opt'})  " additional movements
 call minpac#add('ludovicchabant/vim-gutentags')     " ctags management
 call minpac#add('luochen1990/rainbow')              " colored parentheses
