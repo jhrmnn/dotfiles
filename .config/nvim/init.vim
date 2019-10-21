@@ -77,6 +77,8 @@ nnoremap <silent> <Leader>q :bprevious<CR>
 nnoremap <silent> <Leader>w :bnext<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>
 nnoremap <silent> <Leader>a :Loc<CR>
+vnoremap <silent> <Leader>< :diffput<CR>
+vnoremap <silent> <Leader>> :diffget<CR>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 if has('nvim') || has('terminal')
     tnoremap <C-X> <C-\><C-n>
