@@ -56,13 +56,6 @@ nnoremap <silent> <Leader>gw :Gwrite \| tabclose<CR>
 " Plugin configuration {{{
 " ====================
 
-" Minpac {{{
-" ------
-command PackUpdate call myminpac#init() | call minpac#update()
-command PackClean call myminpac#init() | call minpac#clean()
-command PackStatus call myminpac#init() | call minpac#status()
-" }}}
-
 " Polyglot {{{
 " --------
 let g:polyglot_disabled = ['latex']

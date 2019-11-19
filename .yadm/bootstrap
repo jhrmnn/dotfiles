@@ -5,4 +5,3 @@ fish -c 'source ~/.config/fish/init.fish'
 mkdir -p "$XDG_CACHE_HOME"/bash
 mkdir -p "$XDG_CACHE_HOME"/nvim/sessions
 mkdir -p "$XDG_CACHE_HOME"/ssh
-git clone https://github.com/k-takata/minpac.git "$XDG_DATA_HOME"/nvim/site/pack/minpac/opt/minpac
