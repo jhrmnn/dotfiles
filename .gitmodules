@@ -10,9 +10,6 @@
 [submodule "opt/linediff.vim"]
 	path = opt/linediff.vim
 	url = https://github.com/AndrewRadev/linediff.vim.git
-[submodule "opt/minpac"]
-	path = opt/minpac
-	url = https://github.com/k-takata/minpac.git
 [submodule "opt/neomake"]
 	path = opt/neomake
 	url = https://github.com/neomake/neomake.git
