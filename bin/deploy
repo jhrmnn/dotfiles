@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import hashlib
+import sys
+import tarfile
+import subprocess as sp
+from pathlib import Path
+from tempfile import NamedTemporaryFile
+from argparse import ArgumentParser
+from string import Template
+
+from typing import Union, List, Set, Tuple, Callable, Any, Dict, IO
+import os  # noqa
+
+_Path = Union['os.PathLike[str]', str]
+
+
+def git_rsync(src: _Path, tgt: _Path, flags: List[str]) -> None:
+    src = str(src)
+    tgt = str(tgt)
+    dirs: Set[Path] = set()
+    files = []
+    cmd = ['git', 'ls-files', '--recurse-submodules']
+    path: bytes
+    for path in sp.check_output(cmd, cwd=src).split():
+        files.append(path)
+        dirs.update(Path(path.decode()).parents)
+    files.extend(f'{path}\n'.encode() for path in dirs)
+    args = ['rsync', *flags, src + '/', tgt + '/']
+    sp.run(args, input=b'\n'.join(files), check=True)
+
+
+def save_diff(diffdir: Path, name: str, diff: str) -> None:
+    f: IO[str]
+    with NamedTemporaryFile('w') as f:
+        f.write(diff)
+        f.flush()
+        archive = f'{name}.diff.tar.gz'
+        with tarfile.open(str(diffdir/archive), 'w|gz') as archfile:
+            archfile.add(f.name, 'diff')
+    print(f'Saved diff to {archive}.')
+
+
+def get_diff(mainline: str) -> Tuple[str, str]:
+    diff: str = sp.check_output(['git', 'diff', mainline]).decode()
+    difftext = f'master: {mainline}\n'
+    if diff.strip():
+        difftext += diff
+        sha = hashlib.sha1(difftext.encode()).hexdigest()
+        return sha, difftext
+    else:
+        return mainline, difftext
+
+
+def notify(title: str, msg: str) -> None:
+    sp.check_call(['terminal-notifier', '-message', msg, '-title', title])
+
+
+def deploy(name: str, dest: Union[str, Path], cmd: str,
+           include: List[str] = None, exclude: List[str] = None,
+           diffdir: Union[str, Path] = None, prebuild: str = None,
+           postbuild: str = None,
+           presync: Callable[[Callable[[str, str], None]], None] = None,
+           host: str = None, profile: str = None, dry: bool = False) -> None:
+    dest = Path(dest)
+    diffdir = Path(diffdir).expanduser() if diffdir else None
+    rsync_flags: List[str] = [
+        '-ai',
+        '--delete-excluded',
+        '--include-from=-',
+        *('--include=' + patt for patt in include or []),
+        *('--filter=P ' + patt for patt in exclude or []),
+        '--exclude=*'
+    ]
+    if dry:
+        rsync_flags.append('-n')
+    branch: str = sp.check_output(
+        ['git', 'rev-parse', '--abbrev-ref', 'HEAD']
+    ).decode().strip()
+    mainline: str = sp.check_output(
+        ['git', 'merge-base', 'HEAD', 'origin/master']
+    ).decode().strip()
+    if profile:
+        branch = f'{branch}:{profile}'
+    sha, diff = get_diff(mainline)
+    mainline, sha = mainline[:7], sha[:7]
+    if sha != mainline:
+        print(f'Got diff {sha} of {branch} with respect to {mainline} (master).')
+    else:
+        print(f'On mainline {mainline} (master).')
+    if diffdir:
+        save_diff(diffdir, f'{name}-{sha}', diff)
+    prefix = f'branches/{branch}'
+    if host:
+        sp.check_call(['ssh', host, ':'])
+        print(f'Syncing {branch} to {host}...')
+        if presync:
+            presync(
+                lambda src, tgt: git_rsync(src, f'{host}:{tgt}', rsync_flags)
+            )
+        sp.check_call(['ssh', host, f'mkdir -p {dest/prefix}'])
+        git_rsync('.', f'{host}:{dest/prefix}', rsync_flags)
+    else:
+        dest = Path(sp.check_output(f'echo "{dest}"', shell=True).decode().strip())
+        (dest/prefix).mkdir(exist_ok=True)
+        git_rsync('.', dest/prefix, rsync_flags)
+    if dry:
+        return
+    build_lines = ['set -e', f'pushd {dest}']
+    if prebuild:
+        build_lines.extend(["echo 'Running prebuild hook...'", prebuild])
+    build_lines.extend([
+        f'pushd {prefix}',
+        f"echo 'Building with `{cmd}`...'",
+        cmd,
+        f'popd',
+    ])
+    if postbuild:
+        build_lines.extend(["echo 'Running postbuild hook...'", postbuild])
+    build_script = Template('\n'.join(build_lines)).safe_substitute(
+        PREFIX=prefix, SHA=sha, BRANCH=branch,
+    )
+    msg = f'Finished compiling {name} at {sha}'
+    if host:
+        print(f'Connecting to {host} to make {sha} from {branch}...')
+        sp.run(['ssh', '-t', host, build_script], check=True)
+        msg += f' on {host}'
+    else:
+        sp.check_call(build_script, shell=True)
+    notify(name, msg)
+
+
+def main(**cli_args: Any) -> None:
+    sys.path.append('.')
+    import deploy_conf as conf  # type: ignore
+    deploy(**{
+        **{k: v for k, v in vars(conf).items() if not k.startswith('_')},
+        **{k: v for k, v in cli_args.items() if v is not None}
+    })
+
+
+def parse_cli() -> Dict[str, Any]:
+    parser = ArgumentParser(add_help=False)
+    arg = parser.add_argument
+    arg('-h', '--host')
+    arg('-p', '--profile')
+    arg('-n', '--dry', action='store_true')
+    arg('cmd', nargs='?', metavar='CMD')
+    return vars(parser.parse_args())
+
+
+if __name__ == '__main__':
+    main(**parse_cli())
