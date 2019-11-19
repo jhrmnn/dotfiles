@@ -5,3 +5,5 @@ fish -c 'source ~/.config/fish/init.fish'
 mkdir -p "$XDG_CACHE_HOME"/bash
 mkdir -p "$XDG_CACHE_HOME"/nvim/sessions
 mkdir -p "$XDG_CACHE_HOME"/ssh
+yadm worktree add -q "$XDG_DATA_HOME"/nvim/site/pack/default vimpack
+git -C "$XDG_DATA_HOME"/nvim/site/pack/default submodule update --init
