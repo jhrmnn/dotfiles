@@ -38,11 +38,11 @@ endif
 " Basics {{{
 " ======
 
-let s:local_init = expand('<sfile>:h') . '/local.init.vim'
-if filereadable(s:local_init)
-    execute 'source ' . s:local_init
-endif
-
+{% if yadm.os == "Darwin" %}
+let g:python3_host_prog = "/opt/pynvim/bin/python"
+{% else %}
+let g:python3_host_prog = $HOME . "/opt/pynvim/bin/python"
+{% endif %}
 let g:loaded_python_provider = 1
 let g:python3_host_skip_check = 1
 

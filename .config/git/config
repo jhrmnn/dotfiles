@@ -1,6 +1,6 @@
 [user]
-	name = Jan Hermann
-	email = dev@jan.hermann.name
+    name = Jan Hermann
+    email = dev@jan.hermann.name
 [pull]
     rebase = true
 [rebase]
@@ -11,7 +11,7 @@
 [blame]
     date = short
 [core]
-	excludesfile = ~/.config/git/ignore
+    excludesfile = ~/.config/git/ignore
 [fetch]
     prune = yes
     pruneTags = yes
@@ -23,16 +23,16 @@
 [diff]
     algorithm = patience
     compactionHeuristic = true
-	tool = vimdiff
+    tool = vimdiff
     trustExitCode = yes
 [merge]
     tool = vimdiff
-	conflictstyle = diff3
+    conflictstyle = diff3
 [mergetool]
     prompt = false
 [gpg]
-	program = krgpg
+    program = krgpg
 [tag]
-	forceSignAnnotated = true
+    forceSignAnnotated = true
 [advice]
     detachedHead = false

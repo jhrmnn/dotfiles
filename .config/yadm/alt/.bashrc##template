@@ -5,6 +5,10 @@ fi
 
 [ -s ~/.bashrc.local ] && source ~/.bashrc.local
 
+{% if yadm.os == "Linux" %}
+[[ `ps -o comm= $PPID` =~ ^(sshd|kitty|mosh-server)$ ]] && exec -l fish
+{% endif %}
+
 set -o vi
 shopt -s checkwinsize
 shopt -s histappend

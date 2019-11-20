@@ -1,6 +1,0 @@
-[include]
-    path = "~/.config/yadm/alt/.config/git/config##default"
-[user]
-	name = Jan Hermann
-	email = dev@jan.hermann.name
-	signingkey = 774DBDF2
