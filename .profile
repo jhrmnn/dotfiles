@@ -18,7 +18,7 @@ else
     export XDG_DATA_HOME="$HOME/.local/share"
 fi
 
-if [ command -v nvim >/dev/null ]; then
+if command -v nvim >/dev/null; then
     export EDITOR=nvim
 fi
 

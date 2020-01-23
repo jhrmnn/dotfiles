@@ -48,7 +48,7 @@ else
     alias ls="ls -hG"
 fi
 
-if [ command -v nvim >/dev/null ]; then
+if command -v nvim >/dev/null; then
     alias vim="nvim"
 fi
 
