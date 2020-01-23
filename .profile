@@ -25,14 +25,16 @@ export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
 
 if [ "$OS_NAME" = "Darwin" ]; then
     export HOMEBREW_PREFIX="/usr/local"
-else
+elif [ -e $HOME/.linuxbrew ]; then
     export HOMEBREW_PREFIX=$(realpath $HOME/.linuxbrew)
 fi
-export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
-export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
-export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
-export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
-export INFOPATH="$HOMEBREW_PREFIX/share/info${INFOPATH+:$INFOPATH}";
+if [ -n "$HOMEBREW_PREFIX" ]; then
+    export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
+    export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
+    export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
+    export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="$HOMEBREW_PREFIX/share/info${INFOPATH+:$INFOPATH}";
+fi
 
 if [ -r ~/.profile.local ]; then
     . ~/.profile.local

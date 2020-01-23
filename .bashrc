@@ -7,9 +7,9 @@ fi
 
 OS_NAME=$(uname -s)
 
-if [ "$OS_NAME" = "Linux"]; then
+if [ "$OS_NAME" = "Linux" ]; then
     if [[ `ps -o comm= $PPID` =~ ^(sshd|kitty|mosh-server)$ ]]; then
-        if [ command -v fish >/dev/null ]; then
+        if command -v fish >/dev/null; then
             exec -l fish
         fi
     fi
