@@ -3,29 +3,31 @@ if [ -n "$PROFILE_SOURCED" ]; then
 fi
 export PROFILE_SOURCED=1
 
+OS_NAME=$(uname -s)
+
 export LANGUAGE="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
 export XDG_CONFIG_HOME="$HOME/.config"
-{% if yadm.os == "Darwin" %}
-export XDG_CACHE_HOME="$HOME/Library/Caches"
-export XDG_DATA_HOME="$HOME/Library/Application Support"
-{% else %}
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-{% endif %}
+if [ "$OS_NAME" = "Darwin" ]; then
+    export XDG_CACHE_HOME="$HOME/Library/Caches"
+    export XDG_DATA_HOME="$HOME/Library/Application Support"
+else
+    export XDG_CACHE_HOME="$HOME/.cache"
+    export XDG_DATA_HOME="$HOME/.local/share"
+fi
 
 export EDITOR=nvim
 
 export FZF_DEFAULT_COMMAND='rg -l ""'
 export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
 
-{% if yadm.os == "Darwin" %}
-export HOMEBREW_PREFIX="/usr/local"
-{% else %}
-export HOMEBREW_PREFIX=$(realpath $HOME/.linuxbrew)
-{% endif %}
+if [ "$OS_NAME" = "Darwin" ]; then
+    export HOMEBREW_PREFIX="/usr/local"
+else
+    export HOMEBREW_PREFIX=$(realpath $HOME/.linuxbrew)
+fi
 export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
 export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
 export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
@@ -38,14 +40,14 @@ fi
 
 export PATH="$HOME/bin:$PATH"
 
-{% if yadm.os == "Darwin" %}
-export PATH="$PATH:/opt/bin"
-export PATH="$PATH:$HOME/Library/Ruby/bin"
+if [ "$OS_NAME" = "Darwin" ]; then
+    export PATH="$PATH:/opt/bin"
+    export PATH="$PATH:$HOME/Library/Ruby/bin"
 
-export TERMINFO_DIRS="/usr/share/terminfo"
-export N_PREFIX="/opt"
-export GEM_HOME="$HOME/Library/Ruby"
-{% endif %}
+    export TERMINFO_DIRS="/usr/share/terminfo"
+    export N_PREFIX="/opt"
+    export GEM_HOME="$HOME/Library/Ruby"
+fi
 
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export LESSHISTFILE="$XDG_DATA_HOME/lesshst"
@@ -65,8 +67,8 @@ export CONDA_BLD_PATH="$XDG_CACHE_HOME/conda/conda-bld"
 export BUILD_HOME="$XDG_CACHE_HOME/Builds"
 export _MY_PATH=$PATH
 
-{% if yadm.os == "Darwin" %}
-export OPT_PREFIX=/opt
-{% else %}
-export OPT_PREFIX=$HOME/opt
-{% endif %}
+if [ "$OS_NAME" = "Darwin" ]; then
+    export OPT_PREFIX=/opt
+else
+    export OPT_PREFIX=$HOME/opt
+fi

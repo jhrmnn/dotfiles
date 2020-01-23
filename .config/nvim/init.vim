@@ -38,11 +38,13 @@ endif
 " Basics {{{
 " ======
 
-{% if yadm.os == "Darwin" %}
-let g:python3_host_prog = "/opt/pynvim/bin/python"
-{% else %}
-let g:python3_host_prog = $HOME . "/opt/pynvim/bin/python"
-{% endif %}
+let os_name = substitute(system('uname -s'), "\n", "", "")
+
+if (os_name == "Darwin")
+    let g:python3_host_prog = "/opt/pynvim/bin/python"
+else
+    let g:python3_host_prog = $HOME . "/opt/pynvim/bin/python"
+endif
 let g:loaded_python_provider = 1
 let g:python3_host_skip_check = 1
 
