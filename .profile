@@ -18,7 +18,9 @@ else
     export XDG_DATA_HOME="$HOME/.local/share"
 fi
 
-export EDITOR=nvim
+if [ command -v nvim >/dev/null ]; then
+    export EDITOR=nvim
+fi
 
 export FZF_DEFAULT_COMMAND='rg -l ""'
 export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"

@@ -48,7 +48,9 @@ else
     alias ls="ls -hG"
 fi
 
-[ -s ~/.fzf.bash ] && source ~/.fzf.bash
+if [ command -v nvim >/dev/null ]; then
+    alias vim="nvim"
+fi
 
 Color_Off='\[\e[0m\]'
 Black='\[\e[30m\]'
