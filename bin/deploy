@@ -128,8 +128,9 @@ def deploy(name: str, dest: Union[str, Path], cmd: str,
         sp.run(['ssh', '-t', host, build_script], check=True)
         msg += f' on {host}'
     else:
-        sp.check_call(build_script, shell=True)
-    notify(name, msg)
+        sp.check_call(build_script, shell=True, executable='/bin/bash')
+    if sys.platform == 'darwin':
+        notify(name, msg)
 
 
 def main(**cli_args: Any) -> None:
