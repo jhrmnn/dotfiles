@@ -40,9 +40,6 @@
 [submodule "start/diffchar.vim"]
 	path = start/diffchar.vim
 	url = https://github.com/rickhowe/diffchar.vim.git
-[submodule "start/fzf.vim"]
-	path = start/fzf.vim
-	url = https://github.com/junegunn/fzf.vim.git
 [submodule "start/gina.vim"]
 	path = start/gina.vim
 	url = https://github.com/lambdalisue/gina.vim.git
