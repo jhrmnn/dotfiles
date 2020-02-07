@@ -84,7 +84,7 @@
 	url = https://github.com/terryma/vim-expand-region.git
 [submodule "start/vim-gutentags"]
 	path = start/vim-gutentags
-	url = git@github.com:jhrmnn/vim-gutentags.git
+	url = https://github.com/ludovicchabant/vim-gutentags.git
 [submodule "start/vim-indent-object"]
 	path = start/vim-indent-object
 	url = https://github.com/michaeljsmith/vim-indent-object.git
