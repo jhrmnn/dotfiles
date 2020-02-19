@@ -20,7 +20,7 @@ shopt -s checkwinsize
 shopt -s histappend
 shopt -s cmdhist
 shopt -s histverify
-[ -w $XDG_DATA_HOME/bash/history ] && $XDG_DATA_HOME/bash/history
+[ -w "$XDG_DATA_HOME/bash/history" ] && HISTFILE="$XDG_DATA_HOME/bash/history"
 HISTFILESIZE="1000000"
 HISTSIZE="1000000"
 HISTCONTROL="ignoreboth"
