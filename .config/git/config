@@ -15,13 +15,14 @@
 [fetch]
     prune = yes
     pruneTags = yes
+    recurseSubmodules = on-demand
 [alias]
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
-    plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --date=relative
+    plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%aN>%Creset' --date=relative
 [http]
     postBuffer = 524288000
 [diff]
-    algorithm = patience
+    algorithm = histogram
     compactionHeuristic = true
     tool = vimdiff
     trustExitCode = yes
@@ -36,3 +37,5 @@
     forceSignAnnotated = true
 [advice]
     detachedHead = false
+[receive]
+    denyCurrentBranch = updateInstead

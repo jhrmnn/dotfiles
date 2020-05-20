@@ -5,7 +5,7 @@
 
 set clipboard=unnamed
 set completeopt-=preview
-set diffopt+=vertical,algorithm:patience
+set diffopt+=vertical,algorithm:histogram,indent-heuristic
 set expandtab
 set exrc
 set foldlevelstart=99
@@ -37,6 +37,8 @@ endif
 
 " Basics {{{
 " ======
+
+colorscheme jhrmnn
 
 let os_name = substitute(system('uname -s'), "\n", "", "")
 
@@ -79,6 +81,7 @@ nnoremap <silent> <Leader>q :bprevious<CR>
 nnoremap <silent> <Leader>w :bnext<CR>
 nnoremap <silent> <Leader>n :nohlsearch<CR>
 nnoremap <silent> <Leader>a :Loc<CR>
+nnoremap <silent> <Leader>o :edit <C-R>=expand('%:p:h')<CR><CR>
 vnoremap <silent> <Leader>< :diffput<CR>
 vnoremap <silent> <Leader>> :diffget<CR>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -152,12 +155,5 @@ let python_highlight_all = 1
 let g:pyindent_open_paren = '&sw'
 let g:tex_flavor = 'latex'
 let g:tex_conceal = 'abdmg'
-
-" }}}
-
-" Color theme {{{
-" ===========
-
-colorscheme jhrmnn
 
 " }}}

@@ -69,6 +69,7 @@ let g:vim_markdown_fenced_languages = ['python=python']
 " FZF {{{
 " ---
 let g:fzf_tags_command = 'rg -l "" | ctags --fortran-kinds=-l -L -'
+let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.6 } }
 " }}}
 
 " Gutentags {{{
