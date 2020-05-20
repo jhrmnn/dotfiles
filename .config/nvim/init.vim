@@ -82,6 +82,9 @@ nnoremap <silent> <Leader>a :Loc<CR>
 vnoremap <silent> <Leader>< :diffput<CR>
 vnoremap <silent> <Leader>> :diffget<CR>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+            \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+            \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 if has('nvim') || has('terminal')
     tnoremap <C-X> <C-\><C-n>
     tnoremap <C-H> <C-\><C-n><C-W>h
@@ -95,7 +98,7 @@ elseif has('terminal')
     nnoremap <silent> <Leader>1 :terminal<CR>
 endif
 
-command -bang -nargs=? Loc call LocToggle(<bang>0)
+command! -bang -nargs=? Loc call LocToggle(<bang>0)
 
 function! LocToggle(forced)
     if exists("g:loc_win") && a:forced == 0
@@ -155,21 +158,6 @@ let g:tex_conceal = 'abdmg'
 " Color theme {{{
 " ===========
 
-function! s:patch_base16_colors()
-    hi Normal ctermbg=none
-    hi clear SpellBad
-    hi clear SpellCap
-    hi clear SpellLocal
-    hi SpellBad ctermbg=1
-    hi SpellCap ctermbg=1
-    hi SpellLocal ctermbg=1
-endfunction
-
-autocmd! ColorScheme base16-default-dark call s:patch_base16_colors()
-
-try
-    colorscheme base16-default-dark
-catch /^Vim\%((\a\+)\)\=:E185/  " catch error when theme not installed
-endtry
+colorscheme jhrmnn
 
 " }}}
