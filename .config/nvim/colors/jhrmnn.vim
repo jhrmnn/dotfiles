@@ -46,3 +46,7 @@ hi pythonStrFormat ctermfg=3
 hi pythonBuiltinFunc cterm=bold ctermfg=DarkBlue
 
 hi fortranIntrinsic cterm=bold ctermfg=DarkBlue
+
+hi cPreProc ctermfg=DarkCyan cterm=italic
+hi cPreCondit ctermfg=DarkCyan cterm=italic
+hi cInclude ctermfg=DarkCyan cterm=italic
