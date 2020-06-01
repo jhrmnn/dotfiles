@@ -33,7 +33,7 @@ endif
 nnoremap <silent> <Leader>d :Bdelete<CR>
 nnoremap <Leader>mk :Neomake!<CR>
 xmap ga <Plug>(EasyAlign)
-nnoremap <silent> <Leader>gs :Gina status<CR>
+nnoremap <silent> <Leader>gs :Gina status --group=gina<CR>
 nnoremap <silent> <Leader>gc :Gina commit<CR>
 nnoremap <silent> <Leader>gl :Gina plog --all<CR>
 nnoremap \\ :BLines<Space>
@@ -58,7 +58,7 @@ nnoremap <silent> <Leader>gw :Gwrite \| tabclose<CR>
 
 " Polyglot {{{
 " --------
-let g:polyglot_disabled = ['latex']
+let g:polyglot_disabled = ['latex', 'python']
 " }}}
 
 " Vim Markdown {{{
@@ -87,7 +87,7 @@ let g:limelight_conceal_ctermfg = 13
 
 " Rainbow {{{
 " ---------
-let g:rainbow_active = 1
+" let g:rainbow_active = 1
 " }}}
 
 " ALE {{{
@@ -177,6 +177,7 @@ augroup END
 
 " Deoplete {{{
 " --------
+call deoplete#custom#option('auto_complete_delay', 100)
 call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_full_fuzzy'])
 autocmd InsertEnter * call deoplete#enable()
 " }}}

@@ -1,0 +1,11 @@
+gui:
+  scrollHeight: 4
+  sidePanelWidth: 0.17
+git:
+  autofetch: false
+  paging:
+    colorArg: never
+    pager: ydiff -s -p cat -c always --wrap --width={{columnWidth}}
+reporting: "on"
+startuppopupversion: 1
+

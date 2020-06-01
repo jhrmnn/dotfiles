@@ -12,6 +12,7 @@
     date = short
 [core]
     excludesfile = ~/.config/git/ignore
+    pager = delta
 [fetch]
     prune = yes
     pruneTags = yes
