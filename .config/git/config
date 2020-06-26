@@ -12,7 +12,6 @@
     date = short
 [core]
     excludesfile = ~/.config/git/ignore
-    pager = delta
 [fetch]
     prune = yes
     pruneTags = yes
@@ -40,3 +39,11 @@
     detachedHead = false
 [receive]
     denyCurrentBranch = updateInstead
+[filter "nbstripout"]
+    extrakeys = \
+        metadata.toc \
+        metadata.kernelspec.display_name \
+        metadata.kernelspec.name \
+        metadata.language_info.version \
+        cell.metadata.toc-hr-collapsed \
+        cell.metadata.toc-nb-collapsed

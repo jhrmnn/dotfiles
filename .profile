@@ -28,6 +28,8 @@ export FZF_DEFAULT_COMMAND='rg -l ""'
 export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
 export FZF_TMUX_OPTS="-p"
 
+export YDIFF_OPTIONS="-s -w0 --wrap"
+
 if [ "$OS_NAME" = "Darwin" ]; then
     export HOMEBREW_PREFIX="/usr/local"
 elif [ -e $HOME/.linuxbrew ]; then

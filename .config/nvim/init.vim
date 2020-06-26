@@ -151,7 +151,7 @@ end
 " File-type settings {{{
 " ==================
 
-let python_highlight_all = 1
+let g:python_highlight_all = 1
 let g:pyindent_open_paren = '&sw'
 let g:tex_flavor = 'latex'
 let g:tex_conceal = 'abdmg'
