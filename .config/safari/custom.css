@@ -1,0 +1,4 @@
+table#hnmain {
+    padding-left: -webkit-calc(42.5% - 15em);
+    padding-right: -webkit-calc(42.5% - 15em);
+}
