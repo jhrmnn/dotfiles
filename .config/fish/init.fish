@@ -1,6 +1,8 @@
 set -U fish_key_bindings fish_vi_key_bindings
 set -U fish_prompt_pwd_dir_length 2
-set -U fish_fzf_path (dirname (dirname (which fzf)))
+if type -q fzf
+    set -U fish_fzf_path (dirname (dirname (which fzf)))
+end
 
 set -U fish_greeting
 set -U fish_color_normal normal

@@ -5,7 +5,6 @@
 
 set clipboard=unnamed
 set completeopt-=preview
-set diffopt+=vertical,algorithm:histogram,indent-heuristic
 set expandtab
 set exrc
 set foldlevelstart=99
@@ -30,8 +29,10 @@ set undofile
 set visualbell
 set wrap
 if has('nvim')
+    set diffopt+=vertical,algorithm:histogram,indent-heuristic
     set inccommand=split
 endif
+
 
 " }}}
 
