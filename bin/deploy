@@ -32,9 +32,9 @@ def git_rsync(src: _Path, tgt: _Path, flags: List[str]) -> None:
     sp.run(args, input=b'\n'.join(files), check=True)
 
 
-def save_diff(diffdir: Path, name: str, diff: str) -> None:
+def save_diff(diffdir: Path, name: str, diff: bytes) -> None:
     f: IO[str]
-    with NamedTemporaryFile('w') as f:
+    with NamedTemporaryFile('wb') as f:
         f.write(diff)
         f.flush()
         archive = f'{name}.diff.tar.gz'
@@ -44,11 +44,11 @@ def save_diff(diffdir: Path, name: str, diff: str) -> None:
 
 
 def get_diff(mainline: str) -> Tuple[str, str]:
-    diff: str = sp.check_output(['git', 'diff', mainline]).decode()
-    difftext = f'master: {mainline}\n'
+    diff: str = sp.check_output(['git', 'diff', mainline])
+    difftext = f'master: {mainline}\n'.encode()
     if diff.strip():
         difftext += diff
-        sha = hashlib.sha1(difftext.encode()).hexdigest()
+        sha = hashlib.sha1(difftext).hexdigest()
         return sha, difftext
     else:
         return mainline, difftext

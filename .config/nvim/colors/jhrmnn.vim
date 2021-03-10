@@ -25,9 +25,9 @@ hi Comment ctermfg=11 cterm=italic
 hi Visual ctermbg=12
 
 hi SpellBad cterm=undercurl ctermbg=None guisp=salmon
-hi clear SpellCap
-hi clear SpellLocal
-hi clear SpellRare
+hi SpellLocal cterm=undercurl ctermbg=None guisp=lightblue
+hi SpellCap cterm=undercurl ctermbg=None guisp=lightgreen
+" hi clear SpellRare
 
 hi DiffAdd ctermbg=22
 hi DiffAdded ctermbg=22

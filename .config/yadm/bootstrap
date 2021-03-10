@@ -1,9 +1,13 @@
 #!/bin/bash
 set -ev
 
-fish -c 'source ~/.config/fish/init.fish'
 mkdir -p "$XDG_CACHE_HOME"/bash
 mkdir -p "$XDG_CACHE_HOME"/nvim/sessions
 mkdir -p "$XDG_CACHE_HOME"/ssh
+mkdir -p "$XDG_DATA_HOME"/nvim/backup
+mkdir -p "$XDG_DATA_HOME"/nvim/swap
 yadm worktree add -q "$XDG_DATA_HOME"/nvim/site/pack/default vimpack
 git -C "$XDG_DATA_HOME"/nvim/site/pack/default submodule update --init
+yadm worktree add -b vimpack-vim ~/.vim/pack/default origin/vimpack
+git -C ~/.vim/pack/default submodule update --init
+fish -c 'source ~/.config/fish/init.fish'

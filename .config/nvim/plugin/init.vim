@@ -46,11 +46,12 @@ nnoremap <silent> <Leader>t :BTags<CR>
 nnoremap <silent> <Leader>T :Tags<CR>
 nnoremap <silent> <Leader>gt :execute 'silent !' . g:fzf_tags_command<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
-vnoremap <silent> <Leader>ldf :packadd linediff.vim \| Linediff<CR>
+vnoremap <silent> <Leader>ldf :Linediff<CR>
 nnoremap <silent> <Leader>ldf :LinediffReset<CR>
 nnoremap <silent> <Leader>go :packadd goyo.vim \| packadd limelight.vim \| Goyo<CR>
 nnoremap <silent> <Leader>gd :Gdiff<CR>
 nnoremap <silent> <Leader>gw :Gwrite \| tabclose<CR>
+nnoremap <silent> <Leader>ggt :VimtexTocToggle<CR>
 " }}}
 
 " Plugin configuration {{{
@@ -70,6 +71,9 @@ let g:vim_markdown_fenced_languages = ['python=python']
 " ---
 let g:fzf_tags_command = 'rg -l "" | ctags --fortran-kinds=-l -L -'
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.6 } }
+
+command! -bang -nargs=* Rg
+    \ call fzf#vim#grep("rg -U --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, <bang>0)
 " }}}
 
 " Gutentags {{{
@@ -95,6 +99,14 @@ let g:limelight_conceal_ctermfg = 13
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_fix_on_save = 1
+
+function! FormatFortran(buffer) abort
+    return {
+    \   'command': 'fprettify'
+    \}
+endfunction
+
+execute ale#fix#registry#Add('fprettify', 'FormatFortran', ['fortran'], 'fprettify for fortran')
 " }}}
 
 " Signify {{{

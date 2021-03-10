@@ -1,4 +1,11 @@
 table#hnmain {
-    padding-left: -webkit-calc(42.5% - 15em);
-    padding-right: -webkit-calc(42.5% - 15em);
+    padding: 0 -webkit-calc(42.5% - 25em);
+}
+
+table#hnmain > tbody > tr:not(:first-child) > td > table {
+    padding: 0 7.5em;
+}
+
+table#hnmain div.comment {
+    word-break: break-word;
 }

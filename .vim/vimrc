@@ -4,7 +4,6 @@ filetype plugin indent on
 set autoindent
 set autoread
 set background=dark
-set backspace="indent,eol,start"
 let &backupdir = '.,' . $XDG_DATA_HOME . '/nvim/backup'
 set belloff=all
 set nocompatible

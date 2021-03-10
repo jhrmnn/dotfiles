@@ -19,6 +19,7 @@ else
     export XDG_CACHE_HOME="$HOME/.cache"
     export XDG_DATA_HOME="$HOME/.local/share"
 fi
+export VAR_DATA_HOME="$HOME/var"
 
 if command -v nvim >/dev/null; then
     export EDITOR=nvim
@@ -41,6 +42,17 @@ if [ -n "$HOMEBREW_PREFIX" ]; then
     export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
     export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
     export INFOPATH="$HOMEBREW_PREFIX/share/info${INFOPATH+:$INFOPATH}";
+fi
+
+# my variables
+
+export BUILD_HOME="$VAR_DATA_HOME/Builds"
+export _MY_PATH=$PATH
+
+if [ "$OS_NAME" = "Darwin" ]; then
+    export OPT_PREFIX=/opt
+else
+    export OPT_PREFIX=$HOME/opt
 fi
 
 if [ -r ~/.profile.local ]; then
@@ -70,14 +82,3 @@ export GPG_TTY=$(tty)
 export CONDA_ENVS_PATH="$XDG_CACHE_HOME/conda/envs"
 export CONDA_PKGS_DIRS="$XDG_CACHE_HOME/conda/pkgs"
 export CONDA_BLD_PATH="$XDG_CACHE_HOME/conda/conda-bld"
-
-# my variables
-
-export BUILD_HOME="$XDG_CACHE_HOME/Builds"
-export _MY_PATH=$PATH
-
-if [ "$OS_NAME" = "Darwin" ]; then
-    export OPT_PREFIX=/opt
-else
-    export OPT_PREFIX=$HOME/opt
-fi
