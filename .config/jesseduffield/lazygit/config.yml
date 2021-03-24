@@ -1,8 +1,9 @@
 gui:
   scrollHeight: 4
   sidePanelWidth: 0.17
+  skipUnstageLineWarning: true
 git:
-  autofetch: false
+  autoFetch: false
   paging:
     colorArg: never
     pager: ydiff -s -p cat -c always --wrap --width={{columnWidth}}

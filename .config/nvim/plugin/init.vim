@@ -129,10 +129,15 @@ let g:bufferline_rotate = 1
 let g:lightline = {
 		    \     'active': {
 		    \         'left': [[ 'mode', 'paste' ],
-		    \                  [ 'filename', 'modified' ]],
+		    \                  [ 'bufnum', 'filename', 'modified' ]],
 		    \         'right': [[ 'lineinfo' ],
 		    \                   [ 'percent' ],
 		    \                   [ 'fileformat', 'fileencoding', 'filetype' ]]
+            \     },
+		    \    'inactive': {
+		    \         'left': [[ 'bufnum', 'filename' ]],
+		    \         'right': [[ 'lineinfo' ],
+		    \                   [ 'percent' ]]
             \     },
             \     'colorscheme': 'jellybeans',
             \     'component': {'lineinfo': ' %3l:%-2v'},
