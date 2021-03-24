@@ -91,7 +91,12 @@ let g:limelight_conceal_ctermfg = 13
 
 " Rainbow {{{
 " ---------
-" let g:rainbow_active = 1
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+            \     'separately': {
+            \         'cmake': 0,
+            \     }
+            \ }
 " }}}
 
 " ALE {{{
