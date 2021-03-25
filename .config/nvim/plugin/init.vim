@@ -73,7 +73,7 @@ let g:fzf_tags_command = 'rg -l "" | ctags --fortran-kinds=-l -L -'
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.6 } }
 
 command! -bang -nargs=* Rg
-    \ call fzf#vim#grep("rg -U --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, <bang>0)
+    \ call fzf#vim#grep("rg -P -U --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, <bang>0)
 " }}}
 
 " Gutentags {{{
