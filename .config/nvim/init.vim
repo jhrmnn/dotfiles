@@ -17,12 +17,11 @@ set noshowmode
 set secure
 set shiftround
 set shiftwidth=4
+set softtabstop=4
 set shortmess+=s
 set showmatch
 set smartcase
 set smartindent
-set softtabstop=4
-set tabstop=4
 set timeoutlen=500
 set title
 set undofile
