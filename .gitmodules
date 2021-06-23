@@ -112,9 +112,6 @@
 [submodule "start/vimtex"]
 	path = start/vimtex
 	url = https://github.com/lervag/vimtex.git
-[submodule "start/fzf.vim"]
-	path = start/fzf.vim
-	url = https://github.com/junegunn/fzf.vim.git
 [submodule "start/semshi"]
 	path = start/semshi
 	url = https://github.com/numirias/semshi.git
