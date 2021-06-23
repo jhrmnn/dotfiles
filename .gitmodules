@@ -118,3 +118,6 @@
 [submodule "start/semshi"]
 	path = start/semshi
 	url = https://github.com/numirias/semshi.git
+[submodule "start/vim-jinja"]
+	path = start/vim-jinja
+	url = https://github.com/lepture/vim-jinja.git
