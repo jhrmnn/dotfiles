@@ -118,3 +118,6 @@
 [submodule "start/vim-jinja"]
 	path = start/vim-jinja
 	url = https://github.com/lepture/vim-jinja.git
+[submodule "start/fzf.vim"]
+	path = start/fzf.vim
+	url = https://github.com/junegunn/fzf.vim.git
