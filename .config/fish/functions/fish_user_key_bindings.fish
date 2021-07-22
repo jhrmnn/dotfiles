@@ -31,7 +31,10 @@ end
 bind -M insert \cc cancel_commandline
 bind -m insert \cc cancel_commandline
 bind -M insert \ch fzf_dir_history
-bind -M insert \ej history-token-search-forward
-bind -M insert \ek history-token-search-backward
-bind -M insert \el nextd-or-forward-word
-bind -M insert \eh prevd-or-backward-word
+
+bind -M insert \eh backward-char
+bind -M insert \el forward-char
+bind -M insert \ek up-or-search
+bind -M insert \ej down-or-search
+bind -M insert \eL nextd-or-forward-word
+bind -M insert \eH prevd-or-backward-word
