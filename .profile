@@ -26,7 +26,7 @@ if command -v nvim >/dev/null; then
 fi
 
 export FZF_DEFAULT_COMMAND='rg -l ""'
-export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down --reverse"
+export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down,alt-j:down,alt-k:up --reverse"
 export FZF_TMUX_OPTS="-p"
 
 export YDIFF_OPTIONS="-s -w0 --wrap"
