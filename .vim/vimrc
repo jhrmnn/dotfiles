@@ -4,12 +4,10 @@ filetype plugin indent on
 set autoindent
 set autoread
 set background=dark
-let &backupdir = '.,' . $XDG_DATA_HOME . '/nvim/backup'
 set belloff=all
 set nocompatible
 set complete-=i
 set cscopeverbose
-let &directory = $XDG_DATA_HOME . '/nvim/swap//'
 set display="lastline,msgsep"
 set encoding=utf-8
 set fillchars="vert:│,fold:·"
@@ -31,7 +29,6 @@ set tabpagemax=50
 set tags="./tags;,tags"
 set ttimeoutlen=50
 set ttyfast
-let &undodir = $XDG_DATA_HOME . '/nvim/undo'
 set viminfo+=!
 set wildmenu
 
