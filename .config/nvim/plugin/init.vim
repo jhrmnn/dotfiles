@@ -1,6 +1,6 @@
 " vim: set foldmethod=marker foldlevel=0:
 
-if !filereadable($XDG_DATA_HOME . '/nvim/pack')
+if !isdirectory($XDG_DATA_HOME . '/nvim/site/pack')
     finish
 endif
 
