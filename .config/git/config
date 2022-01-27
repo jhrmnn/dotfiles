@@ -19,7 +19,8 @@
     recurseSubmodules = on-demand
 [alias]
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
-    plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%aN>%Creset' --date=relative
+    plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%aN>%Creset' --date=relative
+    rbc = rebase --continue
 [http]
     postBuffer = 524288000
 [diff]

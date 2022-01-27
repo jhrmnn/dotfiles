@@ -65,6 +65,7 @@ command! -bang -nargs=* Rg
 " Gutentags {{{
 " ---
 let g:gutentags_define_advanced_commands = 1
+let g:gutentags_file_list_command = 'rg -l ""'
 " let g:gutentags_generate_on_missing = 0
 " let g:gutentags_generate_on_new = 0
 let g:gutentags_ctags_extra_args = ['--fortran-kinds=-l']
