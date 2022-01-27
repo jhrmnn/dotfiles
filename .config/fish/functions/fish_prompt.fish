@@ -31,7 +31,7 @@ function fish_prompt
     echo -ns " " (set_color -o cyan) $mypwd
 
     if begin [ -z "$NO_GIT_PROMPT" ]; or string match -rv "$NO_GIT_PROMPT" $PWD >/dev/null; end
-        set_color -o (if git status --porcelain ^/dev/null | egrep . >/dev/null ^&1; echo yellow; else; echo green; end)
+        set_color -o (if git status --porcelain 2>/dev/null | egrep . >/dev/null 2>&1; echo yellow; else; echo green; end)
         __fish_git_prompt
     end
 

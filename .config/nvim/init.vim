@@ -164,6 +164,7 @@ augroup file_types
     autocmd BufEnter term://* startinsert
     autocmd BufRead,BufNewFile *.pyi setl ft=python
     autocmd BufRead,BufNewFile *.pyx setl ft=cython
+    autocmd BufRead,BufNewFile *.F90 setl ft=fortran
     autocmd FileType cpp setl cc=80 tw=80 fo=croqw cino+="(0"
     autocmd FileType fortran setl cc=80,133 tw=80 com=:!!,:!>,:! fo=croq nu
     autocmd FileType javascript setl cc=80 nu
@@ -176,4 +177,12 @@ augroup file_types
     autocmd FileType yaml setl ts=2 sw=2 sts=2
 augroup END
 
+" }}}
+
+" Plugin configuration {{{
+" ====================
+
+" Polyglot {{{
+" --------
+let g:polyglot_disabled = ['latex', 'python']
 " }}}

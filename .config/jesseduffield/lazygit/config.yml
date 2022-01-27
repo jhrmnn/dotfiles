@@ -2,6 +2,7 @@ gui:
   scrollHeight: 4
   sidePanelWidth: 0.17
   skipUnstageLineWarning: true
+  showFileTree: false
 git:
   autoFetch: false
   paging:

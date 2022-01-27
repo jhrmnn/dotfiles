@@ -12,6 +12,7 @@
     date = short
 [core]
     excludesfile = ~/.config/git/ignore
+   	commentchar = !
 [fetch]
     prune = yes
     pruneTags = yes
@@ -28,7 +29,7 @@
     trustExitCode = yes
 [merge]
     tool = vimdiff
-    conflictstyle = diff3
+    conflictstyle = zdiff3
 [mergetool]
     prompt = false
 [gpg]
