@@ -3,11 +3,16 @@ gui:
   sidePanelWidth: 0.17
   skipUnstageLineWarning: true
   showFileTree: false
+  showRandomTip: false
+  showCommandLog: false
 git:
   autoFetch: false
   paging:
     colorArg: never
-    pager: ydiff -s -p cat -c always --wrap --width={{columnWidth}}
-reporting: "on"
-startuppopupversion: 1
-
+    # pager: ydiff -s -p cat --wrap --width={{columnWidth}}
+    pager: delta --dark --paging=never --side-by-side
+  log:
+    showGraph: when-maximised
+  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%aN>%Creset' {{branchName}} --
+  allBranchesLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%aN>%Creset' --all
+reporting: on
