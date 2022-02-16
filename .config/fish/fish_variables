@@ -11,7 +11,7 @@ SETUVAR _fish_abbr_gs:git\x20status
 SETUVAR _fish_abbr_ipty:ptipython
 SETUVAR _fish_abbr_jlab:jupyter\x20lab
 SETUVAR _fish_abbr_jupy:jupyter\x20notebook
-SETUVAR _fish_abbr_jupyter:/home/mi/jhermann/opt/bin/jupyter
+SETUVAR _fish_abbr_jupyter:\x24OPT_PREFIX/bin/jupyter
 SETUVAR _fish_abbr_knitr:r\x20CMD\x20Sweave
 SETUVAR _fish_abbr_la:exa\x20\x2dla
 SETUVAR _fish_abbr_lg:lazygit
@@ -26,6 +26,7 @@ SETUVAR _fish_abbr_ltr:exa\x20\x2dlT
 SETUVAR _fish_abbr_lzf:exa\x20\x2dlT\x20\x2d\x2dcolor\x3dalways\x20\x7c\x20fzf\x20\x2d\x2dansi
 SETUVAR _fish_abbr_makeup:make\x20\x2dC\x20\x2e\x2e
 SETUVAR _fish_abbr_pty:ptpython
+SETUVAR _fish_abbr_rga:rg\x20\x2d\x2dhidden\x20\x2d\x2dno\x2dignore
 SETUVAR _fish_abbr_venv:python3\x20\x2dm\x20venv
 SETUVAR _fish_abbr_vi:vim
 SETUVAR _fish_abbr_vipty:venv/bin/ptipython
@@ -46,6 +47,7 @@ SETUVAR fish_color_error:\x2do\x1ered
 SETUVAR fish_color_escape:magenta
 SETUVAR fish_color_history_current:green
 SETUVAR fish_color_host:normal
+SETUVAR fish_color_host_remote:yellow
 SETUVAR fish_color_match:\x2do\x1ebrmagenta
 SETUVAR fish_color_normal:normal
 SETUVAR fish_color_operator:yellow
@@ -54,6 +56,7 @@ SETUVAR fish_color_quote:green
 SETUVAR fish_color_redirection:magenta
 SETUVAR fish_color_search_match:\x2d\x2dbackground\x3dbryellow
 SETUVAR fish_color_selection:\x2d\x2dbackground\x3dbryellow
+SETUVAR fish_color_status:red
 SETUVAR fish_color_user:brgreen
 SETUVAR fish_color_valid_path:\x2d\x2dunderline
 SETUVAR fish_fzf_path:/srv/hdd/jhermann/\x2elinuxbrew
