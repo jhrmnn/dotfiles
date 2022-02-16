@@ -13,6 +13,9 @@
 [core]
     excludesfile = ~/.config/git/ignore
    	commentchar = !
+    pager = delta --side-by-side --syntax-theme=none
+[delta]
+    navigate = true
 [fetch]
     prune = yes
     pruneTags = yes
@@ -21,6 +24,8 @@
     ls-assumed = !git ls-files -v | grep '^[[:lower:]]'
     plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%aN>%Creset' --date=relative
     rbc = rebase --continue
+[interactive]
+    diffFilter = delta --color-only
 [http]
     postBuffer = 524288000
 [diff]
@@ -28,6 +33,7 @@
     compactionHeuristic = true
     tool = vimdiff
     trustExitCode = yes
+    colorMoved = true
 [merge]
     tool = vimdiff
     conflictstyle = zdiff3
