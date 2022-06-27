@@ -53,7 +53,6 @@ if type -q exa
     abbr ls exa
     abbr ll exa -l
     abbr la exa -la
-    abbr lg exa -la --git
     abbr ltr exa -lT
     abbr lt exa -ls modified
     abbr lta exa -las modified

@@ -9,13 +9,13 @@ function fish_prompt
         echo -ns " "
     end
     if [ -z "$PROMPT_NO_USER" ]
-        echo -ns (set_color brred) $USER
+        echo -ns (set_color de935f) $USER
     end
     if [ -n "$SSH_CLIENT" -o -n "$SSH_CLIENT2" ]
         if not set -q __fish_prompt_hostname
             set -g __fish_prompt_hostname (prompt_hostname)
         end
-        echo -ns (set_color brcyan) "@" (set_color brred) $__fish_prompt_hostname
+        echo -ns (set_color brblack) "@" (set_color de935f) $__fish_prompt_hostname
     end
 
     if [ -n "$PROMPT_PATH_ROOT" ]
