@@ -6,6 +6,7 @@
 _vimrc
 .Rhistory
 tags
+tags.files
 tags.lock
 tags.temp
 *.latexmain

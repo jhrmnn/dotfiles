@@ -5,25 +5,26 @@ if type -q fzf
 end
 
 set -U fish_greeting
-set -U fish_color_normal normal
-set -U fish_color_error -o red
+
+
+set -U fish_color_autosuggestion brblack
 set -U fish_color_command -o brwhite
-set -U fish_color_param blue
-set -U fish_color_escape magenta
+set -U fish_color_comment brblack
 set -U fish_color_end -o brwhite
-set -U fish_color_quote green
-set -U fish_color_operator yellow
-set -U fish_color_autosuggestion bryellow
-set -U fish_color_comment brgrey
-set -U fish_color_redirection magenta
+set -U fish_color_error -o red
+set -U fish_color_escape magenta
 set -U fish_color_history_current green
-set -U fish_color_match -o brmagenta
-set -U fish_color_search_match --background=bryellow
-set -U fish_color_selection --background=bryellow
+# set -U fish_color_match -o brmagenta
+set -U fish_color_operator yellow
+set -U fish_color_param blue
+set -U fish_color_quote green
+set -U fish_color_redirection magenta
+# set -U fish_color_search_match --background=bryellow
+# set -U fish_color_selection --background=bryellow
 set -U fish_color_valid_path --underline
 
 set -U fish_pager_color_completion normal
-set -U fish_pager_color_description bryellow
+# set -U fish_pager_color_description bryellow
 set -U fish_pager_color_prefix blue
 set -U fish_pager_color_progress cyan
 
