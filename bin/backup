@@ -7,6 +7,6 @@ logfile=$logdir/restic-$(date +"%Y-%m-%d")-$(date +"%H-%M-%S").log
 if [[ "$1" == "prune" ]]; then
   myrestic forget --prune --keep-hourly 24 --keep-daily 30 --keep-weekly 52 --keep-monthly 999999
 else
-  myrestic backup ~ --exclude-file=$HOME/.config/restic/exclude -vv | egrep -v "^unchanged"
+  myrestic backup --files-from=$HOME/.config/restic/include --exclude-file=$HOME/.config/restic/exclude -vv | egrep -v "^unchanged"
 fi
 } 2>&1 >$logfile
