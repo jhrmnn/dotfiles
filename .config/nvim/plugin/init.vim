@@ -73,7 +73,7 @@ let g:gutentags_ctags_extra_args = ['--fortran-kinds=-l']
 
 " Limelight {{{
 " ---------
-let g:limelight_conceal_ctermfg = 13
+let g:limelight_conceal_ctermfg = 241
 " }}}
 
 " Rainbow {{{
