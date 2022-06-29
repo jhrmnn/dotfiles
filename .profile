@@ -15,9 +15,11 @@ export XDG_CONFIG_HOME="$HOME/.config"
 if [ "$OS_NAME" = "Darwin" ]; then
     export XDG_CACHE_HOME="$HOME/Library/Caches"
     export XDG_DATA_HOME="$HOME/Library/Application Support"
+    export LOG_HOME="$HOME/Library/Logs"
 else
     export XDG_CACHE_HOME="$HOME/.cache"
     export XDG_DATA_HOME="$HOME/.local/share"
+    export LOG_HOME="$HOME/local/var/log"
 fi
 export VAR_DATA_HOME="$HOME/var"
 

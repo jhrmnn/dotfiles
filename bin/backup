@@ -1,12 +1,12 @@
 #!/bin/bash -l
 
-logdir=$HOME/Library/Logs/jhrmnn.backup/$(date +"%Y-%m")/$(date +"%Y-%m-%d")
+logdir=$LOG_HOME/jhrmnn.backup/$(date +"%Y-%m")/$(date +"%Y-%m-%d")
 mkdir -p $logdir
 logfile=$logdir/restic-$(date +"%Y-%m-%d")-$(date +"%H-%M-%S").log
 {
 if [[ "$1" == "prune" ]]; then
   myrestic forget --prune --keep-hourly 24 --keep-daily 30 --keep-weekly 52 --keep-monthly 999999
 else
-  myrestic backup --files-from=$HOME/.config/restic/include --exclude-file=$HOME/.config/restic/exclude -vv | egrep -v "^unchanged"
+  myrestic backup --files-from=$XDG_CONFIG_HOME/restic/include --exclude-file=$XDG_CONFIG_HOME/restic/exclude -vv | egrep -v "^unchanged"
 fi
 } 2>&1 >$logfile
