@@ -55,9 +55,6 @@
 [submodule "start/tcomment_vim"]
 	path = start/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim.git
-[submodule "start/tex-conceal.vim"]
-	path = start/tex-conceal.vim
-	url = https://github.com/KeitaNakamura/tex-conceal.vim.git
 [submodule "start/textx.vim"]
 	path = start/textx.vim
 	url = https://github.com/igordejanovic/textx.vim.git
