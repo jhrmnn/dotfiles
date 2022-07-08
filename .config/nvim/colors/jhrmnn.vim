@@ -28,12 +28,10 @@ hi SpellLocal cterm=undercurl ctermbg=None guisp=lightblue
 hi SpellCap cterm=undercurl ctermbg=None guisp=lightgreen
 " hi clear SpellRare
 
-" hi DiffAdd ctermbg=22
-" hi DiffAdded ctermbg=22
-" hi DiffChange ctermbg=17 cterm=None
-" hi DiffText ctermbg=21 cterm=None
-" hi DiffDelete ctermbg=52
-" hi DiffRemoved ctermbg=52
+hi DiffAdd ctermbg=22
+hi DiffChange ctermbg=17 cterm=None
+hi DiffDelete ctermbg=52
+hi DiffText ctermbg=21 cterm=None
 
 hi SignifySignAdd ctermfg=2 ctermbg=236
 hi SignifySignChange ctermfg=4 ctermbg=236
