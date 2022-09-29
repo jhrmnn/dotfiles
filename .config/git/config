@@ -13,7 +13,7 @@
 [core]
     excludesfile = ~/.config/git/ignore
    	commentchar = !
-    pager = delta --side-by-side --syntax-theme=none
+    pager = delta --side-by-side --syntax-theme=none --wrap-max-lines=unlimited
 [delta]
     navigate = true
 [fetch]
@@ -25,7 +25,7 @@
     plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%aN>%Creset' --date=relative
     rbc = rebase --continue
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = delta --color-only --wrap-max-lines=unlimited
 [http]
     postBuffer = 524288000
 [diff]

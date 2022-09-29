@@ -10,9 +10,12 @@ git:
   paging:
     colorArg: never
     # pager: ydiff -s -p cat --wrap --width={{columnWidth}}
-    pager: delta --dark --paging=never --side-by-side --syntax-theme=none
+    pager: delta --dark --paging=never --side-by-side --syntax-theme=none --wrap-max-lines=unlimited
   log:
     showGraph: when-maximised
   branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%aN>%Creset' {{branchName}} --
   allBranchesLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%aN>%Creset' --all
 reporting: on
+keybinding:
+  universal:
+    appendNewline: '<tab>'

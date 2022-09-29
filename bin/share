@@ -6,10 +6,40 @@ from hashlib import md5
 import urllib.parse
 import sys
 import subprocess as sp
+from tempfile import NamedTemporaryFile
 from configparser import ConfigParser
 
+HOST = 'pub.hrmnn.net'
+CSS = """
+<style>
+    body {
+        margin: 2em auto;
+        max-width: 70ch;
+        padding: 0 .62em;
+        font: 1.1em serif;
+    }
+    img {
+        max-width: 130%;
+    }
+    table, th {
+        border-collapse: collapse;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+    th, td {
+        padding: 5px;
+    }
+    .katex { font-size: 1em !important; }
+    @media print {
+        body {
+            max-width: none
+        }
+    }
+</style>
+"""
 
-def share(prefix, host, sshname, path=None, lang=None, name=None, home=False):
+
+def share(path=None, lang=None, name=None):
     if name:
         target = name
     else:
@@ -19,26 +49,33 @@ def share(prefix, host, sshname, path=None, lang=None, name=None, home=False):
                 target = target.with_suffix(target.suffix + '.md')
         else:
             target = Path('snippet.md') if lang else Path('note.txt')
+    is_md = target.suffix == '.md'
     stem = md5(os.urandom(128)).hexdigest()[:10]
     stem = Path(stem[0:2])/stem[2:10]
-    link_dir = prefix/stem
-    link_path = link_dir/target
-    target_path = target if home else link_path
-    if not path:
-        stdin = sys.stdin.buffer.read()
-    sp.run(['ssh', sshname, f'mkdir -p {link_dir}'])
-    if path and not lang:
-        sp.run(['rsync', '--info=progress2', str(path), f'{sshname}:"{target_path}"'])
+    target = stem/target
+    args = []
+    if path and not is_md:
+        sp.run(['aws', 's3', 'cp', str(path), f's3://{HOST}/{target}'], check=True)
     else:
-        if lang:
+        if not path:
+            stdin = sys.stdin.buffer.read()
+        if is_md:
             source = path.read_text() if path else stdin.decode()
-            payload = f'```{lang}\n{source}\n```'.encode()
+            target = target.with_suffix('.html')
+            payload = (f'```{lang}\n{source}\n```' if lang else source).encode()
+            with NamedTemporaryFile('w', buffering=1) as f:
+                f.write(CSS)
+                payload = sp.run([
+                    'pandoc', '--quiet', '-f', 'markdown', '-t', 'html', '-s', '--katex',
+                    '-M', f'pagetitle={target.name}',
+                    '--css', '',
+                    '-H', f.name,
+                ], stdout=sp.PIPE, check=True, input=payload).stdout
+            args += ['--content-type', 'text/html']
         else:
             payload = stdin
-        sp.run(['ssh', sshname, f'cat >"{target_path}"'], input=payload)
-    if home:
-        sp.run(['ssh', sshname, f'ln -s ~/"{target}" "{link_path}"'])
-    url = host + str(urllib.parse.quote(str(stem/target)))
+        sp.run(['aws', 's3', 'cp', '-', f's3://{HOST}/{target}', *args], input=payload, check=True)
+    url = f'http://{HOST}/' + str(urllib.parse.quote(str(target)))
     if target.suffix == '.ipynb':
         url = 'http://nbviewer.jupyter.org/urls/' + url.split('//')[1]
     return url
@@ -47,27 +84,26 @@ def share(prefix, host, sshname, path=None, lang=None, name=None, home=False):
 def parse_cli():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    arg('path', type=Path, metavar='FILE', nargs='?', help='file to share')
+    arg('path', type=Path, metavar='FILE', nargs='*', help='file to share')
     arg('-o', '--open', dest='preview', action='store_true', help='open the shared link')
     arg('-l', '--lang', help='language to highlight')
     arg('-n', '--name', type=Path, help='shared name of file')
-    arg('-H', '--home', action='store_true', help='store in home dir, symlink')
     args = parser.parse_args()
     return args
 
 
 def main():
-    config = ConfigParser()
-    config.read([Path('~/.config/simplecloud/config.ini').expanduser()])
     kwargs = vars(parse_cli())
     preview = kwargs.pop('preview')
-    url = share(**config['simplecloud'], **kwargs)
+    urls = [share(**{**kwargs, 'path': path}) for path in kwargs.pop('path') or [None]]
+    url = '\n'.join(urls)
     if sys.stdout.isatty():
         print(url)
     else:
         sys.stdout.write(url)
     if preview:
-        sp.call(['open', url])
+        for url in urls:
+            sp.call(['open', url])
 
 
 if __name__ == '__main__':
