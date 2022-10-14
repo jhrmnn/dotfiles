@@ -23,6 +23,8 @@ hi Identifier ctermfg=131 cterm=bold
 hi Comment ctermfg=241 cterm=italic
 " hi Visual ctermbg=12
 
+hi NormalFloat ctermbg=235
+
 hi SpellBad cterm=undercurl ctermbg=None guisp=salmon
 hi SpellLocal cterm=undercurl ctermbg=None guisp=lightblue
 hi SpellCap cterm=undercurl ctermbg=None guisp=lightgreen
