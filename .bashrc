@@ -1,19 +1,4 @@
-if [ -z "$PROFILE_SOURCED" ]; then
-    [ -s ~/.bash_profile ] && source ~/.bash_profile
-    return
-fi
-
 [ -s ~/.bashrc.local ] && source ~/.bashrc.local
-
-OS_NAME=$(uname -s)
-
-if [ "$OS_NAME" = "Linux" ]; then
-    if [[ `ps -o comm= $PPID` =~ ^(sshd|kitty|mosh-server)$ ]]; then
-        if command -v fish >/dev/null; then
-            exec -l fish
-        fi
-    fi
-fi
 
 set -o vi
 shopt -s checkwinsize

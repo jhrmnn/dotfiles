@@ -1,8 +1,3 @@
-if [ -n "$PROFILE_SOURCED" ]; then
-    return
-fi
-export PROFILE_SOURCED=1
-
 OS_NAME=$(uname -s)
 
 export CLICOLOR=1
