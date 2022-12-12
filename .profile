@@ -1,7 +1,5 @@
 OS_NAME=$(uname -s)
 
-export CLICOLOR=1
-
 export LANGUAGE="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
@@ -17,16 +15,6 @@ else
     export LOG_HOME="$HOME/local/var/log"
 fi
 export VAR_DATA_HOME="$HOME/var"
-
-if command -v nvim >/dev/null; then
-    export EDITOR=nvim
-fi
-
-export FZF_DEFAULT_COMMAND='rg -l ""'
-export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down,alt-j:down,alt-k:up --reverse"
-export FZF_TMUX_OPTS="-p"
-
-export YDIFF_OPTIONS="-s -w0 --wrap"
 
 if [ "$OS_NAME" = "Darwin" ]; then
     export HOMEBREW_PREFIX="/usr/local"

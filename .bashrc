@@ -1,5 +1,14 @@
 [ -s ~/.bashrc.local ] && source ~/.bashrc.local
 
+if command -v nvim >/dev/null; then
+    export EDITOR=nvim
+fi
+export CLICOLOR=1
+export FZF_DEFAULT_COMMAND='rg -l ""'
+export FZF_DEFAULT_OPTS="--bind=ctrl-u:page-up,ctrl-d:page-down,alt-j:down,alt-k:up --reverse"
+export FZF_TMUX_OPTS="-p"
+export YDIFF_OPTIONS="-s -w0 --wrap"
+
 set -o vi
 shopt -s checkwinsize
 shopt -s histappend
