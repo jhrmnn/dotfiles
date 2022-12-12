@@ -1,6 +1,7 @@
+let xdg_data_home = $XDG_DATA_HOME ? $XDG_DATA_HOME : ($HOME . '/.local/share')
 set clipboard=unnamed
 set completeopt-=preview
-let &directory = $XDG_DATA_HOME . '/nvim/swap//,.'
+let &directory = xdg_data_home . '/nvim/swap//,.'
 set expandtab
 set exrc
 set foldlevelstart=99
@@ -20,7 +21,7 @@ set smartcase
 set smartindent
 set timeoutlen=500
 set title
-let &undodir = $XDG_DATA_HOME . '/nvim/undo//'
+let &undodir = xdg_data_home . '/nvim/undo//'
 set undofile
 set visualbell
 set wrap
