@@ -7,7 +7,8 @@
     autoStash = true
 [push]
     default = simple
-    recurseSubmodules = on-demand
+    recurseSubmodules = on-demand 
+    autoSetupRemote = true
 [blame]
     date = short
 [core]
