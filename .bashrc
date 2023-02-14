@@ -47,6 +47,7 @@ alias makeup="make -C .."
 alias del="trash"
 alias grep="grep --color=auto"
 alias vi="vim"
+alias lg="lazygit"
 if ls --color=none &>/dev/null; then
     alias ls="ls -h --color"
 else
