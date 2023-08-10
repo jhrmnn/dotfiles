@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import os
+import sys
+from pathlib import Path
+
+HOME = Path.home()
+ROOT = Path.home() / sys.argv[1]
+
+for dirpath, dirnames, filenames in os.walk(ROOT):
+    dirpath = Path(dirpath)
+    reldirpath = dirpath.relative_to(ROOT)
+    if str(reldirpath) == ".git":
+        dirnames.clear()
+        continue
+    for filename in filenames:
+        target = HOME / reldirpath / filename
+        path = dirpath / filename
+        if target.exists():
+            target.rename(target.with_suffix(".BACKUP"))
+            print(f"{target} backed up")
+        target.symlink_to(path)
+        print(f"{path} symlinked")
+    for dirname in list(dirnames):
+        target = HOME / reldirpath / dirname
+        path = dirpath / dirname
+        if not target.exists():
+            target.symlink_to(path)
+            print(f"{path} symlinked")
+            dirnames.remove(dirname)
