@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 HOME = Path.home()
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).resolve().parent
 
 for dirpath, dirnames, filenames in os.walk(ROOT):
     dirpath = Path(dirpath)
@@ -11,6 +11,8 @@ for dirpath, dirnames, filenames in os.walk(ROOT):
     if str(reldirpath) == ".git":
         dirnames.clear()
         continue
+    if str(reldirpath) == ".":
+        filenames.remove("install")
     for filename in filenames:
         target = HOME / reldirpath / filename
         path = dirpath / filename
