@@ -1,30 +1,31 @@
 #!/usr/bin/env python3
 import os
 from pathlib import Path
+from itertools import chain, repeat
 
 HOME = Path.home()
 ROOT = Path(__file__).resolve().parent
+IGNORE = [".git", "install"]
 
 for dirpath, dirnames, filenames in os.walk(ROOT):
     dirpath = Path(dirpath)
     reldirpath = dirpath.relative_to(ROOT)
-    if str(reldirpath) == ".git":
-        dirnames.clear()
-        continue
-    if str(reldirpath) == ".":
-        filenames.remove("install")
-    for filename in filenames:
-        target = HOME / reldirpath / filename
-        path = dirpath / filename
-        if target.exists():
+    for name, kind in chain(
+        zip(filenames, repeat("file")),
+        zip(list(dirnames), repeat("dir")),
+    ):
+        relpath = reldirpath / name
+        if str(relpath) in IGNORE:
+            if kind == "dir":
+                dirnames.remove(name)
+            continue
+        target = HOME / relpath
+        path = dirpath / name
+        if kind == "file" and target.exists():
             target.rename(target.with_suffix(".BACKUP"))
             print(f"{target} backed up")
-        target.symlink_to(path)
-        print(f"{path} symlinked")
-    for dirname in list(dirnames):
-        target = HOME / reldirpath / dirname
-        path = dirpath / dirname
-        if not target.exists():
+        if kind == "file" or not target.exists():
             target.symlink_to(path)
             print(f"{path} symlinked")
-            dirnames.remove(dirname)
+            if kind == "dir":
+                dirnames.remove(name)
