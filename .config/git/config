@@ -1,8 +1,6 @@
 [user]
     name = Jan Hermann
     email = dev@jan.hermann.name
-[pull]
-    rebase = true
 [rebase]
     autoStash = true
 [push]
